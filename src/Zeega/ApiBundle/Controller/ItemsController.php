@@ -119,57 +119,19 @@ class ItemsController extends ApiBaseController
         }
     }
 
-    public function getItemItemsAction($id)
-    {
-        try {
-            if ( !isset($id) || !is_numeric($id) ) {
-                return parent::getStatusResponse( 422, "The id parameter is mandatory and must be an integer" );
-            }
-
-            $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);    
-
-            if ( !isset($item) ) {
-                return parent::getStatusResponse( 400, "The item with the id $id does not exist" );
-            }
-
-            $query = $this->getRequest()->query->all();        
-            if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
-                $itemAttributes = $item->getAttributes();
-                $query["user"] = $item->getUser()->getId();
-                if(isset($itemAttributes["tags"])) {
-                    if(is_array($itemAttributes["tags"])) {
-                        $query["tags"] = implode(" AND ", $itemAttributes["tags"]);
-                    } else {
-                        $query["tags"] = $itemAttributes["tags"];
-                    }
-                }
-            } else {
-                $query["collection"] = $item->getId();
-            }
-
-            return $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $query); 
-        } catch ( \BadFunctionCallException $e ) {
-            return parent::getStatusResponse( 422, $e->getMessage() );
-        } catch (\Exception $e) {
-            return parent::getStatusResponse( 500, $e->getMessage() );
-        }
-    }
-
     public function deleteItemAction($itemId)
     {
         try {
-            // parameter validation
-            if ( !isset($itemId) || !is_numeric($itemId) ) {
+            if ( !isset($itemId) ) {
                 return parent::getStatusResponse( 422, "The item id parameter is mandatory and must be an integer" );
             }
-            $em = $this->getDoctrine()->getEntityManager();
-            $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
+            $dm = $this->getDoctrine();
+            $item = $dm->getRepository('ZeegaDataBundle:Item')->find($itemId);
             if ( !isset($item) ) {
                 return parent::getStatusResponse( 400, "The item with the id $itemId does not exist" );
             }
-            $item->setEnabled(false);
-            $item->setDateUpdated( new \DateTime("now") );
-            $em->flush();
+            $dm->remove($item);
+            $dm->flush();
 
             return parent::getStatusResponse( 200 );
         } catch ( \BadFunctionCallException $e ) {
@@ -177,57 +139,6 @@ class ItemsController extends ApiBaseController
         } catch (\Exception $e) {
             return parent::getStatusResponse( 500, $e->getMessage() );
         }
-    }
-
-    /**
-     * Deletes a child item from an item
-     *
-     * @return Array|response
-     */    
-    public function deleteItemItemAction($itemId, $childItemId)
-    {
-        try {
-            // parameter validation
-            if ( !isset($itemId) || !is_numeric($itemId) ) {
-                return parent::getStatusResponse(422, "The item id parameter is mandatory and must be an integer");
-            }        
-            if ( !isset($childItemId) || !is_numeric($childItemId) ) {
-                return parent::getStatusResponse(422, "The child item id parameter is mandatory and must be an integer");
-            }            
-            // get the item
-            $em = $this->getDoctrine()->getEntityManager();
-            $item = $em->getRepository("ZeegaDataBundle:Item")->findOneById( $itemId );
-
-            if ( !isset($item) ) {
-                return parent::getStatusResponse(400, "The item with the id $itemId does not exist");
-            }            
-            // authorization
-            $apiKey = $this->getRequest()->query->has('api_key') ? $this->getRequest()->query->get('api_key') : null;
-            $user = $this->getUser($apiKey);
-            
-            if ( $this->isUserAdmin($user) || $this->isItemOwner($item, $user) ) {
-                // get the child item
-                $childItem = $em->getRepository("ZeegaDataBundle:Item")->findOneById( $childItemId );
-                if ( !isset($childItem) ) {
-                    return parent::getStatusResponse(400, "The child item with the id $childItemId does not exist");
-                }
-                // remove the item from the collection and render the response
-                $item->getChildItems()->removeElement($childItem);
-                $item->setChildItemsCount($item->getChildItems()->count());
-                $item->setDateUpdated(new \DateTime("now"));
-                $em->flush();
-                $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
-                
-                return new Response($itemView);
-            } else {
-            
-                return parent::getStatusResponse(403);
-            }
-        } catch ( \BadFunctionCallException $e ) {
-            return parent::getStatusResponse(422, $e->getMessage());
-        } catch (\Exception $e) {
-            return parent::getStatusResponse(500, $e->getMessage());
-        } 
     }
 
     public function postItemsAction()
@@ -306,7 +217,7 @@ class ItemsController extends ApiBaseController
     public function putItemsAction($itemId)
     {
         try {
-            if ( !isset($itemId) || !is_numeric($itemId) ) {
+            if ( !isset($itemId) ) {
                 return parent::getStatusResponse(422, "The item id parameter is mandatory and must be an integer");
             }    
             // authorization
@@ -348,216 +259,4 @@ class ItemsController extends ApiBaseController
             return parent::getStatusResponse(500, $e->getMessage());
         }    
     }
-    
-    public function putItemItemsAction($itemId)
-    {
-        try {
-            // authorization
-            $apiKey = $this->getRequest()->query->has('api_key') ? $this->getRequest()->query->get('api_key') : null;
-            $user = $this->getUser($apiKey);
-            if ( !isset($user) ) {
-                return parent::getStatusResponse(401);   
-            }
-
-            $em = $this->getDoctrine()->getEntityManager();
-    
-            $newItems = $this->getRequest()->request->get('new_items');
-            $itemsToRemoveString = $this->getRequest()->request->get('items_to_remove'); 
-            if(isset($itemsToRemoveString)) {  
-                $itemsToRemove = array();
-                $itemsToRemove = explode(",",$itemsToRemoveString);
-            }
-            
-            $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
-            if ( !isset($item) ) {
-                return parent::getStatusResponse( 400, "The item with the id $itemId does not exist" );
-            }
-
-            if ( $this->isUserAdmin($user) || $this->isItemOwner($item, $user) ) {
-                if (isset($newItems)) {
-                    $item->setDateUpdated(new \DateTime("now"));            
-                    $itemService = $this->get('zeega.item');
-                    foreach( $newItems as $newItem ) {
-                        if( !is_array($newItem) ) {    
-                            $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($newItem);
-                            if (!$childItem) {
-                                 return parent::getStatusResponse( 400, "The child item with the id $newItem does not exist" );
-                            }                            
-                            $childItem->setDateUpdated(new \DateTime("now"));
-                            $item->addChildItem($childItem);
-                        } else {
-                            $existingItem = $em->getRepository('ZeegaDataBundle:Item')->findOneBy(array(
-                                "uri" => $newItem['uri'], 
-                                "enabled" => 1, 
-                                "user_id" => $user->getId()));
-
-                            if(isset($existingItem) && count($existingItem) > 0) {
-                                // the item is a duplicate; skip the rest of the current loop iteration and continue execution at the condition evaluation
-                                continue;
-                            } else {
-                                $childItem = $itemService->parseItem($newItem, $user);
-                                $item->addChildItem($childItem);
-                            }
-                        }
-                    }
-
-                    $item->setDateUpdated(new \DateTime("now"));
-                    $item->setChildItemsCount($item->getChildItems()->count() + count($newItems));
-                    $em->persist($item);
-                    $em->flush();
-                }
-                
-                if(isset($itemsToRemove)) {
-                    foreach($itemsToRemove as $itemToRemoveId) {
-                        $childItem = $em->getRepository('ZeegaDataBundle:Item')->find($itemToRemoveId);
-                        if (isset($childItem))  {
-                            $item->getChildItems()->removeElement($childItem);
-                            $childItem->setDateUpdated(new \DateTime("now"));
-                            $em->persist($childItem);
-                        }
-                    }
-                    $item->setChildItemsCount($item->getChildItems()->count());            
-                    $item->setDateUpdated(new \DateTime("now"));
-                    $em->persist($item);
-                    $em->flush();
-                }
-            }
-
-            $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => $item));
-            return new Response($itemView);
-        } catch ( \BadFunctionCallException $e ) {
-            return parent::getStatusResponse(422, $e->getMessage());
-        } catch ( \Exception $e ) {
-            return parent::getStatusResponse(500, $e->getMessage());
-        }      
-    }
-    /*
-    // get_collection_project GET    /api/collections/{id}/project.{_format}
-    public function getItemProjectAction($id)
-    {
-        try {
-            $item = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findOneById($id);
-            
-            if(null !== $item) {
-                $i=1;
-                $frameOrder=array();
-                $frames=array();
-                $layers=array();
-
-                $queryParser = $this->get('zeega_query_parser');
-                $query = $this->getRequest()->query->all();
-                $query["type"] = "-project";
-                $itemAttributes = $item->getAttributes();
-
-                if($item->getMediaType() == 'Collection' && $item->getLayerType() == 'Dynamic') {
-                    if(isset($itemAttributes["tags"])) {
-                        $query["user"] = $item->getUser()->getId();
-                        if(is_array($itemAttributes["tags"])) {
-                            $query["tags"] = implode(" AND ", $itemAttributes["tags"]);    
-                        } else {
-                            $query["tags"] = $itemAttributes["tags"];
-                        }
-                    }
-                } else {
-                    $query["collection"]  = $id;
-                }
-                $query = $queryParser->parseRequest($query);
-                
-                $solr = $this->get('zeega_solr');
-                $queryResults = $solr->search($query);
-                $queryResults = $queryResults["items"];
-                
-                foreach($queryResults as $childItem) {
-                    if($childItem['mediaType']!='Collection' && $childItem['mediaType']!='Pdf' && $childItem['mediaType']!='Document') {
-                        $i++;
-                        $frameId = (int)$childItem['id'];
-                        $frameOrder[]=$frameId;
-                        $frames[]=array("id"=>$frameId,"sequence_index"=>0,"layers"=>array($i),"attr"=>array("advance"=>0));
-                        
-                        $layer = array("id"=>$i,"media_type"=>$childItem['mediaType'],"layer_type"=>$childItem['layerType']);
-                        $layer["type"] = $layer["media_type"];
-                        if(isset($childItem['text'])) {
-                            $layer["text"] = $childItem['text'];
-                        }
-
-                        $layer["attr"] = array();
-                        $layer["attr"]["user_id"] = $childItem['userId'];
-                        $layer["attr"]["uri"] = $childItem['uri'];
-                        $layer["attr"]["attribution_uri"] =$childItem['attributionUri'];
-                        
-                        if(isset($childItem['title'])) {
-                            $layer["attr"]["title"] = $childItem['title'];
-                        }
-
-                        if(isset($childItem['description'])) {
-                            $layer["attr"]["description"] = $childItem['description'];
-                        }
-
-                        if(isset($childItem['thumbnailUrl'])) {
-                            $layer["attr"]["thumbnail_url"] = $childItem['thumbnailUrl'];
-                        }
-
-                        if(isset($childItem['mediaCreatorUsername'])) {
-                            $layer["attr"]["media_creator_username"] = $childItem['mediaCreatorUsername'];
-                        }
-
-                        if(isset($childItem['mediaCreatorRealname'])) {
-                            $layer["attr"]["media_creator_realname"] = $childItem['mediaCreatorRealname'];
-                        }
-
-                        if(isset($childItem['mediaDateCreated'])) {
-                            $layer["attr"]["media_date_created"] = $childItem['mediaDateCreated'];
-                        }
-
-                        if(isset($childItem['dateCreated'])) {
-                            $layer["attr"]["date_created"] = $childItem['dateCreated'];
-                        }
-
-                        if(isset($childItem['tags'])) {
-                            $layer["attr"]["tags"] = $childItem['tags'];
-                        }
-
-                        if(isset($childItem['mediaGeoLatitude'])) {
-                            $layer["attr"]["media_geo_latitude"] = $childItem['mediaGeoLatitude'];
-                        }
-
-                        if(isset($childItem['mediaGeoLongitude'])) {
-                            $layer["attr"]["media_geo_longitude"] = $childItem['mediaGeoLongitude'];
-                        }
-
-                        if(isset($childItem['archive'])) {
-                            $layer["attr"]["archive"] = $childItem['archive'];
-                        }
-                        
-                        if(isset($childItem['description'])) {
-                            $layer["attr"]["description"] = $childItem['description'];
-                        }
-
-                        $layers[] = $layer;
-                    }
-                }               
-                
-                $creator = $item->getMediaCreatorRealname();
-                if(!isset($creator)) {
-                    $creator = $item->getMediaCreatorUsername();
-                }
-
-                $project = array("id"=>$item->getId(),
-                      "title"=>$item->getTitle(),
-                      "estimated_time"=>"Some time", 
-                      "authors"=>$creator,
-                      "sequences"=>array(array('id'=>1,'frames'=>$frameOrder,"title"=>'none', 'attr'=>array("persistLayers"=>array()))),
-                      'frames'=>$frames,
-                      'layers'=>$layers,
-                    );
-
-                return new Response(json_encode($project));
-            }
-        } catch ( \BadFunctionCallException $e ) {
-            return parent::getStatusResponse(422, $e->getMessage());
-        } catch ( \Exception $e ) {
-            return parent::getStatusResponse(500, $e->getMessage());
-        }   
-    }
-    */
 }
