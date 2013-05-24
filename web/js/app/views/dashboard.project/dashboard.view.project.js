@@ -14,7 +14,7 @@
 		{
 			var blanks = this.model.attributes;
 			if (blanks['cover_image'] === "")blanks['cover_image'] = 'http://static.zeega.org/community/templates/default_project_cover.png';
-			if(_.isNull(this.model.get('item_id'))) blanks['view_url']= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'projects/' +this.model.id + '/preview';
+			if(_.isNull(this.model.get('item_id'))) blanks['view_url']= sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.model.id;
 			else blanks['view_url']=sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + this.model.get('item_id');
 
 			$(this.el).html( _.template( this.getTemplate(), blanks ) );
