@@ -18,7 +18,7 @@
 		
 		url : function(){ 
 			var url;
-			if (this.id >=0){
+			if (!_.isUndefined(this.id)){
 			 	url = sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') 
 			 		+ "api/users/"+ this.id;
 			}else{
