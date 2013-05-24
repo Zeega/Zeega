@@ -26,7 +26,7 @@
         {% endblock %}
 
         {% include "FOSUserBundle:Shared:facebook.html.twig" %}
-        
+        {% if app.environment == 'prod' %}
         <script type="text/javascript">
 
             var _gaq = _gaq || [];
@@ -40,7 +40,7 @@
             })();
 
         </script>
-        
+        {% endif %}
         <script>
             document.body.addEventListener("keydown", function(event){
                 if(event.keyCode == 13 ){
