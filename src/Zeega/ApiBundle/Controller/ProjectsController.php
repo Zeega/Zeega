@@ -179,7 +179,7 @@ class ProjectsController extends BaseController
     public function deleteProjectAction($projectId)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
         $project->setEnabled(false);
         $dm->flush();
         return new Response('SUCCESS',200);

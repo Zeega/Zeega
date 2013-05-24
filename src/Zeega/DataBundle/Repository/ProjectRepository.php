@@ -12,6 +12,7 @@ class ProjectRepository extends DocumentRepository
             ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created')
             ->eagerCursor(true)
             ->field('user.id')->equals($userId)
+            ->field('enabled')->equals(true)
             ->sort('date_created','DESC');
         
         if(null !== $published) {
