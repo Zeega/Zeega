@@ -15,8 +15,6 @@ framework:
     translator: { fallback: en }
     default_locale: %locale%
     trusted_proxies:  [184.106.132.157]
-    session:
-        handler_id: snc_redis.session.handler
 
 parameters:
     pdo.db_options:
@@ -89,15 +87,6 @@ sensio_framework_extra:
     view:
         annotations: false
 
-#nelmio_solarium:
-#    clients:
-#        default:
-#            host: %solr_host%
-#            port: %solr_port%
-#            path: %solr_path%
-#            core: %solr_core%
-#            timeout: 5
-
 fos_rest:
     routing_loader:
         default_format: json
@@ -114,20 +103,6 @@ fos_facebook:
     secret: %facebook_secret%
     cookie: true
     permissions: [email, user_birthday, user_location]
-
-snc_redis:
-    session:
-        client: session
-        ttl: 1440000
-    clients:
-        default:
-            type: predis
-            alias: default
-            dsn: redis://%event_logger_host%
-        session:
-            type: predis
-            alias: session
-            dsn: redis://%session_logger_host%
 
 sonata_block:
     default_contexts: [cms]

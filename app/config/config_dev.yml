@@ -4,6 +4,9 @@ imports:
 framework:
     router:   { resource: "%kernel.root_dir%/config/routing_dev.yml" }
     profiler: { only_exceptions: false }
+    session:
+        cookie_domain: ~
+        cookie_lifetime: 1440000
 
 web_profiler:
     toolbar: false
@@ -24,3 +27,10 @@ assetic:
 
 swiftmailer:
     delivery_address: admin@zeega.com
+
+snc_redis:
+    clients:
+        default:
+            type: predis
+            alias: default
+            dsn: redis://%event_logger_host%
