@@ -8,6 +8,14 @@
         <meta name="description" content="{{project.description}}">
         <meta name="author" content="{{project.user.displayName}}">
 
+        {% if project.thumbnailUrl is defined and project.thumbnailUrl is not empty %}
+            {% set thumbnailUrl = project.thumbnailUrl %}
+        {% elseif project.coverImage is defined and project.coverImage is not empty %}
+            {% set thumbnailUrl = project.coverImage %}
+        {% else %}
+            {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
+        {% endif %}
+
         <!-- FB -->
         
         <meta property="og:site_name" content="Zeega"/>
@@ -15,13 +23,7 @@
         <meta property="og:description" content="{{project.description}}"/>
         <meta property="og:type" content="movie"/>
         <meta property="og:url" content="http:{{hostname}}{{directory}}{{project.id}}"/>
-        {% if project.thumbnailUrl is defined %}
-        <meta property="og:image" content="{{project.thumbnailUrl}}"/>
-        {% elseif project.coverImage is defined %}
-        <meta property="og:image" content="{{project.coverImage}}"/>
-        {% else %}
-        <meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
-        {% endif %}
+        <meta property="og:image" content="{{thumbnailUrl}}"/>
             
         <!-- END FB --> 
 
@@ -32,11 +34,11 @@
         {% if project.title == "" %}
         <meta name="twitter:title" content="">
         {% else %}
-        <meta name="twitter:title" content="A Zeega by {{project.displayName}} &#9658; {{project.title}}">
+        <meta name="twitter:title" content="A Zeega by {{project.user.displayName}} &#9658; {{project.title}}">
         {% endif %}
         <meta name="twitter:description" content="Zeegas are a new format of interactive media, enabling anyone to easily combine animated GIFs, audio, images, text and video from across the web. Make the web you want.">
         <meta name="twitter:creator" content="">
-        <meta name="twitter:image:src" content="{{project.thumbnailUrl}}">
+        <meta name="twitter:image:src" content="{{thumbnailUrl}}">
         <meta name="twitter:domain" content="zeega.com">
 
         <!-- End Twitter -->
@@ -54,7 +56,7 @@
             data-views="{{project.views | default(0)}}"
             data-directory="{{directory}}"
             data-hostname="{{hostname}}"
-            data-user-id="{{project.userId}}"
+            data-user-id="{{project.user.id}}"
          />
          
         <script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
