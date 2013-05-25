@@ -14,82 +14,7 @@
 {% block body %}
 
 <div id='zeega-editor-main'>
-
-		<div id='zeega-action-column'>
-			<div id='zeega-primary-nav' class='menu-bar menu-dark menu-tall'>
-				<ul>
-					<li class='menu-branding'><a href='{{path('ZeegaCommunityBundle_home')}}' class='zeega-primary-logo'><img src='{{ asset('images/zeega-logo-header.png') }}'/></a></li>
-				</ul>
-				<ul class='pull-right'>
-
-					<li>
-
-						<ul class='menu-dropdown'>
-							<a href='#' class='menu-toggle'><i class='icon-user icon-white'></i></a>
-							<ul class='user-action-menu'>
-								<li><a href="{{ path('ZeegaCommunityBundle_dashboard')}}" target='blank'>User Profile</a></li>
-								<!--<li><a href='{{ path('ZeegaCommunityBundle_faq')}}' target='blank' >FAQ</a></li>-->
-								<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
-							</ul>
-						</ul>
-
-					</li>
-					
-					<li>
-
-						<ul class='menu-dropdown'>
-							<a href='#' class='menu-toggle'><i class='icon-folder-open icon-white'></i></a>
-							<ul class='user-action-menu'>
-								<li><a class="new-project" href="{{path('ZeegaEditorBundle_new')}}"><i class='icon-file'></i> New Zeega</a></li>
-								<li class="divider"></li>
-								{% for project in myprojects %}
-								<li><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id }) }}">{{project.title}}</a></li>
-								{% endfor %}
-
-							</ul>
-						</ul>
-
-					</li>
-
-					<li><a href='{{ path('ZeegaCommunityBundle_faq')}}' target='blank' ><i class='icon-question-sign icon-white'></i></a></li>
-
-					<!--<li><a id='zoom-interface' href='#'><i class='icon-zoom-out icon-white'></i></a></li>-->
-					<li id='save-indicator' style='color:orangered'><a href='#'><i class='icon-blank'></i></a></li>
-				</ul>
-
-
-			</div>
-
-			<div id='zeega-project-info'>
-				<div id="zeega-discovery-title">Media Library</div>
-				
-								
-					<div class="menu-bar menu-dark universe-toggle"  >
-						<span class="universe" data-universe="1" >Community</span>
-						<span class="just-me" data-universe="0" >Just Me</span>
-					</div>
-					<div class="menu-bar menu-dark collection-title-wrapper"  >
-						<span id="collection-title" data-id="-1" >A sample Collection</span>
-						<span class="collection-clear">x</span>
-					</div>
-
-				
-			</div>
-			
-			<div id='zeega-add-item-type' class='menu-bar menu-dark' >
-				<div class='zeega-list-header' style="float:left; text-align:left;">MY COLLECTIONS</div>
-				<ul style="float:right;">
-					<li><a href="#" id="create-collection" data-layer_type="Geo"><div class="menu-verbose-title">New</div><i  style = "background-position: -407px -97px;" class="icon-white"></i></a></li>
-					<li><a href="#" id="create-dynamic-collection" data-layer_type="Geo"><div class="menu-verbose-title">Dynamic</div><i style = "background-position: -239px 0;"  class="icon-white"></i></a></li>
-				</ul>	
-			</div>
-
-			<div class='collection-lists-container'  style="max-height:-webkit-calc(100% - 123px);">
-				<div  class='collection-list'><ul id='zeega-collection-list' style ='margin:0;'></ul></div>
-			</div>
-
-		</div><!-- zeega action column -->
-		<div id='zeega-edit-column' style='width: -webkit-calc(100% - 300px);'>
+		<div id='zeega-edit-column'>
 			<div id="zeega-search-wrapper" class='clearfix'>
 				<div class="btn-group" id="zeega-view-toggle">
 					<a data-goto-view='list'><button id="list-button" class="btn btn-inverse active" rel="tooltip" title="List View" style="4px 0 0 4px"><i class="icon-list icon-white"></i></button></a>
@@ -106,7 +31,6 @@
 								<option value="Image">Image</option>
 								<option value="Video">Video</option>
 								<option value="Audio">Audio</option>
-								<option value="Collection">Collection</option>
 								<option value="project">Zeegas</option>
 							</select>
 						</span>

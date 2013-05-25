@@ -23,9 +23,18 @@
             var url;
 
             if(_.isUndefined(this.id)){
-                url = zeega.discovery.app.apiLocation + "api/items";
+                if(this.get("media_type") == "project"){
+                    url = zeega.discovery.app.apiLocation + "api/projects";
+                } else {
+                    url = zeega.discovery.app.apiLocation + "api/items";
+                }
+                
             } else {
-                url = zeega.discovery.app.apiLocation + "api/items/"+this.id;
+                if(this.get("media_type") == "project"){
+                    url = zeega.discovery.app.apiLocation + "api/projects/" + this.id;
+                } else {
+                    url = zeega.discovery.app.apiLocation + "api/items/" + this.id;
+                }
             }
 
             return url;
