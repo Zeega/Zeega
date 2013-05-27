@@ -191,10 +191,7 @@ class ProjectsController extends BaseController
                             return in_array($newTags, $projecTag->getName()) ;
                         }
                     );
-                } else {
-                    // oh no.
-                    continue;
-                }
+                } 
             } else if (is_string($newTags)) {
                 
                 if ( !isset($projectTags) || $projectTags->count() == 0) {
