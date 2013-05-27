@@ -6,6 +6,15 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
 
 class ProjectRepository extends DocumentRepository
 {
+    public function findOneById($id){
+        if (is_numeric($id) ) {
+            $project = parent::findOneBy(array("rdbms_id" => (int)$id));
+        } else {
+            $project = parent::findOneById($id);
+        }        
+        return $project;
+    }
+
     public function findProjectsByUser($userId,$limit = null,$published = null)
     {
         $qb = $this->createQueryBuilder('Project')
