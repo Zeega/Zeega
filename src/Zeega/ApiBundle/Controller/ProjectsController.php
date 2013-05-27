@@ -67,6 +67,7 @@ class ProjectsController extends BaseController
         
         if( $request->request->has('title') ) {
             $title = $request->request->get('title');
+            $project->setTitle($title);
         }
 
         if( $request->request->has('version')) {
@@ -89,7 +90,6 @@ class ProjectsController extends BaseController
         $project->setEnabled(true);
         $project->setPublished(false);
         $project->setAuthors($user->getDisplayName());
-        $project->setTitle($title);
         $project->setUser($user);
         $project->setVersion($version);
         $project->addSequence($sequence);
