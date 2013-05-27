@@ -48,7 +48,13 @@ class ProjectsController extends BaseController
     {   
         $user = $this->get('security.context')->getToken()->getUser();
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $project = $dm->getRepository('ZeegaDataBundle:Project')->find($id);
+
+        if (is_numeric($id) ) {
+            $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneBy(array("rdbms_id" => (int)$id));
+        } else {
+            $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        }    
+        
         $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
         
         return new Response($projectView);

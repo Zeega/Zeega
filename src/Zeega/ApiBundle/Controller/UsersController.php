@@ -39,7 +39,12 @@ class UsersController extends BaseController
         if($id == -1) {
             $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $loggedUser, 'editable' => true));
         } else {
-            $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($id);
+            if (is_numeric($id) ) {
+                $user = $em->getRepository('ZeegaDataBundle:User')->findOneBy(array("rdbms_id" => (int)$id));
+            } else {
+                $user = $em->getRepository('ZeegaDataBundle:User')->findOneById($id);
+            }    
+            
             if( !isset($user) ) {
                 $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig');
             } else {

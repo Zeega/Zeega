@@ -90,7 +90,13 @@ class ItemsController extends ApiBaseController
             $query = $queryParser->parseRequest( $this->getRequest()->query );
                  
             $dm = $this->get('doctrine_mongodb')->getManager();
-            $item = $dm->getRepository("ZeegaDataBundle:Item")->findOneById($id);
+
+            if (is_numeric($id) ) {
+                $item = $dm->getRepository("ZeegaDataBundle:Item")->findOneBy(array("rdbms_id" => $id));    
+            } else {
+                $item = $dm->getRepository("ZeegaDataBundle:Item")->findOneById($id);
+            }
+            
             $user = $this->getUser();
             $editable = $this->isUserAdmin($user) || $this->isItemOwner( $item, $user );
             $itemView = $this->renderView( "ZeegaApiBundle:Items:show.json.twig", array(
