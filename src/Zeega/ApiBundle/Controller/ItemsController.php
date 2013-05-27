@@ -233,7 +233,7 @@ class ItemsController extends ApiBaseController
                 return parent::getStatusResponse(401);   
             }
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine();
             $item = $em->getRepository('ZeegaDataBundle:Item')->find($itemId);
             if (!$item) {
                 return parent::getStatusResponse( 400, "The child item with the id $itemId does not exist" );
