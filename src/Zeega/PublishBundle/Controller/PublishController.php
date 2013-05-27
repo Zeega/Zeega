@@ -30,8 +30,12 @@ class PublishController extends BaseController
     }
      
     public function projectAction($id, $mobile)
-    {       
-        $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+    {   
+        if (is_numeric($id) ) {
+            $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneBy(array("rdbms_id" => (int)$id));
+        } else {
+            $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        }        
         $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
 
         if (null === $project) {
@@ -44,16 +48,17 @@ class PublishController extends BaseController
         if ( null === $projectVersion ) {
             $projectVersion = 1;    
         }
-        
+
         if ( $mobile ) {
+
             if( $isProjectMobile ){
                 if ( $projectVersion < 1.1) {                
-                    return $this->render('ZeegaPublishBundle:Player:mobile_player.html.twig', array(
+                    return $this->render("ZeegaPublishBundle:Player:mobile_player_1_0.html.twig", array(
                         'project'=>$project,
                         'project_data' => $projectData                
                     ));
                 } else {
-                    return $this->render("ZeegaPublishBundle:Player:mobile_player_1_0.html.twig", array(
+                    return $this->render('ZeegaPublishBundle:Player:mobile_player.html.twig', array(                    
                         "project"=>$project,
                         "project_data" => $projectData,                
                     ));            

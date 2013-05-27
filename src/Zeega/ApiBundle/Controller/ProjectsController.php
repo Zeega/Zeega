@@ -79,7 +79,7 @@ class ProjectsController extends BaseController
         if( $request->request->has('version')) {
             $version = $request->request->get('version');
         } else {
-            $version = 1.0;
+            $version = 1.1;
         }
 
         $frame = new MongoFrame();
@@ -97,6 +97,7 @@ class ProjectsController extends BaseController
         $project->setPublished(false);
         $project->setAuthors($user->getDisplayName());
         $project->setUser($user);
+        $project->setMobile(true);
         $project->setVersion($version);
         $project->addSequence($sequence);
         $project->addFrame($frame);

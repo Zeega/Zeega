@@ -16,11 +16,18 @@
         <link href="assets/splashs/splash_1096.png" rel="apple-touch-startup-image" media="(device-height: 568px)">
         <link href="assets/splashs/splash_iphone_2x.png" rel="apple-touch-startup-image" sizes="640x960" media="(device-height: 480px)">
 
+        {% if project.thumbnailUrl is defined and project.thumbnailUrl is not empty %}
+            {% set thumbnailUrl = project.thumbnailUrl %}
+        {% elseif project.coverImage is defined and project.coverImage is not empty %}
+            {% set thumbnailUrl = project.coverImage %}
+        {% else %}
+            {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
+        {% endif %}
 
-         <title>{{project.title}}</title>
+        <title>{{project.title}}</title>
         <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
         <meta name="description" content="{{project.description}}">
-        <meta name="author" content="{{project.mediaCreatorRealname}}">
+        <meta name="author" content="{{project.user.displayName}}">
 
         <!-- FB -->
         
@@ -29,13 +36,7 @@
         <meta property="og:description" content="{{project.description}}"/>
         <meta property="og:type" content="movie"/>
         <meta property="og:url" content="http:{{hostname}}{{directory}}{{project.id}}"/>
-        {% if project.thumbnailUrl is defined %}
-        <meta property="og:image" content="{{project.thumbnailUrl}}"/>
-        {% elseif project.coverImage is defined %}
-        <meta property="og:image" content="{{project.coverImage}}"/>
-        {% else %}
-        <meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
-        {% endif %}
+        <meta property="og:image" content="{{thumbnailUrl}}"/>
             
         <!-- END FB --> 
 
@@ -47,11 +48,11 @@
         {% if project.title == "" %}
         <meta name="twitter:title" content="">
         {% else %}
-        <meta name="twitter:title" content="A Zeega by {{project.displayName}} &#9658; {{project.title}}">
+        <meta name="twitter:title" content="A Zeega by {{project.user.displayName}} &#9658; {{project.title}}">
         {% endif %}
         <meta name="twitter:description" content="Zeegas are a new format of interactive media, enabling anyone to easily combine animated GIFs, audio, images, text and video from across the web. Make the web you want.">
         <meta name="twitter:creator" content="">
-        <meta name="twitter:image:src" content="{{project.thumbnailUrl}}">
+        <meta name="twitter:image:src" content="{{thumbnailUrl}}">
         <meta name="twitter:domain" content="zeega.com">
 
         <!-- End Twitter -->
@@ -61,8 +62,8 @@
             data-directory="{{directory}}"
             data-hostname="{{hostname}}"
             data-project-id="{{project.id}}"
-            data-user-thumbnail="{{project.userThumbnail}}"
-            data-user-id="{{project.userId}}"
+            data-user-thumbnail="{{project.user.thumbUrl}}"
+            data-user-id="{{project.user.id}}"
             data-views="{{project.views}}"
         />
 

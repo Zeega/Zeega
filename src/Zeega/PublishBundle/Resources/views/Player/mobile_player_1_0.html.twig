@@ -16,29 +16,28 @@
         <link href="assets/splashs/splash_1096.png" rel="apple-touch-startup-image" media="(device-height: 568px)">
         <link href="assets/splashs/splash_iphone_2x.png" rel="apple-touch-startup-image" sizes="640x960" media="(device-height: 480px)">
 
+        {% if project.thumbnailUrl is defined and project.thumbnailUrl is not empty %}
+            {% set thumbnailUrl = project.thumbnailUrl %}
+        {% elseif project.coverImage is defined and project.coverImage is not empty %}
+            {% set thumbnailUrl = project.coverImage %}
+        {% else %}
+            {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
+        {% endif %}
 
-         <title>{{project.title}}</title>
+        <title>{{project.title}}</title>
         <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
         <meta name="description" content="{{project.description}}">
-        <meta name="author" content="{{project.mediaCreatorRealname}}">
+        <meta name="author" content="{{project.user.displayName}}">
 
         <!-- FB -->
         
         <meta property="og:site_name" content="Zeega"/>
         <meta property="og:title" content="{{project.title}}"/>
         <meta property="og:description" content="{{project.description}}"/>
-        {% if project.mediaCreatorRealname is defined %}
-        <meta property="og:author" content="{{project.mediaCreatorRealname}}"/>
-        {% endif %}
+        <meta property="og:author" content="{{project.user.displayName}}"/>
         <meta property="og:type" content="movie"/>
         <meta property="og:url" content="{{hostname}}{{directory}}{{project.id}}"/>
-        {% if project.thumbnailUrl is defined %}
-        <meta property="og:image" content="{{project.thumbnailUrl}}"/>
-        {% elseif project.coverImage is defined %}
-        <meta property="og:image" content="{{project.coverImage}}"/>
-        {% else %}
-        <meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
-        {% endif %}
+        <meta property="og:image" content="{{thumbnailUrl}}"/>
             
         <!-- END FB --> 
 
@@ -46,7 +45,7 @@
             data-directory="{{directory}}"
             data-hostname="{{hostname}}"
             data-project-id="{{project.id}}"
-            data-user-thumbnail="{{project.userThumbnail}}"
+            data-user-thumbnail="{{project.user.thumbUrl}}"
             data-views="{{project.views}}"
         />
 

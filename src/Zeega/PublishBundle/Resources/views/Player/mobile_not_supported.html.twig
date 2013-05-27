@@ -35,10 +35,10 @@
             left: 0;
             padding: 0;
             margin: 0;
-            {% if project.thumbnailUrl == "../../../images/default_cover.png" %}
+            {% if project.coverImage == "../../../images/default_cover.png" %}
                 background: url({{ asset('images/static-0.gif') }}) no-repeat center center fixed; 
             {% else %}
-                background: url({{ project.thumbnailUrl }}) no-repeat center center fixed; 
+                background: url({{ project.coverImage }}) no-repeat center center fixed; 
             {% endif %}
             -webkit-background-size: cover;
             -moz-background-size: cover;
@@ -122,10 +122,10 @@
     <div class="content">
         <header>
             <div class="title">{{ project.title }}</div>
-            <div class="byline">{{ project.mediaCreatorRealName }}</div>
+            <div class="byline">{{ project.user.displayName }}</div>
         </header>
         <div class="action">
-            <a href="mailto:your@email.com?subject=Check out this Zeega!&body=Enjoy this Zeega by {{ project.mediaCreatorRealName }} on a big screen. You'll love it! \nhttp://www.zeega.com/{{ project.id }}  \n\n- the friendly folks at Zeega">
+            <a href="mailto:your@email.com?subject=Check out this Zeega!&body=Enjoy this Zeega by {{ project.user.displayName }} on a big screen. You'll love it! \nhttp://www.zeega.com/{{ project.id }}  \n\n- the friendly folks at Zeega">
                 <img class="email" src="{{ asset('images/mobile/email-mobile.png') }}"/>
                 <div>This Zeega loves big screens.<br/>Email a link to yourself!</div>
             </a>
