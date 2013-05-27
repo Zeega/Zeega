@@ -4,22 +4,22 @@
 		<title>{{project.getTitle()}}</title> 
 		<link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
 		
-		
+		{% if project.thumbnailUrl is defined and project.thumbnailUrl is not empty %}
+            {% set thumbnailUrl = project.thumbnailUrl %}
+        {% elseif project.coverImage is defined and project.coverImage is not empty %}
+            {% set thumbnailUrl = project.coverImage %}
+        {% else %}
+            {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
+        {% endif %}
+
 		<!-- FB -->
 		
 		<meta property="og:site_name" content="Zeega"/>
 		<meta property="og:title" content="{{project.getTitle()}}"/>
 		<meta property="og:description" content="{{project.getDescription()}}"/>
    		<meta property="og:type" content="movie"/>
-   		<meta property="og:url" content="{{hostname}}{{directory}}{{projectId}}"/>
-    	{% if project.getThumbnailUrl() is defined %}
-			<meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
-		{% elseif project.getCoverImage() is defined %}
-			<meta property="og:image" content="{{project.getCoverImage()}}"/>
-		{% else %}
-			<meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
-		{% endif %}
-			
+   		<meta property="og:url" content="{{hostname}}{{directory}}{{project.id}}"/>
+		<meta property="og:image" content="{{thumbnailUrl}}"/>
 
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
 
@@ -29,14 +29,7 @@
 		<style type="text/css">
 			body {margin:0px}
 			html {
-				{% if project.getThumbnailUrl() is defined %}
-				background: url({{project.getThumbnailUrl()}}) no-repeat center center fixed;
-				{% elseif project.getCoverImage() is defined %}
-				background: url({{project.getCoverImage()}}) no-repeat center center fixed;
-				{% else %}
-				background: url({{asset('images/default_cover.png')}}) no-repeat center center fixed;
-				{% endif %}
-				
+				background: url({{thumbnailUrl}}) no-repeat center center fixed;				
 				-webkit-background-size: cover;
 				-moz-background-size: cover;
 				-o-background-size: cover;
@@ -78,14 +71,10 @@
 
 	<body id="zeega-embed" >
 		
-		<a id="zeega-link" href="{{hostname}}{{directory}}{{projectId}}"></a>
+		<a id="zeega-link" href="{{hostname}}{{directory}}{{project.id}}"></a>
 		<div id="text">
-			<h1>{{project.getTitle()}}</h1>
-			{% if author != '0' %}	
-				{% if project.getMediaCreatorRealname() is defined %}<h2>{{project.getMediaCreatorRealname() }}</h2>
-				{% elseif project.getAuthor() is defined %}<h2>{{project.getAuthor() }}</h2>
-				{% endif %}
-			{% endif %}	
+			<h1>{{project.title}}</h1>
+			<h2>{{project.user.displayName}}</h2>
 		</div>
 	</body>
 </html>

@@ -5,6 +5,15 @@
 		<link rel="shortcut icon" type="image/x-icon" href="{{asset("images/zeega.ico")}}"> 	
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
 
+
+        {% if project.thumbnailUrl is defined and project.thumbnailUrl is not empty %}
+            {% set thumbnailUrl = project.thumbnailUrl %}
+        {% elseif project.coverImage is defined and project.coverImage is not empty %}
+            {% set thumbnailUrl = project.coverImage %}
+        {% else %}
+            {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
+        {% endif %}
+
     
 		<style type="text/css">
 			body {
@@ -15,7 +24,7 @@
 
 			html {
 				font-family: "Helvetica", sans-serif;
-				background: url({{project.thumbnailUrl}}) no-repeat center center fixed;
+				background: url({{thumbnailUrl}}) no-repeat center center fixed;
 				-webkit-background-size: cover;
 				-moz-background-size: cover;
 				-o-background-size: cover;
@@ -129,16 +138,16 @@
 		<a id="zeega-link" href="{{hostname}}{{directory}}{{project.id}}"></a>
             <div class="info-overlay">
                 <div class="left-column">
-                  <a href="/profile/{{ project.userId }}"  target="blank" >
-                    <div class="profile-token"><img src="{{ project.userThumbnail }}"></div>
+                  <a href="/profile/{{ project.user.id }}"  target="blank" >
+                    <div class="profile-token"><img src="{{ project.user.thumbUrl }}"></div>
                    </a>
                 </div>
                 <div class="right-column">
                   <h1 class = "caption">{{ project.title }}</h1>
                   
                   <div class="profile-name">
-                    <a href="/profile/{{project.userId}}" target="blank" >
-                      {{ project.displayName }}
+                    <a href="/profile/{{project.user.id}}" target="blank" >
+                      {{ project.user.displayName }}
                     </a>
                   </div>
                   
