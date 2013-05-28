@@ -1,0 +1,18 @@
+"request":{
+{% if request is defined %}
+{% if request["query"] is defined %}
+    "query":{{ request["query"] | json_encode | raw}},
+{% endif %}
+{% if request["parser"] is defined %}
+    "parser":{{ request["parser"] | json_encode | raw}},
+{% endif %}
+{% endif %}
+"user":{
+    {% if app.user %}
+        "authenticated": true,
+        "id":{{ app.user.id | default("null") | json_encode | raw}}
+    {% else %}
+        "authenticated": false
+    {% endif %}
+}
+}

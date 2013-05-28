@@ -22,14 +22,11 @@ class ItemsController extends ApiBaseController
     public function getItemsSearchAction()
     {
         try {
+            // TO-DO: Auth
             $queryParser = $this->get('zeega_query_parser');
             $query = $queryParser->parseRequest($this->getRequest()->query);
-            //if(isset($query["user"])) {
-            //    $query["user"] = $this->getUser();
-            //}
             $results = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
             $resultsCount = 0;
-            //var_dump($results);
             $user = $this->getUser();
             $editable = $this->isUserAdmin($user) || $this->isUserQuery( $query, $user );
             $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array(
@@ -57,24 +54,15 @@ class ItemsController extends ApiBaseController
     public function getItemsParserAction()
     {
         try {
+            // TO-DO: Auth
             $apiKey = $this->getRequest()->query->has('api_key') ? $this->getRequest()->query->get('api_key') : null;
             $user = $this->getUser( $apiKey );           
-            // if( !isset($user) ) {
-            //     return parent::getStatusResponse(401);   
-            // }             
-            $request = $this->getRequest();
-            $url  = $request->query->get('url');
+            $url  = $this->getRequest()->query->get('url');
+            $response = $this->get('zeega_parser')->load($url);
+            $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array(
+                'items' => $response["items"], 
+                'request' => array("parser" => $response["details"])));
 
-            if(!isset($url)) {
-                $itemView = $this->renderView('ZeegaApiBundle:Items:show.json.twig', array('item' => new Item(), 'request' => $response["details"]));
-            } else {
-                $loadChildren = $request->query->get('load_children');
-                $loadChildren = (isset($loadChildren) && (strtolower($loadChildren) === "true" || $loadChildren === true)) ? true : false;
-                $parser = $this->get('zeega_parser');
-                $response = $parser->load($url, $loadChildren);
-                $itemView = $this->renderView('ZeegaApiBundle:Items:index.json.twig', array('items' => $response["items"], 'request' => $response["details"]));
-            }
-            
             return new Response($itemView);
         } catch ( \BadFunctionCallException $e ) {
             return parent::getStatusResponse( 422, $e->getMessage() );

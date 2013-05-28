@@ -1,8 +1,7 @@
 {% if editable is not defined %}
     {% set editable = false %}
 {% endif %}
-{
-    {% if request is defined %}"request": {{ request | json_encode | raw  }},{%- endif -%}
+{    
     "items":[
 	{% for item in items %}
 		{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item, 'editable': editable} %}	
@@ -12,5 +11,6 @@
     {% endfor %}
 ],
 "returned_items_count":{% if items is defined %}{{ items|length }}{% else %}0{% endif %},
-"items_count":{% if items_count is defined %}{{ items_count }}{% else %}0{% endif %}
+"items_count":{% if items_count is defined %}{{ items_count }}{% else %}0{% endif %},
+{% include 'ZeegaApiBundle:Shared:request.json.twig' with {'request': request} %}
 }

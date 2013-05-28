@@ -8,10 +8,5 @@
 		{% include 'ZeegaApiBundle:Items:base.json.twig' with {'item': item, 'editable':editable} %}
 	{% endif %}
 ],
-	"request":
-		{% if request is defined %}
-			{{ request | json_encode | raw}}
-		{% else %}
-		{}
-		{% endif %}
+{% include 'ZeegaApiBundle:Shared:request.json.twig' with {'request': request | default(null)} %}
 }
