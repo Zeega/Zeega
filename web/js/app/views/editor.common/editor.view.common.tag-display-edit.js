@@ -13,7 +13,6 @@
 		initialize : function()
 		{
 			this.isEditable = this.model.get('editable');
-			console.log("Tag Module Here:: this is what I got ",this.model);
 		},
 		
 		render : function()

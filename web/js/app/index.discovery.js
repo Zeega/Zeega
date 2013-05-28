@@ -11,7 +11,7 @@ jQuery(function($)
             loaded    : function(){},
 
             search : function(){
-                console.log("triggered visual search");
+                
                 ZeegaDiscovery.parseSearchUI();
             },
 
@@ -58,7 +58,7 @@ jQuery(function($)
 
 
     $("#zeega-content-type").change(function(){
-        console.log("item type filter changed");
+        
         $("#select-wrap-text").text( $("#zeega-content-type option[value=\""+$("#zeega-content-type").val()+"\"]").text() );
         ZeegaDiscovery.parseSearchUI();
 

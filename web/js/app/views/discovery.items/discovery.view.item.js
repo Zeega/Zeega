@@ -30,23 +30,18 @@
             $(this.el).html( _.template( template, blanks ) );
 
 
-            if( this.model.get("media_type") == "project" ){
-                blanks["author"] = this.model.get("username");
+            
+            if( this.model.get("media_type") == "Image" || this.model.get("media_type") == "Audio" || this.model.get("media_type") == "Video"  ){
+                blanks["author"] = this.model.get("media_creator_username");
+            } else {
+                blanks["author"] = this.model.get("user").display_name;
                 
                 if( this.model.get("cover_image") === "" ){
                     blanks["thumbnail_url"] = "http://static.zeega.org/community/templates/default_project_cover.png";
                 } else {
                     blanks["thumbnail_url"] = this.model.get("cover_image");
                 }
-            } else {
-                blanks["author"] = this.model.get("media_creator_username");
             }
-            //Hide broken Thumbs
-
-            $(this.el).find("img").on("error", function(e) {
-                $(e.target).hide();
-                $(e.target.parentElement).append(  "[ No Thumb Available ]<br><br>" + _this.model.get("title"));
-            });
 
             return this;
         },
@@ -97,25 +92,20 @@
 
 
 
-            if( this.model.get("media_type") == "project" ){
-                blanks["author"] = this.model.get("username");
+            if( this.model.get("media_type") == "Image" || this.model.get("media_type") == "Audio" || this.model.get("media_type") == "Video"  ){
+                blanks["author"] = this.model.get("media_creator_username");
+            } else {
+                blanks["author"] = this.model.get("user").display_name;
                 
                 if( this.model.get("cover_image") === "" ){
                     blanks["thumbnail_url"] = "http://static.zeega.org/community/templates/default_project_cover.png";
                 } else {
                     blanks["thumbnail_url"] = this.model.get("cover_image");
                 }
-            } else {
-                blanks["author"] = this.model.get("media_creator_username");
             }
             
             
             $(this.el).html( _.template( template, blanks ) );
-            
-             $(this.el).find("img").on("error", function(e) {
-                $(e.target).hide();
-                $(e.target.parentElement).append(  "[ No Thumb Available ]<br><br>" + _this.model.get("title"));
-            });
 
             return this;
         },
@@ -136,7 +126,7 @@
                 "<p class='jda-item-description'><%= description %></p>"+
             "</td>"+
             "<td class='zeega-list-right-column jda-item-date'>"+
-            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>Added by <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user_id %>' target='_blank' ><%= username %></a></p></div>"+
+            "<div style='position:relative; height:55px'><p class='jda-user-link bottom' style='margin:0px'>Added by <a href='" + zeega.discovery.app.apiLocation + "profile/<%=user.id %>' target='_blank' ><%= user.display_name %></a></p></div>"+
             "</td>";
             
 

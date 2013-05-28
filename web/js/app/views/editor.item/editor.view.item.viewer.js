@@ -135,8 +135,7 @@
                                     url : deleteURL,
                                     success: function(model, response)
                                     {
-                                        console.log("Deleted item " + _this.inFocus.id);
-                                        console.log(_this.index);
+                                        
                                         if(_this.index < _this.collection.length )
                                         {
                                             _this.switchItem();
@@ -154,8 +153,7 @@
                                     },
                                     error: function(model, response)
                                     {
-                                        console.log("Error deleting item " +  _this.inFocus.id);
-                                        console.log(response);
+                                        console.log("Error deleting item " +  _this.inFocus.id, response);
                                     }
                                 });
             }
@@ -222,10 +220,7 @@
         {
             var opts = {},
                 date = new Date( this.model.get("date_created"));
-            console.log(date);
-
-
-
+            
             if(this.options.state == "less")
             {
                 opts = {
@@ -256,7 +251,7 @@
             if( Items.Views.Viewer[itemClass] ) mediaView = new Items.Views.Viewer[itemClass]({model:this.model});
             else mediaView = new Items.Views.Viewer.Default({model:this.model});
             
-            console.log("Media Viewer::",mediaView, itemClass);
+            
 
             this.$el.find("#item-media-target .padded-content").html( mediaView.render().el );
             
@@ -297,9 +292,7 @@
         events : {
             "click .edit-item-metadata" : "editItemMetadata",
             "click .save-item-metadata" : "saveItemMetadata",
-            "click .cancel-item-metadata" : "cancelItemEdit",
-            "click .published":"publish",
-            "click .unpublished":"unpublish"
+            "click .cancel-item-metadata" : "cancelItemEdit"
         },
         
         editItemMetadata : function(e)
@@ -348,22 +341,6 @@
             
         },
 
-        publish: function(){
-            console.log("publishing");
-            if(this.model.get("published")!=2) this.model.save({"published":2});
-            this.$el.find(".published").addClass("selected");
-            this.$el.find(".unpublished").removeClass("selected");
-
-        },
-        unpublish:function(){
-            console.log("unpublishing");
-            if( this.model.get("published")!==1 ){
-                this.model.save({"published": 1});
-            }
-                
-            this.$el.find(".unpublished").addClass("selected");
-            this.$el.find(".published").removeClass("selected");
-        },
         cancelItemEdit : function()
         {
             this.editing = false;
@@ -389,20 +366,7 @@
             }
             html+= "</h2>";
 
-            //  access control UX
-            // if(this.isEditable) {
-            //     html+=  "<div class='row more-info' >"+
-            //                 "<div class='span4 access-level'><div style='padding-left:10px'><strong>Access:</strong>";
-                            
-            //     if(this.model.get("published")==2){
-            //         html+= "<span class='unpublished'>Just Me</span><span class='published selected'>The Universe</span></div>";
-            //     } else {
-            //         html+= "<span class='unpublished selected'>Just Me</span><span class='published'>The Universe</span></div>";
-            //     }
 
-            //     html+= "</div>"+
-            //             "</div>";
-            // }
 
              html+="<div class='row'>"+
                     
@@ -421,7 +385,7 @@
                     "<div class='span4'>"+
                         "<div class='padded-content clearfix'>"+
                             "<div><a href='<%= attribution_uri %>'' target='blank'>View Original <i class='icon-share'></i></a></div>"+
-                            "<div><strong>Added by:</strong> <a href='" + apiLocation + "profile/<%=user_id %>' target='_blank'><%= username %></a></div>"+
+                            "<div><strong>Added by:</strong> <a href='" + apiLocation + "profile/<%=user.id %>' target='_blank'><%= user.display_name %></a></div>"+
                             "<div><strong>Added on:</strong> <%= date %></div>"+
                             "<div><strong>Created by:</strong> <%= media_creator_realname %></div>"+
                             "<div>"+
@@ -502,7 +466,7 @@
             html = "<div id='zeega-embed' style='height:200px; background:url(<%= thumbnail_url %>) no-repeat center center;background-size:cover'>"+
                     "<a class='zeega-link' target='_blank' href='"+sessionStorage.getItem("hostname") + sessionStorage.getItem("directory")+"<%= id %>'><img class='pull-left' style='padding-top: 35%; padding-left: 37%;width:60px;position:relative;z-index:2' src='//alpha.zeega.org/images/embed_play.png'></a>"+
                     "</div>";
-            console.log(zeega);
+            
             return html;
         }
 
@@ -591,7 +555,7 @@
                 this.$el.html(this.player.render().el);
                 this.player.placePlayer();
                 
-                console.log("player",this.player);
+                
                 
                 this.isRendered = true;
             }
