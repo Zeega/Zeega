@@ -16,9 +16,8 @@
     
         url : function()
         {
-            console.log("QUERY :: ", this.query);
-            var url;
 
+            var url;
             
             if( !_.isUndefined(this.query.content) && this.query.content == "project"){
                 url = this.base+"projects/search?";

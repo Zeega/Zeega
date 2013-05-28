@@ -421,7 +421,7 @@
                     "<div class='span4'>"+
                         "<div class='padded-content clearfix'>"+
                             "<div><a href='<%= attribution_uri %>'' target='blank'>View Original <i class='icon-share'></i></a></div>"+
-                            "<div><strong>Added by:</strong> <a href='" + apiLocation + "profile/<%=user_id %>' target='_blank'><%= display_name %></a></div>"+
+                            "<div><strong>Added by:</strong> <a href='" + apiLocation + "profile/<%=user_id %>' target='_blank'><%= username %></a></div>"+
                             "<div><strong>Added on:</strong> <%= date %></div>"+
                             "<div><strong>Created by:</strong> <%= media_creator_realname %></div>"+
                             "<div>"+

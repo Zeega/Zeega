@@ -51,7 +51,6 @@ require (
 			'order!app/views/editor.item/editor.view.item.viewer',
 			
 			'order!app/views/discovery.collections/discovery.view.collection.results',
-			'order!app/views/discovery.collections/discovery.view.collection.my-collections-drawer',
 			
 				//custom
 			'order!helpers/utils',
