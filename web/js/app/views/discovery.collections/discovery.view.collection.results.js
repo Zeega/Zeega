@@ -96,14 +96,12 @@
         },
         
         render : function(){
-            console.log("results rendering");
+
             var _this = this;
             $("#zeega-results-count").hide();
             
             _this._isRendered = true;
             
-            console.log(this.collection,this.collection.search);
-            //if(this.collection.search && this.collection.search.page==1)$(".results-wrapper").empty();
             $(".results-wrapper").empty();
             if(zeega.discovery.app.currentView == "thumb") {
                 $("#results-list-wrapper").hide();

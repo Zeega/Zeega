@@ -48,12 +48,7 @@
         renderItemView : function()
         {
             var itemView = new Items.Views.ViewerContent({model:this.inFocus,state:this.state});
-            
-            if(this.inFocus.get("editable") && this.inFocus.get("media_type") != "Collection"){
-                $("#item-delete").show();
-            } else {
-                $("#item-delete").hide();
-            }
+            $("#item-delete").show();
             this.$el.find(".inner-content").html( itemView.render().el );
             if(this.state == "more" && itemView.mapView.isGeoLocated ) itemView.mapView.renderMap();
             this.inFocus.trigger("after_render");
@@ -219,7 +214,7 @@
         
         initialize : function()
         {
-            this.isEditable = this.model.get("editable");
+            this.isEditable = true;
             this.model.on("toggle_detail", this.toggleDetail, this);
         },
         

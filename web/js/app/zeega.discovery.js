@@ -168,7 +168,7 @@ this.zeega.discovery = {
         var facets = VisualSearch.searchQuery.models;
             
         var obj={};
-        var tagQuery = "";
+        var tagQuery = "tags:";
         var textQuery = "";
 
         _.each(facets, function(facet){
@@ -179,20 +179,23 @@ this.zeega.discovery = {
                     textQuery=textQuery.replace(/^#/, "");
                     break;
                 case "tag":
-                    tagQuery = (tagQuery.length > 0) ? tagQuery + ", " + facet.get("value") : tagQuery + facet.get("value");
+                    tagQuery = (tagQuery.length > 5) ? tagQuery + ", " + facet.get("value") : tagQuery + facet.get("value");
                     tagQuery=tagQuery.replace(/^#/, "");
                     break;
             }
         });
             
-        obj.q = textQuery + (textQuery.length > 0 && tagQuery.length > 0 ? " " : "") + (tagQuery.length > 0 ? tagQuery : "");
-        
-        if(obj.q !== ""){
-            obj.q = "tags:" + obj.q;
-        }
-
+        obj.q = textQuery + (textQuery.length > 0 && tagQuery.length > 5 ? " " : "") + (tagQuery.length > 5 ? tagQuery : "");
         obj.text = textQuery;
         obj.view_type = this.currentView;
+
+        if(!_.isNull(this.currentCollection)) {
+            obj.collection=this.currentCollection.id;
+            obj.collection_title=this.currentCollection.get("title");
+        }
+        
+
+        obj.universe=$(".universe-toggle").find(".selected").data("universe");
         
         obj.content = $("#zeega-content-type").val();
         obj.sort = $("#zeega-sort").val();
