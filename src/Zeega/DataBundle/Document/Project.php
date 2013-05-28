@@ -101,6 +101,11 @@ class Project
     protected $views;
 
     /**
+     * @MongoDB\Boolean
+     */
+    protected $editable;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="User")
      */    
     protected $user;   
@@ -713,5 +718,27 @@ class Project
     public function getTags()
     {
         return $this->tags;
+    }
+
+    /**
+     * Set editable
+     *
+     * @param boolean $editable
+     * @return self
+     */
+    public function setEditable($editable)
+    {
+        $this->editable = $editable;
+        return $this;
+    }
+
+    /**
+     * Get editable
+     *
+     * @return boolean $editable
+     */
+    public function getEditable()
+    {
+        return $this->editable;
     }
 }

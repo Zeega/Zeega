@@ -18,7 +18,7 @@ class ProjectRepository extends DocumentRepository
     public function findProjectsByUser($userId,$limit = null,$published = null)
     {
         $qb = $this->createQueryBuilder('Project')
-            ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created')
+            ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created', 'editable')
             ->eagerCursor(true)
             ->field('user.id')->equals($userId)
             ->field('enabled')->equals(true)

@@ -37,39 +37,10 @@ class EditorController extends BaseController
         }
 
         $this->authorize( $project->getUser()->getId() );       
-        $projectVersion = $project->getVersion();
+        $editable = $project->getEditable();
 
-        if (!isset($projectVersion) || $projectVersion < 1.1) {
-            // temporary fix to support the old editor
-            // TO-DO: exception / null handling and fallback response if something goes wrong
-            $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();            
-
-            $projectJson = json_decode($projectData, true);
-
-            $sequences = $projectJson["sequences"];
-            $sequence = $sequences[0];
-            $projectLayers = $projectJson["layers"];
-
-            $params = array();
-            $params["user"] = $user->getId();
-            $params["sort"] = "date-desc";
-        
-            $items = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $params)->getContent();
-
-            return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
-                    'projecttitle'   => $projectJson["title"],
-                    'projectid'   => $projectJson["id"],
-                    'project'   =>$project,
-                    'sequence'=>$sequence,
-                    'sequences'=>$sequences,
-                    'projectLayers' => $projectLayers,
-                    'page'=>'editor',
-                    'results' => $items,
-                    'project_data' => $projectData,
-                ));
-        } else {
-            // new editor
-            $userProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());        
+        if ( $editable === true ) {
+            $userProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());
             $projectOwners = $project->getUser();       
             $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
         
@@ -78,6 +49,9 @@ class EditorController extends BaseController
                 'project_data' => $projectData,
                 'projects' => json_encode($userProjects)
             )); 
+        } else {
+            // TO-DO: handle old projects gracefully
+            throw new \Exception("This project doesn't exist or cannot be edited");
         }
     }
 }
