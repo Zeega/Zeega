@@ -29,6 +29,7 @@ use Zeega\DataBundle\Document\Sequence as MongoSequence;
 use Zeega\DataBundle\Document\Frame as MongoFrame;
 use Zeega\DataBundle\Document\Layer as MongoLayer;
 use Zeega\DataBundle\Document\User as MongoUser;
+use Zeega\DataBundle\Document\Tag as MongoTag;
 
 //set_error_handler(create_function('$e', 'echo "Uncaught error \n";'));
 //set_exception_handler(create_function('$e', 'echo "Uncaught exception \n";'));
@@ -94,7 +95,7 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                 continue;
             }
             $mongoUser = new MongoUser();
-            $mongoUser->setOldId($user->getId());
+            $mongoUser->setRdbmsId($user->getId());
             $mongoUser->setUsername($user->getUsername());
             $mongoUser->setUsernameCanonical($user->getUsernameCanonical());
             $mongoUser->setEmail($user->getEmail());
@@ -151,43 +152,48 @@ class MysqlToMongoCommand extends ContainerAwareCommand
         foreach($users as $user) {
 
             $oldUserId = $user->getId();
+            $mongoUser = $dm->getRepository('ZeegaDataBundle:User')->findOneBy(array("rdbms_id" => $oldUserId));
 
-            $output->writeln("New User id " . $user->getId());
-            $mongoUser = new MongoUser();
-            $mongoUser->setOldId($user->getId());
-            $mongoUser->setUsername($user->getUsername());
-            $mongoUser->setUsernameCanonical($user->getUsernameCanonical());
-            $mongoUser->setEmail($user->getEmail());
-            $mongoUser->setEmailCanonical($user->getEmailCanonical());
-            $mongoUser->setEnabled($user->isEnabled());
-            $mongoUser->setSalt($user->getSalt());
-            $mongoUser->setPassword($user->getPassword());
-            $lastLogin = $user->getLastLogin();
-            if(isset($lastLogin)) {
-                $mongoUser->setLastLogin($lastLogin);    
-            }            
-            $mongoUser->setLocked($user->isLocked());
-            $mongoUser->setExpired($user->isExpired());
-            $mongoUser->setConfirmationToken($user->getConfirmationToken());
-            $mongoUser->setPasswordRequestedAt($user->getPasswordRequestedAt());
-            $mongoUser->setRoles($user->getRoles());
-            $mongoUser->setCredentialsExpired($user->getCredentialsExpired());
-            $mongoUser->setDisplayName($user->getDisplayName());
-            $mongoUser->setBio($user->getBio());
-            $mongoUser->setThumbUrl($user->getThumbUrl());
-            $mongoUser->setCreatedAt($user->getCreatedAt());
-            $mongoUser->setLocation($user->getLocation());
-            $mongoUser->setLocationLatitude($user->getLocationLatitude());
-            $mongoUser->setLocationLongitude($user->getLocationLongitude());
-            $mongoUser->setBackgroundImageUrl($user->getBackgroundImageUrl());
-            $mongoUser->setDropboxDelta($user->getDropboxDelta());
-            $mongoUser->setIdea($user->getIdea());
-            $mongoUser->setApiKey($user->getApiKey());
-            $mongoUser->setTwitterId($user->getTwitterId());
-            $mongoUser->setTwitterUsername($user->getTwitterUsername());
-            $mongoUser->setFacebookId($user->getFacebookId());
-            $dm->persist($mongoUser);
-            $dm->flush();                
+            if (!isset($mongoUser)) {
+                $output->writeln("New User id " . $user->getId());
+                $mongoUser = new MongoUser();
+                $mongoUser->setRdbmsId($user->getId());
+                $mongoUser->setUsername($user->getUsername());
+                $mongoUser->setUsernameCanonical($user->getUsernameCanonical());
+                $mongoUser->setEmail($user->getEmail());
+                $mongoUser->setEmailCanonical($user->getEmailCanonical());
+                $mongoUser->setEnabled($user->isEnabled());
+                $mongoUser->setSalt($user->getSalt());
+                $mongoUser->setPassword($user->getPassword());
+                $lastLogin = $user->getLastLogin();
+                if(isset($lastLogin)) {
+                    $mongoUser->setLastLogin($lastLogin);    
+                }            
+                $mongoUser->setLocked($user->isLocked());
+                $mongoUser->setExpired($user->isExpired());
+                $mongoUser->setConfirmationToken($user->getConfirmationToken());
+                $mongoUser->setPasswordRequestedAt($user->getPasswordRequestedAt());
+                $mongoUser->setRoles($user->getRoles());
+                $mongoUser->setCredentialsExpired($user->getCredentialsExpired());
+                $mongoUser->setDisplayName($user->getDisplayName());
+                $mongoUser->setBio($user->getBio());
+                $mongoUser->setThumbUrl($user->getThumbUrl());
+                $mongoUser->setCreatedAt($user->getCreatedAt());
+                $mongoUser->setLocation($user->getLocation());
+                $mongoUser->setLocationLatitude($user->getLocationLatitude());
+                $mongoUser->setLocationLongitude($user->getLocationLongitude());
+                $mongoUser->setBackgroundImageUrl($user->getBackgroundImageUrl());
+                $mongoUser->setDropboxDelta($user->getDropboxDelta());
+                $mongoUser->setIdea($user->getIdea());
+                $mongoUser->setApiKey($user->getApiKey());
+                $mongoUser->setTwitterId($user->getTwitterId());
+                $mongoUser->setTwitterUsername($user->getTwitterUsername());
+                $mongoUser->setFacebookId($user->getFacebookId());
+                $dm->persist($mongoUser);
+                $dm->flush();
+            }
+
+            $output->writeln("Old User id " . $user->getId());
             
             //$output->writeln("Getting user projects");
             $userProjects = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());
@@ -209,12 +215,10 @@ class MysqlToMongoCommand extends ContainerAwareCommand
 
                 $mongoProject = new MongoProject();
                 $mongoProject->setId(new \MongoId());
-                $mongoProject->setId(new \MongoId());
                 $mongoProject->setTitle($project->getTitle());
                 $mongoProject->setMobile($project->getMobile());
                 $mongoProject->setDateCreated($project->getDateCreated());
                 $mongoProject->setEnabled($project->getEnabled());
-                $mongoProject->setTags($project->getTags());
                 $mongoProject->setAuthors($project->getAuthors());
                 $mongoProject->setCoverImage($project->getCoverImage());
                 $mongoProject->setEstimatedTime($project->getEstimatedTime());
@@ -222,16 +226,60 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                 $mongoProject->setDescription($project->getDescription());
                 $mongoProject->setLocation($project->getLocation());
                 $mongoProject->setDatePublished($project->getDatePublished());
-                $mongoProject->setOldProjectId($project->getId());
+                $mongoProject->setRdbmsId($project->getId());
+                
                 $mongoProject->setUser($mongoUser);
-
 
                 $projectItemId = $project->getItemId();
 
                 if (isset($projectItemId)) {
-                    $mongoProject->setOldProjectPublishedId($projectItemId);
+                    $mongoProject->setRdbmsIdPublished($projectItemId);
                 }
 
+                $tags = $project->getTags();
+                $tagsAppended = array();
+                if (isset($tags) && is_array($tags)) {
+                    foreach($tags as $tag) {
+                        if(!in_array($tag, $tagsAppended) && !empty($tag) && $tag != "N;" ) {
+                            array_push($tagsAppended, $tag);
+                            $newTag = new MongoTag();
+                            $newTag->setName($tag);
+                            $mongoProject->addTag($newTag);
+                        }
+                    }                    
+                }
+
+                // ITEM DATA
+                if (isset($userProject["itemId"])) {
+                    $item = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Item')->findOneById($userProject["itemId"]);
+                    if (isset($item)) {
+
+                        $mediaType = $item->getMediaType();
+                        if($mediaType == "project") {
+                            $itemTags = $item->getTags();
+                            if (isset($itemTags) && is_array($itemTags)) {
+                                foreach($itemTags as $tag) {
+                                    if(!in_array($tag, $tagsAppended) && !empty($tag) && $tag != "N;" ) {
+                                        array_push($tagsAppended, $tag);
+                                        $newTag = new MongoTag();
+                                        
+                                        $newTag->setName($tag);
+                                        $mongoProject->addTag($newTag);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // PROJECT VERSION
+                $version = $project->getVersion();
+
+                if (isset($version)) {
+                    $mongoProject->setVersion($version);
+                } else {
+                    $mongoProject->setVersion(1);
+                }
                 // TO-DO - SET USER
 
                 foreach($sequences as $seq) {
@@ -356,7 +404,7 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                 //$output->writeln("Saving the new project");
                 $dm->persist($mongoProject);
                 $dm->flush();
-                
+                unset($mongoProject);
                 //$output->writeln("New project saved");
             }
 
@@ -407,18 +455,17 @@ class MysqlToMongoCommand extends ContainerAwareCommand
 
         foreach($mongoUsers as $mongoUser) {
             $id = $mongoUser->getId();
-            $oldId = $mongoUser->getOldId();
+            $oldId = $mongoUser->getRdbmsId();
             $userItems = $dm->createQueryBuilder('ZeegaDataBundle:Item')
-                ->field('userId')->equals((string)$oldId)
-                ->field('user')->notEqual(null)
+                ->field('rdbms_user_id')->equals((string)$oldId)
+                ->field('user')->equals(null)
                 ->getQuery()
                 ->execute();
 
             foreach($userItems as $userItem) {
                 $currUser = $userItem->getUser();
                 $itemId = $userItem->getId();
-                if (!isset($currUser)) {
-                    
+                if (!isset($currUser)) {                    
                     echo "Updating item $itemId \n";
                     $userItem->setUser($mongoUser);
                     $dm->persist($userItem);
