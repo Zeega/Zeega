@@ -25,7 +25,8 @@
 "item_id" : {{ project.itemId | default(null) | json_encode | raw}},
 "mobile" : {{ project.mobile | default(false) | json_encode | raw}},
 "published" : {{ project.published | default(false) | json_encode | raw}},
-"cover_image" : {{ project.coverImage | default("") | json_encode | raw}}
+"cover_image" : {{ project.coverImage | default("") | json_encode | raw}},
+"views":{{ item.views | default(0) | json_encode | raw}}
 {% if project.getSequences is defined %}
 ,"sequences" : [        
     {% for sequence in project.getSequences() %}    
