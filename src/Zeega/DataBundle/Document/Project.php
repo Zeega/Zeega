@@ -103,7 +103,7 @@ class Project
     /**
      * @MongoDB\Boolean
      */
-    protected $editable;
+    protected $editable = true;
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="User")
