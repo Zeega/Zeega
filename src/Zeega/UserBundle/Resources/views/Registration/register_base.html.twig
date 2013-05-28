@@ -13,18 +13,41 @@
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <meta id="viewport" name="viewport" content="
-            width=320;
-            initial-scale=1.0;
-            maximum-scale=1.0;
-            user-scalable=0;"
+            width=320,
+            initial-scale=1.0,
+            maximum-scale=1.0,
+            user-scalable=0"
         />
 
+        <link rel="shortcut icon" type="image/x-icon" href="/images/zeega.ico"> 
         <link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.register.css')}}">
 
         {% block style %}
         {% endblock %}
 
         {% include "FOSUserBundle:Shared:facebook.html.twig" %}
+        {% if app.environment == 'prod' %}
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-37456730-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+        </script>
+        {% endif %}
+        <script>
+            document.body.addEventListener("keydown", function(event){
+                if(event.keyCode == 13 ){
+                    document.getElementById('register').submit(); 
+                }
+            });
+        </script>
     </head>
     <body>
 
