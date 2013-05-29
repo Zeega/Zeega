@@ -24,17 +24,15 @@ class CommunityController extends BaseController
     public function homeAction()
     {
         $queryFields = array("description","tags","id", "title", "thumbnail_url", "attribution_uri", "views", "display_name","user_id", "user_thumbnail");
-        $zeegaQuery = json_decode($this->forward("ZeegaApiBundle:Items:getItemsSearch", array(), array("limit" =>"1", "tags" => "zeegaoftheday", "fields" => "id"))->getContent());
+        $zeegaQuery = json_decode($this->forward("ZeegaApiBundle:Projects:getProjectsSearch", array(), array("tags" => "audiogif", "limit" =>"1"))->getContent());
         
-        if (isset($zeegaQuery->items[0])) {
-            $topZeega = $zeegaQuery->items[0];
+        if (isset($zeegaQuery->projects[0])) {
+            $topZeega = $zeegaQuery->projects[0];
         } else {
             $topZeega = null;
         }
-        
-        $collections = $this->forward("ZeegaApiBundle:Items:getItemsSearch", array(), array("collection" => 94088, "fields" => $queryFields))->getContent();
 
-        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("collections" => $collections, "topZeega" => $topZeega));
+        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("topZeega" => $topZeega));
     }
     
     public function topicAction()
