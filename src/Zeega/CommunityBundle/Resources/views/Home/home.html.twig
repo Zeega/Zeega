@@ -8,11 +8,12 @@
 
 {%  block stylesheets %}
 
-<meta name="zeega" content="zeega-editor"
-            data-root="{{directory}}"
+
+        <meta name="zeega" content="zeega-home"
+            data-directory="{{directory}}"
+            data-hostname="{{hostname}}"
             data-api= "http:{{hostname}}{{directory}}api/"
-            data-hostname= "{{hostname}}"
-        />
+         />
 
     <!-- FOR DEVELOPMENT ONLY - Less CSS files are cached in localStorage so we have to empty that or else your CSS changes will never take effect and you will beat your head on your keyboard and get a big bruise -->
 
@@ -48,7 +49,7 @@
 {% block scripts %}
       
      
-      <script src="{{ asset('js/app/home/dist/debug/require.js') }}" ></script>
+      <script src="{{ asset('js/app/home/dist/release/require.js') }}" ></script>
        <script src="{{ asset('js/lib/bootstrap.js') }}"></script>
       
 
