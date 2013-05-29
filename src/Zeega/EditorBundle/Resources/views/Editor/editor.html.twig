@@ -1,158 +1,102 @@
-{# src/Zeega/EditorBundle/Resources/views/Editor/index.html.twig #}
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
 
-{% extends '::editor.base.html.twig' %}
+        <title>{{project.getTitle()}}</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
+        <meta name="robots" content="noindex,follow">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-{% block title %}Editor{% endblock %}
+        <!-- FB -->
+        
+        <meta property="og:site_name" content="Zeega"/>
+        <meta property="og:title" content="{{project.getTitle()}}"/>
+        <meta property="og:description" content="{{project.getDescription()}}"/>
+        <meta property="og:type" content="movie"/>
+        <meta property="og:url" content="{{hostname}}{{directory}}{{project.getId()}}"/>
+        {% if project.getThumbnailUrl() is defined %}
+        <meta property="og:image" content="{{project.getThumbnailUrl()}}"/>
+        {% elseif project.getCoverImage() is defined %}
+        <meta property="og:image" content="{{project.getCoverImage()}}"/>
+        {% else %}
+        <meta property="og:image" content="{{asset('images/default_cover.png')}}"/>
+        {% endif %}
+            
+        <!-- END FB --> 
 
-{% block body %}
-	<div id='zeega-editor-main'>
+        <!-- Zeega metatags -->
 
-		<div id='zeega-action-column'>
-			<div id='zeega-primary-nav' class='menu-bar menu-dark menu-tall'>
-				<ul>
-					<li class='menu-branding'><a href='{{path('ZeegaCommunityBundle_home')}}' class='zeega-primary-logo'><img src='{{ asset('images/zeega-logo-header.png') }}'/></a></li>
-				</ul>
-				<ul class='pull-right'>
+        <meta name="zeega" content="zeega-editor"
+            data-root="{{directory}}"
+            data-hostname="{{hostname}}"
+            data-editor="editor"
+            data-user-id="{{project.user.getId}}"
+            data-user-name="{{project.user.displayname}}"
+            data-media-root="{{media_host}}"
+            data-project-id="{{project.getId}}"
+            data-user-thumbnail="{{project.user.getThumbUrl}}"
+            data-fav-id="5192b78a20d5cd1712000000"
+        />
 
-					<li>
+        <!-- STYLESHEETS -->
+        <!-- <link rel="stylesheet" href="{{ asset('js/app/editor/vendor/zeegaplayer/dist/debug/css/zeega.css') }}"> -->
+        <link rel="stylesheet" href="{{ asset('js/app/editor/assets/css/style.css') }}">
+        <!-- END STYLESHEETS -->
 
-						<ul class='menu-dropdown'>
-							<a href='#' class='menu-toggle'><i class='icon-user icon-white'></i></a>
-							<ul class='user-action-menu'>
-								<li><a href="{{ path('ZeegaCommunityBundle_dashboard')}}" target='blank'>User Profile</a></li>
-								<!--<li><a href='{{ path('ZeegaCommunityBundle_faq')}}' target='blank' >FAQ</a></li>-->
-								<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
-							</ul>
-						</ul>
+        <script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
 
-					</li>
-					
-					<li>
+        <script>
+            // Session data
+            // sessionStorage.setItem('directory', '{{directory}}');
+            // sessionStorage.setItem('hostname','{{hostname}}');
+            // sessionStorage.setItem('projectId','{{project.getId()}}');
+        {% if app.environment == 'prod' %}
+            // Google analytics
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-33491977-1']);
+            _gaq.push(['_setDomainName', '.zeega.org']); 
+            _gaq.push(['_trackPageview']);
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        {% endif %}
+        
+            // Because IE sucks
+            if ( !window.console ) {
+                console = {log: function() {}};
+            }
 
-						<ul class='menu-dropdown'>
-							<a href='#' class='menu-toggle'><i class='icon-folder-open icon-white'></i></a>
-							<ul class='user-action-menu'>
-								<li><a class="new-project" href="{{path('ZeegaEditorBundle_new')}}"><i class='icon-file'></i> New Zeega</a></li>
-								<li class="divider"></li>
-								{% for project in myprojects %}
-								<li><a href="{{ path('ZeegaEditorBundle_editor', { 'id': project.id }) }}">{{project.title}}</a></li>
-								{% endfor %}
+            // Project data
+            var projectJSON = "{{ project_data|e('js') }}";
 
-							</ul>
-						</ul>
+            window.userProjects = "{{ projects|e('js') }}";
+        </script>
+    
+    {% if app.environment == 'prod'  %}
+        <script src="{{ asset('js/app/editor/dist/release/require.js') }}" ></script>
+        
+        {% if hostname == '//zeega.com/'  %}
 
-					</li>
+          <script type="text/javascript">
+            var heap=heap||[];heap.load=function(a){window._heapid=a;var b=document.createElement("script");b.type="text/javascript",b.async=!0,b.src=("https:"===document.location.protocol?"https:":"http:")+"//d36lvucg9kzous.cloudfront.net";var c=document.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c);var d=function(a){return function(){heap.push([a].concat(Array.prototype.slice.call(arguments,0)))}},e=["identify","track"];for(var f=0;f<e.length;f++)heap[e[f]]=d(e[f])};
+            heap.load("3280618186");
+          </script>
 
-					<li><a href='{{ path('ZeegaCommunityBundle_faq')}}' target='blank' ><i class='icon-question-sign icon-white'></i></a></li>
+        {% endif %}
 
-					<!--<li><a id='zoom-interface' href='#'><i class='icon-zoom-out icon-white'></i></a></li>-->
-					<li id='save-indicator' style='color:orangered'><a href='#'><i class='icon-blank'></i></a></li>
-				</ul>
+    {% else %}
 
+        <script src="{{ asset('js/app/editor/dist/debug/require.js') }}" ></script>
 
-			</div>
+    {% endif %}
 
-			<div id='zeega-project-info'></div>
-			
-			<div id='zeega-add-item-type' class='menu-bar menu-dark' >
-				<ul>
-					<li><a href='#' data-layer_type='Text'><div class='menu-verbose-title'>text</div><i class='icon-font icon-white'></i></a></li>
-					<li><a href='#' data-layer_type='Rectangle'><div class='menu-verbose-title'>color</div><i class='icon-th-large icon-white'></i></a></li>
-					<li><a href='#' data-layer_type='Geo'><div class='menu-verbose-title'>streetview</div><i class='icon-map-marker icon-white'></i></a></li>
-					<li><a href='#' data-layer_type='Popup'><div class='menu-verbose-title'>popup</div><i class='icon-share icon-white'></i></a></li>
-				</ul>
-				<div class='zeega-list-header'>LAYERS</div>
-			</div>
+    </head>
 
-			<div class='layer-lists-container'>
-				<div id='zeega-link-list' class='layer-list'></div>
-				<div id='zeega-layer-list' class='layer-list'></div>
-			</div>
-
-			<div id='zeega-item-database'>
-				
-				<div class='menu-bar  menu-dark' >
-					<ul>
-						<li><a id='database-tray-toggle' href='#'><div class='menu-verbose-title'>hide</div><i class='icon-chevron-down icon-white'></i></a></li>
-						<!--<li><a href="javascript:dropbox.sync()" id='sync-dropbox'><div class='menu-verbose-title'>dropbox</div><i class='icon-hdd icon-white'></i></a></li>-->
-						<li><a href="#" id='add-media-modal'><div class='menu-verbose-title'>add media</div><i class='icon-plus-sign icon-white'></i></a></li>
-						<!--<li><a id="zeega-community-view-toggle" class="my-media" href='#'><div  class='menu-verbose-title'>switch to community media</div><i class='icon-refresh icon-white'></i></a></li>-->
-					</ul>
-					<div class='zeega-list-header'>MEDIA</div>
-				</div>
-
-				<div class='database-tray'>
-					<div class='menu-bar menu-dark clearfix' >
-						<ul class='pull-right'>
-							<li><a id='database-list-view-toggle' href='#'><div class='menu-verbose-title'>List View</div><i class='icon-th-list icon-white'></i></a></li>
-
-
-							<li>
-								<ul class='menu-dropdown'>
-									<a href='#' class='menu-toggle'><div class='menu-verbose-title'>filters</div><i class='icon-filter icon-white'></i></a>
-									<ul id='filter-action-menu'>
-										<li><a href="#" data-filter='all'><i class='icon-globe'></i> All</a></li>
-										<li><a href="#" data-filter='audio'><i class='icon-bullhorn'></i> Audio</a></li>
-										<li><a href="#" data-filter='image'><i class='icon-picture'></i> Image</a></li>
-										<li><a href="#" data-filter='video'><i class='icon-film'></i> Video</a></li>
-										<li class='divider'></li>
-										<li><a href="#" data-filter='reset'><i class='icon-backward'></i> Clear Filters</a></li>
-
-									</ul>
-								</ul>
-
-							</li>
-						</ul>
-						<input id='search-input' class='pull-left' style='margin-left:10px' type='text' placeholder='search my media'/>
-					</div>
-
-					<div id='database-flash' class='alert alert-info hide'></div>
-					<div id='zeega-item-database-list' class='grid-view'></div>
-
-				</div><!-- database tray -->
-
-
-			</div><!-- zeega item database -->
-
-		</div><!-- zeega action column -->
-		<div id='zeega-edit-column' style='width: -webkit-calc(100% - 300px);'>
-
-			<div id='zeega-project-nav'>
-				<div id='zeega-project-sequence-list' class='clearfix'></div>
-				<div id='zeega-project-frame-list' class='clearfix'></div>
-				<div id='zeega-project-frame-detail-bar' class='menu-bar clearfix'></div>
-			</div>
-			<div id='frame-workspace-wrapper'>
-				<div id='zeega-frame-workspace'></div>
-			</div>
-		</div>
-
-	</div>
-{% endblock %}
-
-{% block scripts %}
-
-	<script type="text/javascript" language="Javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script src="http://s3.documentcloud.org/viewer/loader.js"></script>
-	
-	{% if app.environment == 'dev' %}
-	<!-- to load JS libraries separately -->
-		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js/loaders/editor.js') }}"></script>
-	{% else %}
-		<!-- to load single aggregated JS library --> 
-		<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/editor.js') }}"></script>
-	{% endif %}
-
-	<script src="{{ asset('js/lib/jquery.tagsinput.min.js')}}"></script>
-
-	<link rel="stylesheet" type="text/css" href="{{ asset('js/lib/jquery.tagsinput.css')}}" />
-
-	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-	
-	<script type="text/javascript" language="Javascript">
-		//bootstrapping data
-		var itemsJSON = "{{ results|e('js') }}";
-		var projectJSON = "{{ project_data|e('js') }}";
-	</script>
-			
-{% endblock %}
+    <body>
+        <div role="main" id="main"></div>
+    </body>
+</html>

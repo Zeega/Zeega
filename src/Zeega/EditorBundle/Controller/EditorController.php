@@ -44,7 +44,7 @@ class EditorController extends BaseController
             $projectOwners = $project->getUser();       
             $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
         
-            return $this->render('ZeegaEditorBundle:Editor:neweditor.html.twig', array(
+            return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
                 'project'   =>$project,
                 'project_data' => $projectData,
                 'projects' => json_encode($userProjects)
