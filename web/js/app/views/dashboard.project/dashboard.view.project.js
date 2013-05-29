@@ -43,7 +43,7 @@
 									'<img class="pull-left" style="width:60px;position:relative;z-index:2" src="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'images/embed_play.png">'+
 								'</a>';
 								
-								if (zeega.dashboard.app.editable)
+								if (zeega.dashboard.app.editable && && this.model.get('version') > 1)
 								{
 									html+=
 										'<div class="admin-actions btn-group">'+
