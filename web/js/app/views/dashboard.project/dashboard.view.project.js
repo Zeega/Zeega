@@ -38,12 +38,14 @@
 		{
 			var html =
 						'<div class="row">'+
-							'<div id="zeega-embed" class="span7 project-image" style="background:url(<%= cover_image %>) no-repeat center center;background-size:cover">'+
-								'<a class="zeega-link" href="<%= view_url %>" target="_blank">'+
+							'<div id="zeega-embed" class="span7 project-image" style="background:url(<%= cover_image %>) no-repeat center center;background-size:cover">';
+							if(!_.isNull(this.model.get('item_id'))) {
+								html += '<a class="zeega-link" href="<%= view_url %>" target="_blank">'+
 									'<img class="pull-left" style="width:60px;position:relative;z-index:2" src="'+sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') +'images/embed_play.png">'+
 								'</a>';
+							} 
 								
-								if (zeega.dashboard.app.editable && this.model.get('version') > 1)
+								if (zeega.dashboard.app.editable)
 								{
 									html+=
 										'<div class="admin-actions btn-group">'+
