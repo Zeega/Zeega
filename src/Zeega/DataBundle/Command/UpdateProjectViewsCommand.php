@@ -28,7 +28,7 @@ use Zeega\DataBundle\Entity\Item;
  * Updates a task status
  *
  */
-class UpdateItemViewsCommand extends ContainerAwareCommand
+class UpdateProjectViewsCommand extends ContainerAwareCommand
 {
     /**
      * @see Command
