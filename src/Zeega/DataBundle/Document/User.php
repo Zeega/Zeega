@@ -492,8 +492,8 @@ class User extends BaseUser
     {
         return $this->favorites;
     }
-    
-     * Set salt
+
+     /* Set salt
      *
      * @param string $oldId
      * @return \User
