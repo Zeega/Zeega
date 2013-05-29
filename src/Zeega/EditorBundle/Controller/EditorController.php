@@ -46,8 +46,35 @@ class EditorController extends BaseController
 		$projectVersion = $project->getVersion();
 
 		if (!isset($projectVersion) || $projectVersion < 1.1) {
-		    throw new \Exception("This project doesn't exist or cannot be edited");
-                } else {
+			// video editor
+			$sequences = $this->getDoctrine()->getRepository('ZeegaDataBundle:Sequence')->findBy(array("project" => $id));
+
+			$projectLayers =  $this->getDoctrine()->getRepository('ZeegaDataBundle:Layer')->findBy(array("project" => $id));
+
+			$sequence = $sequences[0];
+			
+			$params = array();
+			$params["user"] = $user->getId();
+		    $params["data_source"] = "db";
+		    $params["sort"] = "date-desc";
+		    $params["type"] = "-project AND -collection";
+		
+			$items = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), $params)->getContent();
+
+			$projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
+			
+			return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
+					'projecttitle'   => $project->getTitle(),
+					'projectid'   =>$project->getId(),
+					'project'   =>$project,
+					'sequence'=>$sequence,
+					'sequences'=>$sequences,
+					'projectLayers' => $projectLayers,
+	           		'page'=>'editor',
+					'results' => $items,
+					'project_data' => $projectData,
+				));
+		} else {
 			// new editor
 			$userProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectsByUserSmall($user->getId());		
 			$projectOwners = $project->getUsers();		
