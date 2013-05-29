@@ -34,7 +34,9 @@ class BaseController extends SymfonyBaseController
                 }
             }
         } else {
-            return $user;
+            if ( $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') ) {                
+                return $user;
+            }
         }
 
         return null;
