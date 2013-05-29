@@ -90,6 +90,11 @@ class User extends BaseUser
      */
     protected $facebookId;
 
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="Favorite", mappedBy="project")
+     */
+    protected $favorites;
+
     public function __construct()
     {
         parent::__construct();
@@ -456,5 +461,35 @@ class User extends BaseUser
     public function getRdbmsId()
     {
         return $this->rdbmsId;
+    }
+
+    /**
+     * Add favorites
+     *
+     * @param Zeega\DataBundle\Document\Favorite $favorites
+     */
+    public function addFavorite(\Zeega\DataBundle\Document\Favorite $favorites)
+    {
+        $this->favorites[] = $favorites;
+    }
+
+    /**
+    * Remove favorites
+    *
+    * @param <variableType$favorites
+    */
+    public function removeFavorite(\Zeega\DataBundle\Document\Favorite $favorites)
+    {
+        $this->favorites->removeElement($favorites);
+    }
+
+    /**
+     * Get favorites
+     *
+     * @return Doctrine\Common\Collections\Collection $favorites
+     */
+    public function getFavorites()
+    {
+        return $this->favorites;
     }
 }

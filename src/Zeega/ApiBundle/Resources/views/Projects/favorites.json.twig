@@ -1,0 +1,8 @@
+{
+{% for favorite in favorites %}
+    {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': favorite.user} %}
+    {%- if loop.index0 < favorites|length - 1 -%}
+        ,
+    {%- endif -%}
+{% endfor %}
+}

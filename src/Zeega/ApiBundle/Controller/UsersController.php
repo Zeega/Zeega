@@ -211,4 +211,27 @@ class UsersController extends BaseController
         }
         
     }
+
+    public function postUsersValidateAction() {
+        $valid = false;
+
+        if ( $this->getRequest()->request->has("username") ) {
+            $username = $this->getRequest()->request->get("username");
+            $user =  $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findOneByUsername($username);
+
+            if ( !isset($user) ) {
+                $valid = true;
+            } else {
+                $loggedUser = $this->getUser();
+
+                if ( isset($loggedUser) ) {
+                    if ( $user->getId() == $loggedUser->getId() ) {
+                        $valid = true;
+                    }
+                }
+            }
+        }
+
+        return json_encode(array("username"=>$username, "valid"=>$valid));
+    }
  }

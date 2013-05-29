@@ -17,6 +17,7 @@ use Zeega\DataBundle\Document\Sequence as MongoSequence;
 use Zeega\DataBundle\Document\Frame as MongoFrame;
 use Zeega\DataBundle\Document\Layer as MongoLayer;
 use Zeega\DataBundle\Document\Tag;
+use Zeega\DataBundle\Document\Favorite;
 
 use Zeega\CoreBundle\Controller\BaseController;
 
@@ -37,6 +38,21 @@ class ProjectsController extends BaseController
 
         return new Response($projectView);
     } 
+
+    public function getProjectsFavoritesAction($projectId)
+    {   
+        $dm = $this->get('doctrine_mongodb')->getManager();        
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        if ( !$project ) {
+            throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
+        }
+
+        $favorites = $dm->getRepository('ZeegaDataBundle:Favorite')->findFavoriteUsers($projectId);
+        $projectView = $this->renderView('ZeegaApiBundle:Projects:favorites.json.twig', array('favorites' => $favorites));
+
+        return new Response($projectView);
+    }  
 
     /**
      * Get a project
@@ -547,5 +563,65 @@ class ProjectsController extends BaseController
         $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
         
         return new Response($layerView);
+    }
+
+    public function postProjectsFavoriteAction($projectId)
+    {   
+        $user = $this->get('security.context')->getToken()->getUser();
+        if( !isset($user) ) {
+            return parent::getStatusResponse(401);   
+        }
+
+        $dm = $this->get('doctrine_mongodb')->getManager();        
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        if ( !$project ) {
+            throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
+        }
+        
+        $favorite = $dm->getRepository('ZeegaDataBundle:Favorite')->findOneBy(array(
+            "user.id" => $user->getId(),
+            "project.id" => $projectId));
+
+        if ( !isset($favorite) ) {
+            $favorite = new Favorite();
+            $favorite->setUser($user);
+            $favorite->setProject($project);
+
+            $dm->persist($favorite);
+            $dm->flush();
+        }
+        
+        $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
+        
+        return new Response($projectView);
+    }
+
+    public function postProjectsUnfavoriteAction($projectId)
+    {   
+        $user = $this->get('security.context')->getToken()->getUser();
+        if( !isset($user) ) {
+            return parent::getStatusResponse(401);   
+        }
+        
+        $dm = $this->get('doctrine_mongodb')->getManager();        
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        if ( !$project ) {
+            throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
+        }
+        
+        $favorite = $dm->getRepository('ZeegaDataBundle:Favorite')->findOneBy(array(
+            "user.id" => $user->getId(),
+            "project.id" => $projectId));
+
+        if ( isset($favorite) ) {            
+            $dm->remove($favorite);
+            $dm->flush();
+        }
+        
+        $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
+        
+        return new Response($projectView);
     }
 }
