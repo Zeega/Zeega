@@ -65,29 +65,47 @@
 
 		deleteTag : function(e)
 		{
-			var index = $(e.target).closest('li').data('index');
-			var tagArray = this.model.get('tags');
+			var index = $(e.target).closest('li').data('index'),
+			tagArray = this.model.get('tags');
+
+			$(e.target).closest('li').remove();
+			
+			$.ajax({
+						url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'api/projects/' + this.model.id + "/tags/" + tagArray[ index ],
+						type: 'DELETE',
+						success: function(){
+					}
+			});
+
 			tagArray.splice(index,1);
-			if(!_.isUndefined(this.model.get('text'))){
-                    this.model.unset('text');
-            }
-			this.model.save('tags',tagArray);
-			this.render();
+			this.model.set('tags',tagArray);
 			return false;
 		},
 		
 		inputKeypress : function(e)
 		{
-			var tagArray;
+			var tag, tagArray;
 			
 			if(e.which == 13){
 				tagArray = this.model.get('tags');
-				if(!_.isArray(tagArray)) tagArray =[];
-				tagArray.push(this.$el.find('.tag-input input').val());
+				if(!_.isArray(tagArray)) {
+					tagArray =[];
+				}
+				tag = this.$el.find('.tag-input input').val();
+
+				tagArray.push( tag );
 				if(!_.isUndefined(this.model.get('text'))){
                     this.model.unset('text');
                 }
-				this.model.save('tags',tagArray);
+
+                $.ajax({
+						url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'api/projects/' + this.model.id + "/tags/" + tag,
+						type: 'POST',
+						success: function(){
+					}
+				});
+
+				this.model.set('tags',tagArray);
 				this.render();
 				this.$el.find('.tag-input input').focus();
 

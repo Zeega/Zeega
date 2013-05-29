@@ -229,6 +229,8 @@ class ProjectsController extends BaseController
         return new Response($projectView);    
     }
 
+
+
     /**
      * Delete a project
      * Route: Delete api/projects/:id
@@ -243,6 +245,69 @@ class ProjectsController extends BaseController
         $dm->flush();
         return new Response('SUCCESS',200);
     }
+
+
+    /**
+     * Add a tag to a project
+     * Route: POST api/projects/:id/tags/:tag
+     *
+     * @return Project|response
+     */   
+    public function postProjectsTagsAction($projectId, $tag)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();        
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        if ( !$project ) {
+            throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
+        }
+
+        $newTag = new Tag();
+        $newTag->setName($tag);
+        $project->addTag($newTag);
+        
+        $dm->persist($project);
+        $dm->flush();
+        
+        $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));        
+        return new Response($projectView);    
+    }
+
+    /**
+     * Delete a tag from a project
+     * Route: DELETE api/projects/:id/tags/:tag
+     *
+     * @return Project|response
+     */   
+    public function deleteProjectsTagsAction($projectId, $tag)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();        
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        if ( !$project ) {
+            throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
+        }
+
+        $projectTags = $project->getTags();
+
+        if( $projectTags->count() > 0 ){
+            foreach($projectTags as $t){
+                if( $t->getName() == $tag ){
+                    $project->removeTag($t);
+                }
+
+            }
+        }
+
+        $dm->persist($project);
+        $dm->flush();
+        
+        $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));        
+        return new Response($projectView);    
+    }
+
+
+
 
     /**
      * Update a sequence
