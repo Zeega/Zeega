@@ -28,6 +28,7 @@
 "cover_image" : {{ project.coverImage | default("") | json_encode | raw}},
 "views":{{ project.views | default(0) | json_encode | raw}},
 "editable":{{ project.editable | default(false) | json_encode | raw}},
+"favorite":{{ favorite | default(false) | json_encode | raw}},
 "favorite_count":{{ project.favorites.count | json_encode | raw}}
 {% if project.getSequences is defined %}
 ,"sequences" : [        

@@ -64,11 +64,20 @@ class ProjectsController extends BaseController
      * @return Project|response
      */   
     public function getProjectAction($id)
-    {   
-        $user = $this->get('security.context')->getToken()->getUser();
+    {           
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);        
-        $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        $user = $this->getUser();
+        $favorite = false;
+        if ( isset($user) ) {
+            $favorite = $dm->getRepository('ZeegaDataBundle:Favorite')->findOneBy(array(
+                "user.id" => $user->getId(),
+                "project.id" => $id));
+            $favorite = isset($favorite);
+        }
+        $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array(
+            'project' => $project,
+            'favorite' => $favorite));
         
         return new Response($projectView);
     } 
