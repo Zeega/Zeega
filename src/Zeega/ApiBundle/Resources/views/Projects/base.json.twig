@@ -1,6 +1,6 @@
 {
 "id" : {{ project.id | default("") | json_encode | raw }},
-{% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': project.user} %},
+"user": {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': project.user} %},
 "title" : {{ project.title | default("") | json_encode | raw}},
 "date_created" : "{{ project.dateCreated is empty ? "" : project.getDateCreated()  | date("m/d/Y ") }}",
 "date_updated" : "{{ project.dateUpdated is empty ? "" : project.getDateUpdated()  | date("U") }}",
