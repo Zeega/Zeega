@@ -1,5 +1,4 @@
 {
-    {% if request is defined %}"request": {{ request | json_encode | raw  }},{%- endif -%}
     "projects":[
     {% for project in projects %}
         {% include 'ZeegaApiBundle:Projects:base.json.twig' with {'project': project} %}    
@@ -7,5 +6,6 @@
         ,
         {%- endif -%}
     {% endfor %}
-]
+    ],
+    {% include 'ZeegaApiBundle:Shared:request.json.twig' with {'request': request} %}
 }
