@@ -1,8 +1,18 @@
 {
+"project": {
+    {% if project is defined %}
+    "id": {{ project.id | json_encode | raw}}
+    {% endif %}
+},
+"users":[
+{% if favorites is defined %}
 {% for favorite in favorites %}
     {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': favorite.user} %}
     {%- if loop.index0 < favorites|length - 1 -%}
         ,
     {%- endif -%}
 {% endfor %}
+{% endif %}
+],
+{% include 'ZeegaApiBundle:Shared:request.json.twig' %}
 }
