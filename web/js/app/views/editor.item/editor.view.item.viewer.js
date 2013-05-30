@@ -505,7 +505,7 @@
         getTemplate : function()
         {
             html = "<div id='zeega-embed' style='height:200px; background:url(<%= thumbnail_url %>) no-repeat center center;background-size:cover'>"+
-                    "<a class='zeega-link' target='_blank' href='"+sessionStorage.getItem("hostname") + sessionStorage.getItem("directory")+"<%= id %>'><img class='pull-left' style='padding-top: 35%; padding-left: 37%;width:60px;position:relative;z-index:2' src='//alpha.zeega.org/images/embed_play.png'></a>"+
+                    "<a class='zeega-link' target='_blank' href='"+sessionStorage.getItem("hostname") + sessionStorage.getItem("directory")+"<%= id %>'></a>"+
                     "</div>";
             console.log(zeega);
             return html;
