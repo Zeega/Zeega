@@ -49,7 +49,10 @@ class ProjectsController extends BaseController
         }
 
         $favorites = $dm->getRepository('ZeegaDataBundle:Favorite')->findFavoriteUsers($projectId);
-        $projectView = $this->renderView('ZeegaApiBundle:Projects:favorites.json.twig', array('favorites' => $favorites));
+        $projectView = $this->renderView('ZeegaApiBundle:Projects:favorites.json.twig', array(
+            'project' => $project,
+            'favorites' => $favorites
+            ));
 
         return new Response($projectView);
     }  
