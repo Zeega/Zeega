@@ -1,5 +1,4 @@
-{ 
-"project":{
+{
 "id" : {{ project.id | default("") | json_encode | raw }},
 "user": {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': project.user} %},
 "title" : {{ project.title | default("") | json_encode | raw}},
@@ -77,6 +76,4 @@
     {%- endif -%}           
     {% endfor %}        
 ]
-},
-{% include 'ZeegaApiBundle:Shared:request.json.twig' %}
 }

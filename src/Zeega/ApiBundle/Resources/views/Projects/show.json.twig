@@ -1,1 +1,4 @@
-{% include 'ZeegaApiBundle:Projects:base.json.twig' with {'project': project} %}	
+{ 
+"project":{% include 'ZeegaApiBundle:Projects:base.json.twig' with {'project': project} %},
+{% include 'ZeegaApiBundle:Shared:request.json.twig' %}
+}
