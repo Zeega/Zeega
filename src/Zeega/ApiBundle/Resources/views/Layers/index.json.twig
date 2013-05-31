@@ -1,8 +1,0 @@
-[
-	{% for layer in layers %}
-		{% include 'ZeegaApiBundle:Layers:show.json.twig' with {'layer': layer} %}	
-		{%- if loop.index0 < layers|length - 1 -%}
-		,
-		{%- endif -%}
-    {% endfor %}
-]

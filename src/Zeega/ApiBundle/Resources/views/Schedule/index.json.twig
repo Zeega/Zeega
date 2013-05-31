@@ -1,8 +1,0 @@
-{
-    {% for schedule in schedules %}
-        {% include 'ZeegaApiBundle:Schedule:show.json.twig' with {'schedule': schedule} %} 
-        {%- if loop.index0 < schedules|length - 1 -%}
-        ,
-        {%- endif -%}
-    {% endfor %}
-}
