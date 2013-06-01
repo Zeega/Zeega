@@ -32,11 +32,24 @@ class PublishController extends BaseController
     public function projectAction($id, $mobile)
     {   
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-        $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
 
         if (null === $project) {
             throw $this->createNotFoundException("The project with the id $id does not exist or is not published.");
         }
+
+        // favorites begin - changes here should be replicaded on api/projects/:id
+        $user = $this->getUser();
+        $favorite = false;
+        if ( isset($user) ) {
+            $favorite = $this->getDoctrine()->getRepository('ZeegaDataBundle:Favorite')->findOneBy(array(
+                "user.id" => $user->getId(),
+                "project.id" => $id));
+            $favorite = isset($favorite);
+        }
+        // favorites end
+        $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array(
+            'project' => $project,
+            'favorite' => $favorite));
 
         $isProjectMobile = $project->getMobile();
         $projectVersion = $project->getVersion();
