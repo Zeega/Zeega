@@ -49,7 +49,6 @@ class BookmarkletController extends BaseController
      */    
     public function openAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
         $request = $this->getRequest();
         $session = $request->getSession();
         
@@ -65,9 +64,10 @@ class BookmarkletController extends BaseController
         
         if(isset($parserResponse))
         {
-            $isUrlValid = $parserResponse["request"]["success"];
-            $isUrlCollection = $parserResponse["request"]["is_set"];
-            $message = $parserResponse["request"]["message"];
+            //var_dump($parserResponse);
+            $isUrlValid = $parserResponse["request"]["parser"]["success"];
+            $isUrlCollection = $parserResponse["request"]["parser"]["is_set"];
+            $message = $parserResponse["request"]["parser"]["message"];
             $items = $parserResponse["items"];
             
             if($isUrlValid && count($items) > 0)

@@ -68,6 +68,7 @@ class ProjectsController extends BaseController
         $dm = $this->get('doctrine_mongodb')->getManager();
         $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
         $user = $this->getUser();
+        // favorites begin - changes here should be replicaded on the publish controller (/:project_id)
         $favorite = false;
         if ( isset($user) ) {
             $favorite = $dm->getRepository('ZeegaDataBundle:Favorite')->findOneBy(array(
@@ -75,6 +76,7 @@ class ProjectsController extends BaseController
                 "project.id" => $id));
             $favorite = isset($favorite);
         }
+        // favorites end
         $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array(
             'project' => $project,
             'favorite' => $favorite));
