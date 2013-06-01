@@ -72,7 +72,7 @@
             {% endif %}
             
             //Project data
-            var projectJSON = "{{ project_data|e('js') }}";
+            var projectJSON = "{{ project|json_encode|e('js') }}";
         </script>
         
         <script src="{{ asset('js/app/player.mobile_1_0/dist/release/require.js') }}" ></script>
