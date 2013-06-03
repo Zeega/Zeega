@@ -7,21 +7,22 @@
         "psr-0": { "": "src/" }
     },
     "require": {
-       "php": ">=5.3.3",
-        "symfony/symfony": "2.1.*",
-        "doctrine/doctrine-bundle": "1.1.*",
-        "twig/extensions": "1.0.*@dev",
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.2.*",
+        "doctrine/orm": "~2.2,>=2.2.3",
+        "doctrine/doctrine-bundle": "1.2.*",
+        "twig/extensions": "1.0.*",
         "symfony/assetic-bundle": "2.1.*",
-        "symfony/swiftmailer-bundle": "2.1.*",
-        "symfony/monolog-bundle": "2.1.*",
-        "sensio/distribution-bundle": "2.1.*",
-        "sensio/framework-extra-bundle": "2.1.*",
-        "sensio/generator-bundle": "2.1.*",
-        "jms/security-extra-bundle": "1.2.*",
-        "jms/di-extra-bundle": "1.1.*",
-        "kriswallsmith/assetic": "1.1.*@dev",
+        "symfony/swiftmailer-bundle": "2.2.*",
+        "symfony/monolog-bundle": "2.2.*",
+        "sensio/distribution-bundle": "2.2.*",
+        "sensio/framework-extra-bundle": "2.2.*",
+        "sensio/generator-bundle": "2.2.*",
+        "jms/security-extra-bundle": "1.4.*",
+        "jms/di-extra-bundle": "1.3.*",
+        "jms/serializer-bundle": "0.12.*@dev",
         "friendsofsymfony/user-bundle": "1.3.1",
-        "friendsofsymfony/rest-bundle": "0.9.0",
+        "friendsofsymfony/rest-bundle": "0.12.0",
         "friendsofsymfony/twitter-bundle": "dev-master",
         "kertz/twitteroauth": "*@dev",
         "friendsofsymfony/facebook-bundle": "1.1.*",
@@ -29,11 +30,11 @@
         "doctrine/mongodb-odm-bundle": "3.0.*@dev",
         "snc/redis-bundle": "2.1.x-dev",
         "predis/predis": "0.8.x",
-        "sonata-project/admin-bundle": "2.1.*@dev",
-        "sonata-project/doctrine-mongodb-admin-bundle": "2.1.*@dev",
+        "sonata-project/admin-bundle": "2.2.*@dev",
+        "sonata-project/doctrine-mongodb-admin-bundle": "2.2.*@dev",
         "sonata-project/jquery-bundle": "1.8.*",
         "sonata-project/exporter": "1.*",
-        "sonata-project/block-bundle": "2.1.*",
+        "sonata-project/block-bundle": "2.2.*",
         "kunstmaan/sentry-bundle": "2.2.*@dev",
         "raven/raven": "dev-master@dev" 
     },
@@ -51,11 +52,15 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
         ]
     },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "alpha",
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "web",
         "branch-alias": {
-            "dev-master": "2.1-dev"
+            "dev-master": "2.2-dev"
         }
     }
 }

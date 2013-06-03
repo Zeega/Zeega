@@ -5,23 +5,19 @@ imports:
     - { resource: @ZeegaSocialBundle/Resources/config/services.yml }
 
 framework:
-    #esi:             ~
     secret:          %secret%
-    router:          { resource: "%kernel.root_dir%/config/routing.yml" }
-    form:            true
-    csrf_protection: true
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: %kernel.debug%
+    form:            ~
+    csrf_protection: ~
     validation:      { enable_annotations: true }
-    templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
-    translator: { fallback: en }
+    templating:
+        engines: ['twig']
     default_locale: %locale%
-    trusted_proxies:  [184.106.132.157]
-
-parameters:
-    pdo.db_options:
-        db_table:    session
-        db_id_col:   session_id
-        db_data_col: session_value
-        db_time_col: session_time  
+    trusted_proxies:  ~
+    session:          ~
+    fragments:        ~
 
 # Twig Configuration
 twig:
@@ -36,9 +32,9 @@ twig:
 
 # Assetic Configuration
 assetic:
-    bundles: []
     debug:          %kernel.debug%
     use_controller: false
+    bundles:        [ ]
     filters:
         cssrewrite: ~
 
@@ -52,14 +48,18 @@ doctrine_mongodb:
         default:
             auto_mapping: true
 
+doctrine:
+    dbal:
+        charset:  UTF8
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: %mailer_transport%
-    encryption: %mailer_encryption%
-    auth_mode:  login
     host:      %mailer_host%
     username:  %mailer_user%
     password:  %mailer_password%
+    spool:     { type: memory }
+    auth_mode:  login
 
 fos_user:
     db_driver: mongodb # other valid values are 'mongodb', 'couchdb' and 'propel'

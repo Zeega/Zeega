@@ -19,8 +19,8 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-            new Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
 
+            new Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
             new FOS\UserBundle\FOSUserBundle(),                        
             
             new Sonata\BlockBundle\SonataBlockBundle(),
@@ -29,9 +29,8 @@ class AppKernel extends Kernel
             new Sonata\DoctrineMongoDBAdminBundle\SonataDoctrineMongoDBAdminBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),      
             
-            new JMS\SerializerBundle\JMSSerializerBundle($this),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
-            //new Nelmio\SolariumBundle\NelmioSolariumBundle(),
             new FOS\TwitterBundle\FOSTwitterBundle(),
             new FOS\FacebookBundle\FOSFacebookBundle(),
             new Snc\RedisBundle\SncRedisBundle(),

@@ -2,8 +2,10 @@ imports:
     - { resource: config.yml }
 
 framework:
-    router:   { resource: "%kernel.root_dir%/config/routing_prod.yml" }
-    profiler: { only_exceptions: true }
+    router:
+        strict_requirements: null
+    validation:
+        cache: apc
     session:
         handler_id: snc_redis.session.handler
 
