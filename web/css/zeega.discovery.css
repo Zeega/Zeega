@@ -1043,6 +1043,8 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 #zeega-list-view .zeega-list-left-column{width:100px;}
 #zeega-list-view .zeega-list-middle-column{width:-webkit-calc(-120%);word-break:break-all;}
 #zeega-list-view .zeega-list-right-column{width:115px;}
+.zeega-project-link{position:absolute;top:30%;left:90px;width:100px;height:100px;background-image:url('../../../images/start-button.png');background-size:100%;background-position:center;background-repeat:no-repeat;opacity:0.8;}
+.zeega-project-link:hover{opacity:1;}
 .collection-head .cover-image{background:repeat;background-color:#ccc;height:200px;position:relative;margin-bottom:10px;}
 .collection-thumb-drop{outline:1px solid yellow;}
 .collection-remove-item{z-index:10;position:absolute;background:transparent !important;font-weight:bold;padding-left:2px;line-height:11px;width:10px;height:10px;overflow:hidden;}
@@ -1084,6 +1086,7 @@ li.collection-list-item .collection-title{display:inline-block;width:200px;white
 #zeega-item-database-list>ul>li{padding:2px;float:left;}
 #zeega-item-database-list>ul>li>a{display:block;height:42px;width:42px;background:black;}
 #zeega-item-database-list>ul>li>a img{height:100%;width:100%;}
+.thumbnail{background-position:center;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;position:relative;width:144px;height:144px;background-color:#ffffff;}
 #zeega-discovery-title{font-weight:bold;color:white;font-size:2em;padding:5px 10px;cursor:pointer;line-height:1em;}
 .list-media{cursor:pointer;}
 .collection-title-wrapper{display:none;padding:10px;}
