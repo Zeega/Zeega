@@ -16,6 +16,15 @@ use Zeega\DataBundle\Document\Item;
 
 class ItemRepository extends DocumentRepository
 {
+    public function findOneById($id){
+        if (is_numeric($id) ) {
+            $item = parent::findOneBy(array("rdbms_id" => $id));
+        } else {
+            $item = parent::findOneById($id);
+        }        
+        return $item;
+    }
+
     private function buildSearchQuery($qb, $query)
     {
         if(isset($query['user'])) {
