@@ -45,6 +45,7 @@ security:
         - { path: ^/[a-zA-Z0-9]+, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }    # force http for project playback
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }   # force https for login
         - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY}                       # this needs to be here; not sure why
+        - { path: ^/register$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/dashboard, role: ROLE_USER }
         - { path: ^/library, role: ROLE_USER }
