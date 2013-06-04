@@ -56,7 +56,7 @@ class ParserTumblrTag extends ParserAbstract
                             $item->setMediaDateCreated(new DateTime($currentPost -> date));
                             $item->setChildItemsCount(0);
                             $item->setTags($currentPost -> tags);
-                            
+                            $item->setAttributes( array( "timestamp"=> $currentPost -> timestamp, "id"=>$currentPost -> id, "apiRequestUrl"=> $apiCallUrl) );
                             array_push($items,$item); 
                         }
                         break;
