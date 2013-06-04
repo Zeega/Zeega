@@ -17,17 +17,22 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Kernel;
 
+use FOS\Rest\Decoder\DecoderProviderInterface;
+
 class ApiListener
 {
     /** @var \Symfony\Component\Security\Core\SecurityContext */
     private $context;
     /** @var \Symfony\Component\HttpKernel\Kernel */
     private $kernel;
+    /** @var DecoderProviderInterface */
+    private $decoderProvider;
 
-    public function __construct(SecurityContext $context, Kernel $kernel)
+    public function __construct(SecurityContext $context, Kernel $kernel, DecoderProviderInterface $fos_decoder)
     {
         $this->context = $context;
         $this->kernel = $kernel;
+        $this->decoderProvider = $fos_decoder;
     }
 
     public function onKernelRequest(GetResponseEvent $event)
@@ -52,6 +57,29 @@ class ApiListener
                         }
                     }
                 }
+            }
+        }
+
+        $request = $event->getRequest();
+
+        if (!count($request->request->all())
+            && in_array($request->getMethod(), array('POST', 'PUT', 'PATCH', 'DELETE'))
+        ) {
+            $contentType = $request->headers->get('Content-Type');
+
+            $format = null === $contentType
+                ? $request->getRequestFormat()
+                : $request->getFormat($contentType);
+
+            if (!$this->decoderProvider->supports($format)) {
+                return;
+            }
+
+            $decoder = $this->decoderProvider->getDecoder($format);
+
+            $data = $decoder->decode($request->getContent(), $format);
+            if (is_array($data)) {
+                $request->request = new ParameterBag($data);
             }
         }
     }

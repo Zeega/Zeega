@@ -30,6 +30,10 @@ twig:
         web_directory: %web_directory%
         event_logger_host: %event_logger_host%
 
+doctrine:
+    dbal:
+        charset: UTF8
+
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%

@@ -195,47 +195,6 @@ class ProjectsController extends BaseController
             $project->setMobile( $this->getRequest()->request->get('mobile') );
         }
 
-        if( $this->getRequest()->request->has('tags') ) {
-
-            $newTags = $this->getRequest()->request->get('tags');
-            $projectTags = $project->getTags();
-
-            // TO-DO: make this update safe before pushing to staging (this is a prototype)
-            if ( is_array($newTags) ) {
-                
-                // new tag
-                if ( $projectTags->count() < count($newTags) ) {
-                    
-                    $idx = count($newTags) - $projectTags->count() - 1;
-                    $newTags = array_slice($newTags, $idx, count($newTags) - $idx);
-
-                    foreach($newTags as $newTag) {
-                        $tag = new Tag();
-                        $tag->setName($newTag);
-                        $project->addTag($tag);
-                    }
-                } else if ( $projectTags->count() < count($newTags) ) {
-                    // delete tag
-                    $projectTags = $project->getTags()->filter(
-                        function($projecTag) use ($newTags){
-                            return in_array($newTags, $projecTag->getName()) ;
-                        }
-                    );
-                } 
-            } else if (is_string($newTags)) {
-                
-                if ( !isset($projectTags) || $projectTags->count() == 0) {
-                    $tag = new Tag();
-                    $tag->setName($newTags);
-                    $project->addTag($tag);
-                }
-            } else {
-                $project->getTags()->clear();
-            }
-
-            $project->setMobile( $this->getRequest()->request->get('mobile') );
-        }
-
         $dm->persist($project);
         $dm->flush();
         

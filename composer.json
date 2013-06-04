@@ -34,7 +34,9 @@
         "sonata-project/exporter": "1.*",
         "sonata-project/block-bundle": "2.2.*",
         "kunstmaan/sentry-bundle": "2.2.*@dev",
-        "raven/raven": "dev-master@dev" 
+        "raven/raven": "dev-master@dev",
+        "jms/serializer-bundle": "0.12.*@dev",
+        "friendsofsymfony/rest-bundle": "0.12.0" 
     },
     "scripts": {
         "post-install-cmd": [

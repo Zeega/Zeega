@@ -79,6 +79,11 @@ api_projects_put_project_sequences:
     defaults: { _controller:  ZeegaApiBundle:Projects:putProjectSequences, _format: json }
     methods: [PUT]
 
+api_projects_put_project:
+    path: /api/projects/{projectId}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:putProjects, _format: json }
+    methods: [PUT]
+
 api_projects_put_projects:
     path: /api/projects/{projectId}.{_format}
     defaults: { _controller:  ZeegaApiBundle:Projects:postProject, _format: json }
@@ -107,7 +112,7 @@ api_users_post_users_validate:
 
 api_users_post_users_validate:
     path: /api/users/{id}.{_format}
-    defaults: { _controller:  ZeegaApiBundle:Users:putUser, _format: json }
+    defaults: { _controller:  ZeegaApiBundle:Users:putUsers, _format: json }
     methods: [PUT]
 
 # Items API
