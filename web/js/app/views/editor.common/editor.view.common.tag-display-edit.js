@@ -69,12 +69,17 @@
 			tagArray = this.model.get('tags');
 
 			$(e.target).closest('li').remove();
-			
+			if( this.model.get("media_type") == "Project"){
+				$type = "projects";
+			} else {
+				$type =  "items";
+			}
+
 			$.ajax({
-						url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'api/projects/' + this.model.id + "/tags/" + tagArray[ index ],
-						type: 'DELETE',
-						success: function(){
-					}
+					url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'api/' + $type + '/' + this.model.id + "/tags/" + tagArray[ index ],
+					type: 'DELETE',
+					success: function(){
+				}
 			});
 
 			tagArray.splice(index,1);
@@ -98,8 +103,14 @@
                     this.model.unset('text');
                 }
 
+                if( this.model.get("media_type") == "project"){
+                	$type = "projects";
+                } else {
+                	$type =  "items";
+                }
+
                 $.ajax({
-						url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'api/projects/' + this.model.id + "/tags/" + tag,
+						url: sessionStorage.getItem('hostname') + sessionStorage.getItem('directory') + 'api/' + $type + '/' + this.model.id + "/tags/" + tag,
 						type: 'POST',
 						success: function(){
 					}
