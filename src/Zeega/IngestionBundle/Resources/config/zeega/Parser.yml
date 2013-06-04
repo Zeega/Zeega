@@ -94,9 +94,9 @@ zeega.parsers:
             is_set: false
             parser_class: Zeega\IngestionBundle\Parser\Giphy\ParserGiphyItem
         tag_parser: 
-            regex: /https?:\/\/(?:www\.)?giphy.com.*\/tags\/([a-zA-Z0-9\-_]+)\/*/
+            regex: /https?:\/\/(?:www\.)?giphy.com.*\/tags\/([a-zA-Z0-9\-_]+)\/offset\/([0-9]+)/
             is_set: true
-            parser_class: Zeega\IngestionBundle\Parser\Giphy\ParserGiphyTag
+            parser_class: Zeega\IngestionBundle\Parser\Giphy\ParserGiphyTag         
 
     dp.la:
         set_parser:
@@ -123,6 +123,10 @@ zeega.parsers:
             parser_class: Zeega\IngestionBundle\Parser\Tumblr\ParserTumblr
         tag_parser:
             regex: /http:\/\/([a-zA-Z0-9\-_]+).tumblr.com\/tagged\/([a-zA-Z0-9\-_]+)/
+            is_set: true
+            parser_class: Zeega\IngestionBundle\Parser\Tumblr\ParserTumblrTag
+        tag_paged_parser:
+            regex: /http:\/\/([a-zA-Z0-9\-_]+).tumblr.com\/tagged\/([a-zA-Z0-9\-_]+)/\before/\([0-9]+)/
             is_set: true
             parser_class: Zeega\IngestionBundle\Parser\Tumblr\ParserTumblrTag
 
