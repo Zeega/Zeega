@@ -48,10 +48,6 @@ doctrine_mongodb:
         default:
             auto_mapping: true
 
-doctrine:
-    dbal:
-        charset:  UTF8
-
 # Swiftmailer Configuration
 swiftmailer:
     transport: %mailer_transport%
