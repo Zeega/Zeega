@@ -13,9 +13,16 @@ class ParserTumblrTag extends ParserAbstract
     {
         $regexMatches = $parameters["regex_matches"];
         $tag = $regexMatches[2];
+        
         # API key should be moved into a conf file
         $apiKey = "F7zV5AJ9F5I2oKPydkeDcIRydMMm5iiyX3By8Mir6sjMZFpbFv"; 
-        $apiCallUrl = "http://api.tumblr.com/v2/tagged?tag=" . $tag . "&api_key=" . $apiKey;
+
+        if(isset($regexMatches[3])){
+            $apiCallUrl = "http://api.tumblr.com/v2/tagged?tag=" . $tag . "&api_key=" . $apiKey . "&before=" . $regexMatches[3];
+        } else {
+            $apiCallUrl = "http://api.tumblr.com/v2/tagged?tag=" . $tag . "&api_key=" . $apiKey;
+        }
+
         $results_str = file_get_contents(($apiCallUrl));
         $results_json = json_decode($results_str);
         #print(var_dump($results_json));
