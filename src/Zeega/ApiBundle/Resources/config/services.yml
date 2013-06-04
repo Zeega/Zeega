@@ -7,6 +7,7 @@ services:
         arguments:
             security: "@security.context"
             kernel: "@kernel"
+            fos_decoder: "@fos_rest.decoder_provider"
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
