@@ -25,7 +25,7 @@ class ItemsController extends ApiBaseController
             // TO-DO: Auth
             $queryParser = $this->get('zeega_query_parser');
             $query = $queryParser->parseRequest($this->getRequest()->query);
-            $results = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
+            $results = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findByQuery($query);
             $resultsCount = 0;
             $user = $this->getUser();
             $editable = $this->isUserAdmin($user) || $this->isUserQuery( $query, $user );

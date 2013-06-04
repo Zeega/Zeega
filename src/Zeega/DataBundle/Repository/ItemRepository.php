@@ -58,7 +58,7 @@ class ItemRepository extends DocumentRepository
         return $qb;
     }
 
-    public function searchItems($query)
+    public function findByQuery($query)
     {  
         if ( isset($query["text"]) ) {
             $command = array("text" => "Item", "search" => $query["text"]);
