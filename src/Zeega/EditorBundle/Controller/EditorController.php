@@ -37,6 +37,13 @@ class EditorController extends BaseController
         }
 
         $this->authorize( $project->getUser()->getId() );       
+        $userProjects = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findProjectsByUserSmall( $userId );
+        if ( $userProjects == 0 ) {
+            $newUser = true;
+        } else {
+            $newUser = false;
+        }
+
         $editable = $project->getEditable();
 
         if ( $editable === true ) {
@@ -45,7 +52,8 @@ class EditorController extends BaseController
         
             return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
                 'project'   =>$project,
-                'project_data' => $projectData
+                'project_data' => $projectData,
+                'new_user' => $newUser
             )); 
         } else {
             // TO-DO: handle old projects gracefully
