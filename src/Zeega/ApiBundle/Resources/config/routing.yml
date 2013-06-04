@@ -1,15 +1,152 @@
-api_projects:
-    type: rest
-    resource: Zeega\ApiBundle\Controller\ProjectsController
-    name_prefix: api_
-    prefix:   api    
+# Projects API
+api_projects_get_projects_search:
+    path: /api/projects/search.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:getProjectsSearch, _format: json }
+    methods: [GET]
 
-items:
-    type:     rest
-    prefix:   api
-    resource: Zeega\ApiBundle\Controller\ItemsController
+api_projects_get_projects_favorites:
+    path: /api/projects/{projectId}/favorites.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:getProjectsFavorites, _format: json }
+    methods: [GET]
 
-api_users:
-    type: rest
-    prefix: api
-    resource: Zeega\ApiBundle\Controller\UsersController
+api_projects_get_project:
+    path: /api/projects/{id}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:getProject, _format: json }
+    methods: [GET]
+
+api_projects_delete_project:
+    path: /api/projects/{projectId}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:deleteProject, _format: json }
+    methods: [DELETE]
+
+api_projects_delete_projects_tags:
+    path: /api/projects/{projectId}/tags/{tag}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:deleteProjectsTags, _format: json }
+    methods: [DELETE]
+
+api_projects_post_project:
+    path: /api/project.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:postProject, _format: json }
+    methods: [POST]
+
+api_projects_post_project_frames_layers:
+    path: /api/projects/{projectId}/frames/{frameId}/layers.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:postProjectFramesLayers, _format: json }
+    methods: [POST]
+
+api_projects_post_project_frames_thumbnail:
+    path: /api/projects/{projectId}/frames/{frameId}/thumbnail.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:postProjectFramesThumbnail, _format: json }
+    methods: [POST]
+
+api_projects_post_project_layers:
+    path: /api/projects/{projectId}/layers.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:postProjectLayers, _format: json }
+    methods: [POST]
+
+api_projects_post_project_sequences_frames:
+    path: /api/projects/{projectId}/sequences/{sequenceId}/frames.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:postProjectSequencesFrames, _format: json }
+    methods: [POST]
+
+api_projects_post_projects_favorite:
+    path: /api/projects/{projectId}/favorite.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:postProjectsFavorite, _format: json }
+    methods: [POST]
+
+api_projects_post_projects_unfavorite:
+    path: /api/projects/{projectId}/unfavorite.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:postProjectsUnfavorite, _format: json }
+    methods: [POST]
+
+api_projects_post_projects_tags:
+    path: /api/projects/{projectId}/tags/{tag}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:postProjectsTags, _format: json }
+    methods: [POST]
+
+api_projects_put_project_frames:
+    path: /api/projects/{projectId}/frames/{frameId}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:putProjectFrames, _format: json }
+    methods: [PUT]
+
+api_projects_put_project_layers:
+    path: /api/projects/{projectId}/layers/{layerId}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:putProjectLayers, _format: json }
+    methods: [PUT]
+
+api_projects_put_project_sequences:
+    path: /api/projects/{projectId}/sequences/{sequenceId}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:putProjectSequences, _format: json }
+    methods: [PUT]
+
+api_projects_put_projects:
+    path: /api/projects/{projectId}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:postProject, _format: json }
+    methods: [PUT]
+
+# Users API
+api_users_get_user:
+    path: /api/users/{id}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Users:getUser, _format: json }
+    methods: [GET]
+
+api_users_get_user_projects:
+    path: /api/users/{id}/projects.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Users:getUserProjects, _format: json }
+    methods: [GET]
+
+api_users_post_user_profileimage:
+    path: /api/users/{id}/profileimage.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Users:postUserProfileimage, _format: json }
+    methods: [POST]
+
+api_users_post_users_validate:
+    path: /api/users/validate.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Users:postUsersValidade, _format: json }
+    methods: [POST]
+
+api_users_post_users_validate:
+    path: /api/users/{id}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Users:putUser, _format: json }
+    methods: [PUT]
+
+# Items API
+api_items_get_items_parser:
+    path: /api/items/parser.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Items:getItemsParser, _format: json }
+    methods: [GET]
+
+api_items_get_items_search:
+    path: /api/items/search.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Items:getItemsSearch, _format: json }
+    methods: [GET]
+
+api_items_get_item:
+    path: /api/items/{id}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Items:getItem, _format: json }
+    methods: [GET]
+
+api_items_get_items:
+    path: /api/items.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Items:getItems, _format: json }
+    methods: [GET]
+
+api_items_post_items:
+    path: /api/items.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Items:postItems, _format: json }
+    methods: [POST]
+
+api_items_put_items:
+    path: /api/items/{itemId}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Items:putItems, _format: json }
+    methods: [POST]
+
+api_items_delete_item:
+    path: /api/items/{itemId}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Items:deleteItem, _format: json }
+    methods: [DELETE]
+
+api_items_delete_item_tags:
+    path: /api/items/{itemId}/tags/{tagName}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Items:deleteItem, _format: json }
+    methods: [DELETE]

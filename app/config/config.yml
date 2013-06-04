@@ -87,10 +87,6 @@ sensio_framework_extra:
     view:
         annotations: false
 
-fos_rest:
-    routing_loader:
-        default_format: json
-
 fos_twitter:
         file: %kernel.root_dir%/../vendor/kertz/twitteroauth/twitteroauth/twitteroauth.php
         consumer_key: %twitter_consumer_key%

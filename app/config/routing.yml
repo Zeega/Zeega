@@ -12,7 +12,6 @@ ZeegaAdminBundle:
 
 api:
     resource: "@ZeegaApiBundle/Resources/config/routing.yml"
-    type: rest
 
 #admin:
 #    resource: "@ZeegaAdminBundle/Resources/config/routing.yml"
