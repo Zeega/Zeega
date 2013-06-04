@@ -225,6 +225,7 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                 $mongoProject->setDateUpdated($project->getDateUpdated());
                 $mongoProject->setDescription($project->getDescription());
                 $mongoProject->setLocation($project->getLocation());
+                $mongoProject->setPublished($project->getPublished());
                 $mongoProject->setDatePublished($project->getDatePublished());
                 $mongoProject->setRdbmsId($project->getId());
                 
@@ -269,6 +270,9 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                                 }
                             }
                         }
+                        
+                        $views = $item->getViews();
+                        $mongoProject->setViews($views);
                     }
                 }
 
@@ -347,6 +351,26 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                     if(isset($oldSequenceAttr)) {
                         if(isset($oldSequenceAttr["soundtrack"])) {
                             $soundtrackLayerId = $oldSequenceAttr["soundtrack"];
+                            $oldLayer = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Layer')->findOneById($soundtrackLayerId);
+                            if (!isset($layersIdTranslation[$soundtrackLayerId]) && isset($oldLayer)) {                            
+                                $mongoLayer = new MongoLayer();
+                                $mongoLayer->setId(new \MongoId());
+                                $layerAttr = $oldLayer->getAttr();
+                                $layerAttrJson = json_encode($layerAttr);
+                                //echo $layerAttrJson;
+                                if ($layerAttrJson == FALSE) {
+                                    $output->writeln("Project $id has broken layers");
+                                    continue;
+                                }
+
+                                $mongoLayer->setAttr($layerAttr);    
+                                $mongoLayer->setType($oldLayer->getType());
+                                $mongoLayer->setText($oldLayer->getText());
+                                $mongoLayer->setEnabled(true);
+                                $mongoProject->addLayer($mongoLayer);
+                                $layersIdTranslation[$soundtrackLayerId] = $mongoLayer->getId();
+                            }
+
                             if (isset($layersIdTranslation[$soundtrackLayerId])) {
                                 $oldSequenceAttr["soundtrack"] = (string)$layersIdTranslation[$soundtrackLayerId];    
                             }                            
@@ -355,7 +379,6 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                         if(isset($oldSequenceAttr["persistent_layers"])) {
                             $oldPersistentLayersIds = $oldSequenceAttr["persistent_layers"];
 
-                            if (is_array)
                             $newPersistentLayersIds = array();
                             foreach($oldPersistentLayersIds as $oldPersistentLayer) {
                                 array_push($newPersistentLayersIds, (string)$layersIdTranslation[$oldPersistentLayer]);
@@ -413,68 +436,32 @@ class MysqlToMongoCommand extends ContainerAwareCommand
     
     }
 
-    private function fixProjectsUser(OutputInterface $output) {
-        /*$dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
-        $minId = 1;
-        $maxId = 100;
-        $increment = 100;
-
-        while (1) {
-            $mongoUsers = $dm->createQueryBuilder('ZeegaDataBundle:User')
-                ->field('oldId')->gt($minId)
-                ->field('oldId')->lt($maxId)
-                ->getQuery()
-                ->execute();
-
-            if (!isset($mongoUsers)) {
-                break;
-            }   
-
-            foreach($mongoUsers as $mongoUser) {
-                $id = $mongoUser->getId();
-                $oldId = $mongoUser->getOldId();
-                $userItems = $dm->createQueryBuilder('ZeegaDataBundle:Item')
-                    ->field('userId')->equals($oldId)
-                    ->getQuery()
-                    ->execute();
-
-                foreach($userItems as $userItem) {
-                    $userItem->setUser($mongoUser);
-                    $dm->persist($userItem);
-                }
-                $dm->flush();
-
-                echo "$id - $oldId \n";
-            }
-            $dm->clear();
-            $minId = $minId + $increment;
-            $maxId = $maxId + $increment; 
-        }*/
+    private function fixProjectsUser(OutputInterface $output) {        
         $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
         $mongoUsers = $dm->getRepository('ZeegaDataBundle:User')->findAll();
-
+        
         foreach($mongoUsers as $mongoUser) {
             $id = $mongoUser->getId();
             $oldId = $mongoUser->getRdbmsId();
+            var_dump($id);
             $userItems = $dm->createQueryBuilder('ZeegaDataBundle:Item')
                 ->field('rdbms_user_id')->equals((string)$oldId)
                 ->field('user')->equals(null)
                 ->getQuery()
                 ->execute();
-
-            foreach($userItems as $userItem) {
-                $currUser = $userItem->getUser();
-                $itemId = $userItem->getId();
-                if (!isset($currUser)) {                    
-                    echo "Updating item $itemId \n";
-                    $userItem->setUser($mongoUser);
-                    $dm->persist($userItem);
-                    $dm->flush();
-                }                
-            }
             
-            echo "$id - $oldId \n";
-            $dm->clear();
+                foreach($userItems as $userItem) {
+                    $currUser = $userItem->getUser();
+                    $itemId = $userItem->getId();
+                    if (!isset($currUser)) {                    
+                        echo "Updating item $itemId \n";
+                        $userItem->setUser($mongoUser);
+                        $dm->persist($userItem);
+                        $dm->flush();
+                    }                
+                }
+            
+                $dm->clear();                
         }      
     }
 }
