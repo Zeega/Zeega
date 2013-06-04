@@ -6,7 +6,7 @@ use FOS\UserBundle\Document\User as BaseUser;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
- * @MongoDB\Document
+ * @MongoDB\Document(repositoryClass="Zeega\DataBundle\Repository\UserRepository")
  */
 class User extends BaseUser
 {

@@ -25,7 +25,7 @@ class ItemsController extends ApiBaseController
             // TO-DO: Auth
             $queryParser = $this->get('zeega_query_parser');
             $query = $queryParser->parseRequest($this->getRequest()->query);
-            $results = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->searchItems($query);
+            $results = $this->getDoctrine()->getRepository('ZeegaDataBundle:Item')->findByQuery($query);
             $resultsCount = 0;
             $user = $this->getUser();
             $editable = $this->isUserAdmin($user) || $this->isUserQuery( $query, $user );
@@ -78,12 +78,7 @@ class ItemsController extends ApiBaseController
             $query = $queryParser->parseRequest( $this->getRequest()->query );
                  
             $dm = $this->get('doctrine_mongodb')->getManager();
-
-            if (is_numeric($id) ) {
-                $item = $dm->getRepository("ZeegaDataBundle:Item")->findOneBy(array("rdbms_id" => $id));    
-            } else {
-                $item = $dm->getRepository("ZeegaDataBundle:Item")->findOneById($id);
-            }
+            $item = $dm->getRepository("ZeegaDataBundle:Item")->findOneById($id);
             
             $user = $this->getUser();
             $editable = $this->isUserAdmin($user) || $this->isItemOwner( $item, $user );
