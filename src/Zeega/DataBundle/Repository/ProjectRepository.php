@@ -62,6 +62,10 @@ class ProjectRepository extends DocumentRepository
             $qb->field('tags.name')->equals($query["tags"]);
         }
 
+        if (isset($query["user"])) {
+            $qb->field('user.id')->equals($query["user"]);
+        }
+
         return $qb->getQuery()->execute();    
     }
 
