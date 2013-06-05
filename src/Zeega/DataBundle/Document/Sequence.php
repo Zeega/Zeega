@@ -45,7 +45,7 @@ class Sequence
     protected $soundtrack;
 
     /**     
-     * @MongoDB\Field(type="int",name="advance_to")
+     * @MongoDB\Field(type="id",name="advance_to")
      */
     protected $advanceTo;
 
