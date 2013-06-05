@@ -85,10 +85,15 @@
             if ( !window.console ) {
                 console = {log: function() {}};
             }
-
+            {% block player_data %}
             // Project data
             var projectJSON = "{{ project_data|e('js') }}";
+            
+            {% endblock player_data %}
+
         </script>
+
+
         {% block player_script %}
         <script src="{{ asset('js/app/player.standalone/dist/release/require.js') }}" ></script>
         {% endblock player_script %}
