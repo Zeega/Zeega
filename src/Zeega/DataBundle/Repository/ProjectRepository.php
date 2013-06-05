@@ -7,8 +7,12 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
 class ProjectRepository extends DocumentRepository
 {
     public function findOneById($id){
-        if (is_numeric($id) ) {
-            $project = parent::findOneBy(array("rdbms_id" => (int)$id));
+        if ( is_numeric($id) ) {
+            $project = parent::findOneBy(array("rdbms_id_published" => (int)$id));
+            // this should be an $or query, but doesn't seem to work yet on ODM
+            if ( !isset($project) ) {
+                $project = parent::findOneBy(array("rdbms_id" => (int)$id));                
+            }
         } else {
             $project = parent::findOneById($id);
         }        
