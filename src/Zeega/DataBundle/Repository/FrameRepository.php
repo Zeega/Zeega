@@ -32,7 +32,7 @@ class FrameRepository extends EntityRepository
                     ->orderBy('n.sequenceIndex','ASC')
              		->setParameter('id',$id)
              		->getQuery()
-             		->getResult();
+             		->getArrayResult();
     }
     
 }

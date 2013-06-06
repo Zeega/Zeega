@@ -1,5 +1,4 @@
 <?php
-
 /*
 * This file is part of Zeega.
 *
@@ -30,6 +29,7 @@ use Zeega\DataBundle\Document\Frame as MongoFrame;
 use Zeega\DataBundle\Document\Layer as MongoLayer;
 use Zeega\DataBundle\Document\User as MongoUser;
 use Zeega\DataBundle\Document\Tag as MongoTag;
+ini_set('memory_limit', '-1');
 
 //set_error_handler(create_function('$e', 'echo "Uncaught error \n";'));
 //set_exception_handler(create_function('$e', 'echo "Uncaught exception \n";'));
@@ -212,6 +212,8 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                 $sequencesFrames = array();
                 
                 $layersIdTranslation = array();
+                $framesIdTranslation = array();
+                $sequencesIdTranslation = array();
 
                 $mongoProject = new MongoProject();
                 $mongoProject->setId(new \MongoId());
@@ -296,6 +298,8 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                     $mongoSequence->setAdvanceTo($seq->getAdvanceTo());
                     
                     $seqId = $seq->getId();
+                    $sequencesIdTranslation[$seqId] = (string)$mongoSequence->getId();
+                    
                     $currSequenceFramesIds = $this->getContainer()->get('doctrine')->getRepository('ZeegaDataBundle:Frame')->findIdBySequenceId($seqId);
                     $sequenceFrames = array();
                     foreach($currSequenceFramesIds as $oldFrameId) {
@@ -304,7 +308,8 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                         $mongoFrame = new MongoFrame();
                         $mongoFrame->setId(new \MongoId());
                         array_push($sequenceFrames, (string)$mongoFrame->getId());
-
+                        $framesIdTranslation[$oldFrame->getId()] = (string)$mongoFrame->getId();
+                    
                         $mongoFrame->setAttr($oldFrame->getAttr());
                         $mongoFrame->setThumbnailUrl($oldFrame->getThumbnailUrl());
                         $mongoFrame->setControllable($oldFrame->getControllable());
@@ -424,6 +429,61 @@ class MysqlToMongoCommand extends ContainerAwareCommand
                     $mongoSequence->setFrames($sequenceFrames);
                     $mongoProject->addSequence($mongoSequence);
                 }
+
+                $layers = $mongoProject->getLayers();
+
+                foreach($layers as $layer) {
+                    $layerAttr = $layer->getAttr();
+
+                    if ( isset($layerAttr["to_frame"]) ) {
+                        if ( isset( $framesIdTranslation[$layerAttr["to_frame"]] )) {
+                            $layerAttr["to_frame"] = $framesIdTranslation[$layerAttr["to_frame"]];    
+                        } else {
+                            unset($layerAttr["to_frame"]);
+                        }
+                    }
+
+                    if ( isset($layerAttr["from_frame"])) {
+                        if ( isset( $framesIdTranslation[$layerAttr["from_frame"]] )) {
+                        $layerAttr["from_frame"] = $framesIdTranslation[$layerAttr["from_frame"]];
+                        } else {
+                            unset($layerAttr["from_frame"]);
+                        }
+                    }
+
+                    if ( isset($layerAttr["to_sequence"]) ) {
+                        if ( isset( $sequencesIdTranslation[$layerAttr["to_sequence"]] )) {
+                        $layerAttr["to_sequence"] = $sequencesIdTranslation[$layerAttr["to_sequence"]];
+                        } else {
+                            unset($layerAttr["to_sequence"]);
+                        }
+                    }
+
+                    if ( isset($layerAttr["from_sequence"]) ) {
+                        if ( isset( $sequencesIdTranslation[$layerAttr["from_sequence"]] )) {
+                            $layerAttr["from_sequence"] = $sequencesIdTranslation[$layerAttr["from_sequence"]];
+                        } else {
+                            unset($layerAttr["from_sequence"]);
+                        }
+                    }
+
+                    $layer->setAttr($layerAttr);                    
+                }
+
+                $sequences = $mongoProject->getSequences();
+
+                foreach($sequences as $sequence) {
+                    $advanceTo = $sequence->getAdvanceTo();
+
+                    if ( isset($advanceTo) ) {
+                        if ( isset( $sequencesIdTranslation[$advanceTo] )) {
+                            $sequence->setAdvanceTo((string)$sequencesIdTranslation[$advanceTo]);  
+                        } else {
+                            $sequence->setAdvanceTo(null);
+                        }
+                    }
+                }
+
                 //$output->writeln("Saving the new project");
                 $dm->persist($mongoProject);
                 $dm->flush();
