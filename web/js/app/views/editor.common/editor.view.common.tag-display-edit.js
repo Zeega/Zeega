@@ -69,7 +69,7 @@
 			tagArray = this.model.get('tags');
 
 			$(e.target).closest('li').remove();
-			if( this.model.get("media_type") == "Project"){
+			if( this.model.get("media_type") == "project"){
 				$type = "projects";
 			} else {
 				$type =  "items";
