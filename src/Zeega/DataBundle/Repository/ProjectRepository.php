@@ -3,6 +3,7 @@
 namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
+use Zeega\DataBundle\Document\Project;
 
 class ProjectRepository extends DocumentRepository
 {
@@ -54,23 +55,54 @@ class ProjectRepository extends DocumentRepository
 
     public function findByQuery($query)
     {
-        $qb = $this->createQueryBuilder('Project')
-                    ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created', 'tags')
-                    ->field('user')->prime(true)
-                    ->eagerCursor(true)
-                    ->limit($query['limit'])
-                    ->skip($query['limit'] * $query['page'])
-                    ->sort('created_at','DESC');
+        if ( isset($query["text"]) ) {
+            $command = array(
+                "text" => "Project", 
+                "search" => $query["text"],
+                "project" => array("id"=>1,'user'=>1,'title'=>1,'uri'=>1, 'cover_image'=>1, 'authors'=>1, 'date_created'=>1, 'editable'=>1)
+                );
+            $filter = array();
 
-        if (isset($query["tags"])) {
-            $qb->field('tags.name')->equals($query["tags"]);
+            if ( isset($query["user"]) ) {
+                $filter["user"] = new \MongoId($query["user"]);
+            }
+
+            $command["filter"] = $filter;
+
+            $connection = $this->getDocumentManager()->getConnection();
+            $database = $this->getDocumentManager()->getConfiguration()->getDefaultDB();
+            $results = $connection->selectDatabase($database)->command($command);
+            $projects = array();
+
+            if ( isset($results) && isset($results["results"]) ) {
+
+                foreach($results["results"] as $result) {            
+                    $project = new Project();
+                    $this->getDocumentManager()->getHydratorFactory()->hydrate($project, $result["obj"]);
+                    array_push($projects,$project);
+                }    
+            }            
+            
+            return $projects;
+        } else {        
+            $qb = $this->createQueryBuilder('Project')
+                        ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created', 'tags')
+                        ->field('user')->prime(true)
+                        ->eagerCursor(true)
+                        ->limit($query['limit'])
+                        ->skip($query['limit'] * $query['page'])
+                        ->sort('created_at','DESC');
+
+            if (isset($query["tags"])) {
+                $qb->field('tags.name')->equals($query["tags"]);
+            }
+
+            if (isset($query["user"])) {
+                $qb->field('user.id')->equals($query["user"]);
+            }
+
+            return $qb->getQuery()->execute();
         }
-
-        if (isset($query["user"])) {
-            $qb->field('user.id')->equals($query["user"]);
-        }
-
-        return $qb->getQuery()->execute();    
     }
 
     public function findProjectFrame($projectId, $frameId) {
