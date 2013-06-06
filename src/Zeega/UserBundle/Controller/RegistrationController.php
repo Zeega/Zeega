@@ -32,7 +32,7 @@ class RegistrationController extends BaseController
 
         $route = $this->container->get('request')->get('_route');
 
-        if ($route == "fos_user_registration_mobile") {
+        if ($route == "fos_user_register_mobile") {
             return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register_mobile.html.'.$this->getEngine(), array(
                 'form' => $form->createView(),
                 'mobile' => True
