@@ -24,7 +24,7 @@ class CommunityController extends BaseController
     public function homeAction()
     {
         $queryFields = array("description","tags","id", "title", "thumbnail_url", "attribution_uri", "views", "display_name","user_id", "user_thumbnail");
-        $zeegaQuery = json_decode($this->forward("ZeegaApiBundle:Projects:getProjectsSearch", array(), array("tags" => "audiogif", "limit" =>"1"))->getContent());
+        $zeegaQuery = json_decode($this->forward("ZeegaApiBundle:Projects:getProjectsSearch", array(), array("tags" => "zeegaoftheday", "limit" =>"1"))->getContent());
         
         if (isset($zeegaQuery->projects[0])) {
             $topZeega = $zeegaQuery->projects[0];
