@@ -23,7 +23,7 @@ class ProjectRepository extends DocumentRepository
     public function findProjectsByUser($userId,$limit = null,$published = null)
     {
         $qb = $this->createQueryBuilder('Project')
-            ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created', 'editable')
+            ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created', 'editable','tags')
             ->eagerCursor(true)
             ->field('user.id')->equals($userId)
             ->field('enabled')->equals(true)
@@ -59,7 +59,7 @@ class ProjectRepository extends DocumentRepository
             $command = array(
                 "text" => "Project", 
                 "search" => $query["text"],
-                "project" => array("id"=>1,'user'=>1,'title'=>1,'uri'=>1, 'cover_image'=>1, 'authors'=>1, 'date_created'=>1, 'editable'=>1)
+                "project" => array("id"=>1,'user'=>1,'title'=>1,'uri'=>1, 'cover_image'=>1, 'authors'=>1, 'date_created'=>1, 'editable'=>1, 'tags'=>1)
                 );
             $filter = array();
 
