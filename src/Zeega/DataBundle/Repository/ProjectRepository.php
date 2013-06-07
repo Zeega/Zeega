@@ -170,4 +170,25 @@ class ProjectRepository extends DocumentRepository
 
         return array("frame"=> $frame, "layers" => array());
     }
+
+
+    public function findProjectsCountByDates($dateBegin, $dateEnd )
+    {
+        $qb = $this->createQueryBuilder('Project');
+        $qb ->field('cover_image')->notEqual( null )
+            ->eagerCursor(true)
+            ->field('date_created')->range( $dateBegin, $dateEnd );
+                      
+        return $qb->getQuery()->execute()->count();
+    }
+
+    public function findActiveUsersCountByDates($dateBegin, $dateEnd )
+    {
+        $qb = $this->createQueryBuilder('Project');
+        $qb ->distinct('user')
+            ->field('user.lastLogin')->lt( $dateBegin );
+                      
+        return $qb->getQuery()->execute()->count();
+    }
+
 }
