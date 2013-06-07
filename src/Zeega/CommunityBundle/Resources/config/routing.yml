@@ -1,22 +1,6 @@
-ZeegaCommunityBundle_about:
-    pattern:  /mission
-    defaults: { _controller: ZeegaCommunityBundle:Community:mission }
-
-ZeegaCommunityBundle_author:
-    pattern:  /author
-    defaults: { _controller: ZeegaCommunityBundle:Community:author }
-
 ZeegaCommunityBundle_home:
     pattern:  /
     defaults: { _controller: ZeegaCommunityBundle:Community:home }
-
-ZeegaCommunityBundle_features:
-    pattern:  /features
-    defaults: { _controller: ZeegaCommunityBundle:Community:features }
-
-ZeegaCommunityBundle_topic:
-    pattern:  /topic/{id}
-    defaults: { _controller: ZeegaCommunityBundle:Community:topic }
 
 ZeegaCommunityBundle_user:
     pattern:  /profile/{id}
@@ -25,14 +9,6 @@ ZeegaCommunityBundle_user:
 ZeegaCommunityBundle_dashboard:
     pattern:  /dashboard
     defaults: { _controller: ZeegaCommunityBundle:Community:dashboard}
-
-ZeegaCommunityBundle_productions:
-    pattern:  /productions
-    defaults: { _controller: ZeegaCommunityBundle:Community:productions}
-
-ZeegaCommunityBundle_engine:
-    pattern:  /engine
-    defaults: { _controller: ZeegaCommunityBundle:Community:engine}
 
 ZeegaCommunityBundle_team:
     pattern:  /team
@@ -50,35 +26,13 @@ ZeegaCommunityBundle_privacy:
     pattern:  /privacy
     defaults: { _controller: ZeegaCommunityBundle:Community:privacy}
 
-ZeegaCommunityBundle_news:
-    pattern:  /news
-    defaults: { _controller: ZeegaCommunityBundle:Community:news}
-
 ZeegaCommunityBundle_faq:
     pattern: /faq
     defaults: { _controller: ZeegaCommunityBundle:Community:faq }
 
-ZeegaCommunityBundle_legacynews:
-    pattern:  /news.php
-    defaults: { _controller: ZeegaCommunityBundle:Community:legacynews}
-
-ZeegaCommunityBundle_legacyhappenings:
-    pattern:  /happenings/
-    defaults: { _controller: ZeegaCommunityBundle:Community:legacyhappenings}
-
-
-ZeegaCommunityBundle_legacyengine:
-    pattern:  /engine.php
-    defaults: { _controller: ZeegaCommunityBundle:Community:legacyengine}
-
-ZeegaCommunityBundle_legacyteam:
-    pattern:  /team.php
-    defaults: { _controller: ZeegaCommunityBundle:Community:legacyteam}
-
 ZeegaCommunityBundle_notfound:
     pattern:  /notfound
     defaults: { _controller: ZeegaCommunityBundle:Community:notfound}
-
 
 ZeegaCommunityBundle_makeday:
     pattern:  /events/tribecahacks
