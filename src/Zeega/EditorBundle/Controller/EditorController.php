@@ -37,9 +37,9 @@ class EditorController extends BaseController
         }
 
         $this->authorize( $project->getUser()->getId() );       
-        $userProjects = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findProjectsByUserSmall( $user->getId() );
-
-        if ( count( $userProjects ) == 1  && !$project->getPublished() ) {
+        $userProjectsCount = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findProjectsCountByUser( $user->getId() );
+        
+        if ( $userProjectsCount == 1  && !$project->getPublished() ) {
             $newUser = true;
         } else {
             $newUser = false;

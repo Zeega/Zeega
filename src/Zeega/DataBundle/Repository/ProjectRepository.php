@@ -36,17 +36,12 @@ class ProjectRepository extends DocumentRepository
         return $qb->getQuery()->execute();
     }
 
-    public function findProjectsByUserSmall($userId)
+    public function findProjectsCountByUser($userId)
     {
-        $connection = $this->getDocumentManager()->getConnection();
-        $database = $this->getDocumentManager()->getConfiguration()->getDefaultDB();
-        $results = $connection
-            ->selectDatabase($database)
-            ->Project
-            ->find(array('user.$id'=>new \MongoId($userId), 'enabled' => true),array("id" => 1, "title" => 1))
-            ->sort(array('id', -1));
-        
-        return iterator_to_array($results);
+        return $this->createQueryBuilder('Project')
+            ->field('user.id')->equals($userId)
+            ->eagerCursor(true)
+            ->getQuery()->execute()->count();
     }
 
     public function findByQuery($query)
