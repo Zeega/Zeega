@@ -5,7 +5,7 @@
 {% macro show(item, editable) %}    {# Item rendering macro/function #}
     {% if item is not null %}
     {
-        "id":{{ item.id | default("null") | json_encode | raw}},
+        "id":{{ item.id | default(null) | json_encode | raw}},
         "user": {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': item.user} %},
         "title":{{ item.title | default("") | json_encode | raw}},
         "headline":{{ item.headline | default("") | json_encode | raw}},
