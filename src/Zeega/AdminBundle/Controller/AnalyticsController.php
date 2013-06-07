@@ -101,12 +101,12 @@ class AnalyticsController extends BaseController
                     
                     $daily [ $i ] = array( 
                             "date" => date('M d, Y', $t ), 
-                            "count" => $countZeegas[0][1],
-                            "allNewUsersCount" => $countAllNewUsers[0][1],
-                            "usersCount" => $countUsers[0][1],
-                            "newUsersCount" => $countNewUsers[0][1],
-                            "activeUsersCount" => $countActiveUsers[0][1],
-                            "activeNewUsersCount" => $countActiveNewUsers[0][1],
+                            "count" => $countZeegas,
+                            "allNewUsersCount" => $countAllNewUsers,
+                            "usersCount" => $countUsers,
+                            "newUsersCount" => $countNewUsers,
+                            "activeUsersCount" => $countActiveUsers,
+                            "activeNewUsersCount" => $countActiveNewUsers,
                             "dateBegin" => $dateBegin,
                             "dateEnd" => $dateEnd
                     );

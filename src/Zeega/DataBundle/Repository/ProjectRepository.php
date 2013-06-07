@@ -181,14 +181,35 @@ class ProjectRepository extends DocumentRepository
                       
         return $qb->getQuery()->execute()->count();
     }
+    // users with at least one zeega
+    // users with more than one zeega
 
-    public function findActiveUsersCountByDates($dateBegin, $dateEnd )
+    public function findActiveUsersCountByDates($dateBegin, $dateEnd, $what=false, $count = 1.0 )
     {
-        $qb = $this->createQueryBuilder('Project');
-        $qb ->distinct('user')
-            ->field('user.lastLogin')->lt( $dateBegin );
-                      
-        return $qb->getQuery()->execute()->count();
+        $qb = $this->createQueryBuilder('Project')
+            ->field('dateCreated')->gte($dateBegin)
+            ->field('dateCreated')->lte($dateEnd)             
+            ->map('function() { 
+                emit(this.user.$id, 1); 
+            }')
+            ->reduce('function(k, vals) {
+                var sum = 0;
+                for (var i in vals) {
+                    sum += vals[i];
+                }
+                return sum;
+            }');
+        $query = $qb->getQuery();
+
+        $projects = $query->execute();
+        $count = 0;
+        foreach($projects as $project) {
+            if ((double)$project["value"] > 0.0) {
+                $count = $count + 1;
+            }
+        }
+
+        return $count;
     }
 
 }
