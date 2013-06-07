@@ -38,11 +38,8 @@ class ZeegaTwigExtension extends \Twig_Extension
                 if(isset($securityToken)) {
                     $user = $this->container->get('security.context')->getToken()->getUser();
                     if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
-                        $projects = $this->container->get('doctrine.odm.mongodb.document_manager')->getRepository('ZeegaDataBundle:Project')->findProjectsByUser($user->getId());
-                        
                         return array(
                             'user_id' => $user->getId(),
-                            'myprojects'=> $projects,
                             'displayname' => $user->getDisplayName(),
                         );
                     }
