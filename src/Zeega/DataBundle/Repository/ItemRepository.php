@@ -99,9 +99,9 @@ class ItemRepository extends DocumentRepository
             if(isset($query['sort'])) {
                 $sort = $query['sort'];
                 if($sort == 'date-desc') {
-                    $qb->sort('dateCreated','DESC');
+                    $qb->sort('id','DESC');
                 } else if($sort == 'date-asc') {
-                    $qb->sort('dateCreated','ASC');
+                    $qb->sort('id','ASC');
                 } else {
                     $qb->sort('id','DESC');
                 }
