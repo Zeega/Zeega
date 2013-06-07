@@ -87,28 +87,6 @@
 									</a>
 									
 									<ul class="nav">
-										
-									
-										
-										<li class="dropdown">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-												About
-												<b class="caret"></b>
-											</a>
-											<ul class="dropdown-menu">
-												
-												<li><a href="http://blog.zeega.com/about">Mission</a></li>
-												<li><a href="{{path('ZeegaCommunityBundle_team')}}">Team</a></li>
-												<li><a href="{{path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
-												<li><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></li>
-												<li class="divider"></li>
-												<li><a href="{{path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></li>
-												<li><a href="{{path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>
-												
-												
-												
-											</ul>
-										</li>
 										{% if is_granted('ROLE_ADMIN') %}
 											<li><a href="{{ path('sonata_admin_dashboard') }}" target="_blank">Admin Dashboard</a></li>
 											<li><a href="{{ path('ZeegaDiscoveryBundle_library') }}" target="_blank">Library</a></li><br>
@@ -152,21 +130,8 @@
 							<div class="span8">
 								<div class="navigation">	
 									<div>
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret" style="vertical-align:middle;border-top:4px solid #037FB3;opacity:1"></b></a>
-											<ul class="dropdown-menu-no-margins dropdown-menu">
-														
-														<li><a href="http://blog.zeega.com/about">Mission</a></li>
-														<li><a href="{{ path('ZeegaCommunityBundle_team')}}">Team</a></li>
-														<li><a href="{{ path('ZeegaCommunityBundle_contact')}}">Contact</a></li>
-														<li><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></li>
-														<li class="divider"></li>
-														<li><a href="{{ path('ZeegaCommunityBundle_terms')}}">Terms of Use</a></li>
-														<li><a href="{{ path('ZeegaCommunityBundle_privacy')}}">Privacy Policy</a></li>
-														
-														
-														
-													</ul>
-                                                                                        <a href="http://blog.zeega.com" target="_blank">Blog</a>											<a href="{{path('fos_user_registration_register')}}">Sign Up</a><a href='{{path('fos_user_security_login')}}'>Login</a>
+										<a href="http://blog.zeega.com" target="_blank">Blog</a>
+										<a href="{{path('fos_user_registration_register')}}">Sign Up</a><a href='{{path('fos_user_security_login')}}'>Login</a>
 									</div>
 								</div>
 							</div>
@@ -238,7 +203,7 @@
 							<div class="footer-navigation span3 offset6">
 								<div>
 									<p><a href="{{ path('ZeegaCommunityBundle_home')}}">Home</a></p>
-									<p><a href="{{ path('ZeegaCommunityBundle_about')}}">About</a></p>
+									<p><a href="http://blog.zeega.com/about">About</a></p>
 									<p><a href="{{ path('fos_user_registration_register')}}">Sign Up</a></p>
 									<p><a href="{{ path('_security_login')}}">Login</a></p>
 									<p><a href="http://blog.zeega.com/faq" target="_blank">FAQ</a></p>
