@@ -10,10 +10,6 @@ class ProjectRepository extends DocumentRepository
     public function findOneById($id){
         if ( is_numeric($id) ) {
             $project = parent::findOneBy(array("rdbms_id_published" => (int)$id));
-            // this should be an $or query, but doesn't seem to work yet on ODM
-            if ( !isset($project) ) {
-                $project = parent::findOneBy(array("rdbms_id" => (int)$id));                
-            }
         } else {
             $project = parent::findOneById($id);
         }        
@@ -27,7 +23,7 @@ class ProjectRepository extends DocumentRepository
             ->eagerCursor(true)
             ->field('user.id')->equals($userId)
             ->field('enabled')->equals(true)
-            ->sort('date_created','DESC');
+            ->sort('id','DESC');
         
         if(null !== $published) {
             $qb->field('published')->equals($published);
@@ -91,7 +87,7 @@ class ProjectRepository extends DocumentRepository
                         ->eagerCursor(true)
                         ->limit($query['limit'])
                         ->skip($query['limit'] * $query['page'])
-                        ->sort('created_at','DESC');
+                        ->sort('id','DESC');
 
             if (isset($query["tags"])) {
                 $qb->field('tags.name')->equals($query["tags"]);
