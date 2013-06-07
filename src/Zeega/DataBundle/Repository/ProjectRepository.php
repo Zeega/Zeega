@@ -40,6 +40,7 @@ class ProjectRepository extends DocumentRepository
     {
         return $this->createQueryBuilder('Project')
             ->field('user.id')->equals($userId)
+            ->field('enabled')->equals(true)
             ->eagerCursor(true)
             ->getQuery()->execute()->count();
     }
