@@ -103,35 +103,6 @@ class PublishController extends BaseController
             "project_data" => $projectData,
         ));
     }
-
-     
-    public function collectionAction($id)
-    {
-        $projectData = $this->forward("ZeegaApiBundle:Items:getItemProject", array("id" => $id))->getContent();
-        $project = new Project();
-        return $this->render("ZeegaPublishBundle:Player:player.html.twig", array(
-            "project"=>$project,
-            "project_data"=>$projectData,
-        ));
-    }
-
-
-    public function channelAction($tag)
-    {
-
-        $params = array();
-        //$params["data_source"] = "db";
-        $params["sort"] = "date-desc";
-        $params["type"] = "project";
-        $params["tags"] = $tag;
-        $projectData = $this->forward("ZeegaApiBundle:Items:getItemsSearch", array(), $params)->getContent();
-        $project = new Project();
-
-        return $this->render("ZeegaPublishBundle:Player:channel.html.twig", array(
-            "project"=>$project,
-            "project_data"=>$projectData,
-        ));
-    }
      
     public function embedAction ($id)
     {
