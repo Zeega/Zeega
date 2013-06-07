@@ -33,7 +33,12 @@ class ThumbnailService
                 return null;
             }
 
-            $thumbnailServerUrl =  "$host/image?url=$url";
+            if($size == 7){
+                $thumbnailServerUrl =  "$host/image?url=$url&sizes=4567";
+            } else {
+                $thumbnailServerUrl =  "$host/image?url=$url";
+            }
+
             $thumbnailJSON = @file_get_contents($thumbnailServerUrl);
             if (!strpos($http_response_header[0], "200")) { 
                 return null;
@@ -54,7 +59,11 @@ class ThumbnailService
                     if ( array_key_exists("image_url_6", $zeegaThumbnail) ) {
                         return $zeegaThumbnail["image_url_6"];    
                     }
-                }    
+                } else if($size == 7) {
+                    if ( array_key_exists("image_url_7", $zeegaThumbnail) ) {
+                        return $zeegaThumbnail["image_url_7"];    
+                    }
+                }     
             }
         }
         catch(Exception $e)

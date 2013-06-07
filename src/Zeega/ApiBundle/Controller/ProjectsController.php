@@ -168,7 +168,14 @@ class ProjectsController extends BaseController
         }
 
         if( $this->getRequest()->request->has('cover_image') ) {
-            $project->setCoverImage( $this->getRequest()->request->get('cover_image') );
+
+            if( $project->getCoverImage() != $this->getRequest()->request->get('cover_image') ){
+                $thumbnailService = $this->get('zeega_thumbnail');
+                $coverImage = $thumbnailService->getItemThumbnail( $this->getRequest()->request->get('cover_image'), 7 );
+                $project->setCoverImage( $coverImage );
+            }
+
+            
         }
 
         if( $this->getRequest()->request->has('authors') ) {
