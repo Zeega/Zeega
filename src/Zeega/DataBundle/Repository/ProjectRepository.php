@@ -23,7 +23,7 @@ class ProjectRepository extends DocumentRepository
             ->eagerCursor(true)
             ->field('user.id')->equals($userId)
             ->field('enabled')->equals(true)
-            ->sort('id','DESC');
+            ->sort('date_created','DESC');
         
         if(null !== $published) {
             $qb->field('published')->equals($published);
@@ -82,7 +82,7 @@ class ProjectRepository extends DocumentRepository
                         ->eagerCursor(true)
                         ->limit($query['limit'])
                         ->skip($query['limit'] * $query['page'])
-                        ->sort('id','DESC');
+                        ->sort('date_created','DESC');
 
             if (isset($query["tags"])) {
                 $qb->field('tags.name')->equals($query["tags"]);
