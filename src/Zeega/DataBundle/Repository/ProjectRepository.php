@@ -176,6 +176,7 @@ class ProjectRepository extends DocumentRepository
     {
         $qb = $this->createQueryBuilder('Project');
         $qb ->field('cover_image')->notEqual( null )
+            ->field('cover_image')->notEqual( null )
             ->eagerCursor(true)
             ->field('date_created')->range( $dateBegin, $dateEnd );
                       
@@ -184,11 +185,12 @@ class ProjectRepository extends DocumentRepository
     // users with at least one zeega
     // users with more than one zeega
 
-    public function findActiveUsersCountByDates($dateBegin, $dateEnd, $what=false, $count = 1.0 )
+    public function findActiveUsersCountByDates($dateBegin, $dateEnd, $new = null, $numZeegas = 0.0, $datePrevious = null )
     {
         $qb = $this->createQueryBuilder('Project')
             ->field('dateCreated')->gte($dateBegin)
-            ->field('dateCreated')->lte($dateEnd)             
+            ->field('dateCreated')->lte($dateEnd)
+            ->field('published')->equals(true)          
             ->map('function() { 
                 emit(this.user.$id, 1); 
             }')
@@ -199,17 +201,21 @@ class ProjectRepository extends DocumentRepository
                 }
                 return sum;
             }');
-        $query = $qb->getQuery();
 
+        if (null !== $new) {
+             $qb->field('user.lastLogin')->gte($dateBegin)
+                ->field('user.lastLogin')->lte($dateEnd);
+        }
+
+        $query = $qb->getQuery();
         $projects = $query->execute();
         $count = 0;
         foreach($projects as $project) {
-            if ((double)$project["value"] > 0.0) {
+            if ((double)$project["value"] > $numZeegas) {                
                 $count = $count + 1;
             }
         }
 
         return $count;
     }
-
 }

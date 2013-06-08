@@ -23,5 +23,13 @@ class UserRepository extends DocumentRepository
         return $qb->getQuery()->execute()->count();
     }
 
-  
+    public function findNewUsersCountByDates( $dateBegin, $dateEnd )
+    {
+        $qb = $this->createQueryBuilder('User')
+            ->select('id')
+            ->field('createdAt')->gte($dateBegin)
+            ->field('createdAt')->lte($dateEnd);   
+
+        return $qb->getQuery()->execute()->count();
+    }
 }
