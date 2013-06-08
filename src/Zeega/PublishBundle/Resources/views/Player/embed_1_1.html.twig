@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+	<head>
+		<title>{{project.title}}</title> 
+		<link rel="shortcut icon" type="image/x-icon" href="{{asset("images/zeega.ico")}}"> 	
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+
+
+        {% if project.thumbnailUrl is defined and project.thumbnailUrl is not empty %}
+            {% set thumbnailUrl = project.thumbnailUrl %}
+        {% elseif project.coverImage is defined and project.coverImage is not empty %}
+            {% set thumbnailUrl = project.coverImage %}
+        {% else %}
+            {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
+        {% endif %}
+
+    
+		<style type="text/css">
+			body {
+					margin:0px
+					width: 100%;
+					height: 100%;
+			}
+
+			html {
+				font-family: "Helvetica", sans-serif;
+				background: url({{thumbnailUrl}}) no-repeat center center fixed;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+				color:white;
+			}
+		
+    		.info-overlay{
+		        position: absolute;
+		        bottom: 0;
+		        left: 0;
+		        right: 0;
+		        background: rgba(0, 0, 0, 0.5);
+		        overflow-x:hidden;
+		        padding: 10px;
+		        border-radius: 0 0 2px 2px;
+		        color: white;
+		        text-shadow: rgba(0, 0, 0, 0.498039) 2px 2px 12px;
+		    }
+
+	        .left-column{
+	            float:left;
+	            margin-right: 10px;
+	        }
+            .profile-token{
+                border-radius: 28px;
+                height: 50px;
+                width: 50px;
+                overflow: hidden;
+                float: left;
+                border: 3px solid orangered;
+                
+            }
+
+            .profile-token img {
+                    width: 100%;
+            }
+       
+                    
+        
+	        .right-column{
+	            height: 56px;
+	            position: relative;
+	            float:left;
+	            min-width: 200px;
+	        }
+            
+            .profile-name{
+                font-size: 0.7em;
+                position: absolute;
+                width: 100%;
+                bottom: 0;
+            }
+            
+            .profile-name a{
+                text-decoration: none;
+                color: orangered;
+            }
+                    
+            h1{
+                font-size: .9em;
+                margin: 0;
+            }
+   
+
+		    .play{
+		        width: 150px;
+		        height: 80px;
+		        display: block;
+		        top: 40%;
+		        position: absolute;
+		        left: 0;
+		        right: 0;
+		        margin: auto;
+		        background: rgba(0, 0, 0, 0.5);
+		        border-radius: 50px;
+		        padding: 5px 5px 3px 5px;
+		        background-image: url({{hostname}}{{directory}}images/start-button.png);
+		        background-position: center;
+		        background-size: 93%;
+		        background-repeat: no-repeat;
+		        opacity:0.8;
+		        cursor: pointer;
+		    }
+		    .play:hover{
+		    	opacity:1;
+		    }
+
+		</style>	
+
+		{% if app.environment == "prod" %}
+		    <script type="text/javascript">
+		        var _gaq = _gaq || [];
+		        _gaq.push(["_setAccount", "UA-37456730-1"]);
+		        _gaq.push(["_trackPageview"]);
+
+		        (function() {
+		            var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+		            ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+		            var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+		        })();
+
+            </script>
+   
+        {% endif %}
+	</head>
+
+	<body id="zeega-embed" >
+		
+		<a id="zeega-link" href="{{hostname}}{{directory}}{{project.id}}"></a>
+            <div class="info-overlay">
+                <div class="left-column">
+                  <a href="/profile/{{ project.user.id }}"  target="blank" >
+                    <div class="profile-token"><img src="{{ project.user.thumbUrl }}"></div>
+                   </a>
+                </div>
+                <div class="right-column">
+                  <h1 class = "caption">{{ project.title }}</h1>
+                  
+                  <div class="profile-name">
+                    <a href="/profile/{{project.user.id}}" target="blank" >
+                      {{ project.user.displayName }}
+                    </a>
+                  </div>
+                  
+                </div>
+                  
+            
+            </div>
+        <a href="{{hostname}}{{directory}}{{project.id}}" class="play"></a>
+
+      
+	</body>
+</html>

@@ -1,0 +1,10 @@
+{% extends "ZeegaPublishBundle:Player:player.html.twig" %}
+
+{% block player_stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone_1_1/dist/release/index.css') }}">
+{% endblock player_stylesheets %}
+
+{% block player_script %}
+<script src="{{ asset('js/app/player.standalone_1_1/dist/debug/require.js') }}" ></script>
+{% endblock player_script %}
+

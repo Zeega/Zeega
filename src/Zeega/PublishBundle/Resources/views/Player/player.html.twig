@@ -46,7 +46,16 @@
 
         <!-- STYLESHEETS -->
         {% block player_stylesheets %}
-        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/release/index.css') }}">
+        
+        {% if app.environment == 'prod' %}
+            <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/release/index.css') }}">
+        {% else %}
+            <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/debug/index.css') }}">
+        {% endif %}
+
+
+        
+
         {% endblock player_stylesheets %}
         <!-- END STYLESHEETS -->
 
@@ -95,7 +104,13 @@
 
 
         {% block player_script %}
+        
+        {% if app.environment == 'prod' %}
         <script src="{{ asset('js/app/player.standalone/dist/release/require.js') }}" ></script>
+        {% else %}
+        <script src="{{ asset('js/app/player.standalone/dist/debug/require.js') }}" ></script>
+        {% endif %}
+
         {% endblock player_script %}
     </head>
 

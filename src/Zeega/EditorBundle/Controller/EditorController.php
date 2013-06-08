@@ -12,10 +12,8 @@ class EditorController extends BaseController
 {    
     public function newProjectAction()
     {  
-        if ( $this->container->get('security.context')->isGranted('ROLE_CUTTINGEDGE') ||
-            $this->container->get('security.context')->isGranted('ROLE_EDITOR_V1.1') ) {            
-            $this->getRequest()->request->set('version',1.1);
-        } 
+        
+        $this->getRequest()->request->set('version', 1.2);
 
         $projectId = $this->forward('ZeegaApiBundle:Projects:postProject')->getContent();
 
@@ -51,11 +49,21 @@ class EditorController extends BaseController
             $projectOwners = $project->getUser();       
             $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
         
-            return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
-                'project'   =>$project,
-                'project_data' => $projectData,
-                'new_user' => $newUser
-            )); 
+            if($project->getVersion() == 1.1 ){
+                return $this->render('ZeegaEditorBundle:Editor:editor_1_1.html.twig', array(
+                    'project'   =>$project,
+                    'project_data' => $projectData,
+                    'new_user' => $newUser
+                )); 
+            } else {
+                return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
+                    'project'   =>$project,
+                    'project_data' => $projectData,
+                    'new_user' => $newUser
+                ));
+            }
+
+             
         } else {
             // TO-DO: handle old projects gracefully
             throw new \Exception("This project doesn't exist or cannot be edited");

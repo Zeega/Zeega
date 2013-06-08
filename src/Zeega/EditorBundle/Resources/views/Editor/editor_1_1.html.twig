@@ -6,7 +6,7 @@
         <title>{{project.getTitle()}}</title>
         <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
         <meta name="robots" content="noindex,follow">
-        <meta name="description" content="Zeega Editor - PRIME">
+        <meta name="description" content="">
         <meta name="author" content="">
 
         <!-- FB -->
@@ -42,11 +42,8 @@
         />
 
         <!-- STYLESHEETS -->
-        {% if app.environment == 'prod'  %}
-            <link rel="stylesheet" href="{{ asset('js/app/editor/dist/release/index.css') }}">
-        {% else %}
-            <link rel="stylesheet" href="{{ asset('js/app/editor/dist/debug/index.css') }}">
-        {% endif %}
+        <!-- <link rel="stylesheet" href="{{ asset('js/app/editor/vendor/zeegaplayer/dist/debug/css/zeega.css') }}"> -->
+        <link rel="stylesheet" href="{{ asset('js/app/editor_1_1/assets/css/style.css') }}">
         <!-- END STYLESHEETS -->
 
         <script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
@@ -79,7 +76,7 @@
         </script>
     
     {% if app.environment == 'prod'  %}
-        <script src="{{ asset('js/app/editor/dist/release/require.js') }}" ></script>
+        <script src="{{ asset('js/app/editor_1_1/dist/release/require.js') }}" ></script>
         
         {% if hostname == '//zeega.com/'  %}
 
@@ -92,7 +89,7 @@
 
     {% else %}
 
-        <script src="{{ asset('js/app/editor/dist/debug/require.js') }}" ></script>
+        <script src="{{ asset('js/app/editor_1_1/dist/debug/require.js') }}" ></script>
 
     {% endif %}
 

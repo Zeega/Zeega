@@ -31,12 +31,13 @@ class PublishController extends BaseController
      
     public function projectAction($id, $mobile)
     {   
+
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
 
         if (null === $project) {
             throw $this->createNotFoundException("The project with the id $id does not exist or is not published.");
         }
-
+        ;
         // favorites begin - changes here should be replicaded on api/projects/:id
         $user = $this->getUser();
         $favorite = false;
@@ -58,6 +59,8 @@ class PublishController extends BaseController
             $projectVersion = 1;    
         }
 
+
+
         if ( $mobile ) {
             if ( $projectVersion < 1.1) {                
                 if( $isProjectMobile ) {
@@ -72,7 +75,12 @@ class PublishController extends BaseController
                         'project'=>$project                
                     ));                    
                 }
-            } else {
+            } else if( $projectVersion == 1.1 ) {
+                return $this->render('ZeegaPublishBundle:Player:mobile_player_1_1.html.twig', array(                    
+                    "project"=>$project,
+                    "project_data" => $projectData,                
+                ));            
+            } else  {
                 return $this->render('ZeegaPublishBundle:Player:mobile_player.html.twig', array(                    
                     "project"=>$project,
                     "project_data" => $projectData,                
@@ -81,6 +89,11 @@ class PublishController extends BaseController
         } else {
             if ( $projectVersion < 1.1) {
                 return $this->render('ZeegaPublishBundle:Player:player_1_0.html.twig', array(
+                    'project'=>$project,
+                    'project_data' => $projectData
+                ));
+            } else if ( $projectVersion == 1.1) {
+                return $this->render('ZeegaPublishBundle:Player:player_1_1.html.twig', array(
                     'project'=>$project,
                     'project_data' => $projectData
                 ));
@@ -117,6 +130,8 @@ class PublishController extends BaseController
 
         if ( $projectVersion < 1.1) {
             return $this->render('ZeegaPublishBundle:Player:embed_1_0.html.twig', array('project'=>$project));
+        } else if( $projectVersion == 1.1 ) {
+            return $this->render("ZeegaPublishBundle:Player:embed_1_1.html.twig", array("project"=>$project ));
         } else {
             return $this->render("ZeegaPublishBundle:Player:embed.html.twig", array("project"=>$project ));
         }
