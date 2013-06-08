@@ -20,11 +20,11 @@
             var url;
             
             if( !_.isUndefined(this.query.content) && this.query.content == "project"){
-                url = this.base+"projects/search?";
+                url = this.base+"projects/search?limit=20&";
             } else if( !_.isUndefined(this.query.content) && this.query.content !== "all"){
-                url = this.base+"items/search?type=" + this.query.content;
+                url = this.base+"items/search?limit=20&type=" + this.query.content;
             } else {
-                url = this.base+"items/search?";
+                url = this.base+"items/search?limit=20&";
             }
            
             
@@ -61,8 +61,13 @@
         {
             
            if(!_.isUndefined(this.query.content) && this.query.content == "project"){
-                this.count = response.projects.length;
-
+                
+                if( response.projects.length == 20 ){
+                    this.more = true;
+                } else {
+                    this.more = false;
+                }
+                
                 _.each(response.projects, function(project){
                     project.thumbnail_url = project.cover_image;
                     project.attribution_uri = zeega.discovery.app.apiLocation + project.id;
@@ -72,7 +77,13 @@
 
                 return response.projects;
             } else {
-                this.count = response.items_count;
+                
+                if( response.items.length == 20 ){
+                    this.more = true;
+                } else {
+                    this.more = false;
+                }
+
                 return response.items;
             }
             

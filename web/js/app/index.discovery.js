@@ -84,8 +84,9 @@ jQuery(function($)
 
     $("#zeega-results-wrapper").bind("scroll", function(){
         if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight){
-            if(ZeegaDiscovery.resultsView.collection.query.page*100<ZeegaDiscovery.resultsView.collection.count){
-                ZeegaDiscovery.searchObject.page=ZeegaDiscovery.resultsView.collection.query.page+1;
+            if( ZeegaDiscovery.resultsView.collection.more ){
+                ZeegaDiscovery.resultsView.collection.more = false;
+                ZeegaDiscovery.searchObject.page = ZeegaDiscovery.resultsView.collection.query.page+1;
                 ZeegaDiscovery.search(ZeegaDiscovery.searchObject,false);
             }
         }
