@@ -23,7 +23,7 @@ class ProjectRepository extends DocumentRepository
             ->eagerCursor(true)
             ->field('user.id')->equals($userId)
             ->field('enabled')->equals(true)
-            ->sort('id','ASC');
+            ->sort('date_created','DESC');
         
         if(null !== $published) {
             $qb->field('published')->equals($published);
@@ -83,7 +83,7 @@ class ProjectRepository extends DocumentRepository
                         ->eagerCursor(true)
                         ->limit($query['limit'])
                         ->skip($query['limit'] * $query['page'])
-                        ->sort('id','ASC');;
+                        ->sort('date_created','DESC');
 
             if (isset($query["tags"])) {
                 $qb->field('tags.name')->equals($query["tags"]);
@@ -161,5 +161,53 @@ class ProjectRepository extends DocumentRepository
         }
 
         return array("frame"=> $frame, "layers" => array());
+    }
+
+
+    public function findProjectsCountByDates($dateBegin, $dateEnd )
+    {
+        $qb = $this->createQueryBuilder('Project');
+        $qb ->field('cover_image')->notEqual( null )
+            ->field('cover_image')->notEqual( null )
+            ->eagerCursor(true)
+            ->field('date_created')->range( $dateBegin, $dateEnd );
+                      
+        return $qb->getQuery()->execute()->count();
+    }
+    // users with at least one zeega
+    // users with more than one zeega
+
+    public function findActiveUsersCountByDates($dateBegin, $dateEnd, $new = null, $numZeegas = 0.0, $datePrevious = null )
+    {
+        $qb = $this->createQueryBuilder('Project')
+            ->field('dateCreated')->gte($dateBegin)
+            ->field('dateCreated')->lte($dateEnd)
+            ->field('published')->equals(true)          
+            ->map('function() { 
+                emit(this.user.$id, 1); 
+            }')
+            ->reduce('function(k, vals) {
+                var sum = 0;
+                for (var i in vals) {
+                    sum += vals[i];
+                }
+                return sum;
+            }');
+
+        if (null !== $new) {
+             $qb->field('user.lastLogin')->gte($dateBegin)
+                ->field('user.lastLogin')->lte($dateEnd);
+        }
+
+        $query = $qb->getQuery();
+        $projects = $query->execute();
+        $count = 0;
+        foreach($projects as $project) {
+            if ((double)$project["value"] > $numZeegas) {                
+                $count = $count + 1;
+            }
+        }
+
+        return $count;
     }
 }
