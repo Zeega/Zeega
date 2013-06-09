@@ -47,6 +47,7 @@ class FacebookProvider implements UserProviderInterface
         }
 
         // TODO use http://developers.facebook.com/docs/api/realtime
+        $newUser = false;
 
         if ( !empty($facebookUserData) ) {
             // we a have a facebook user
@@ -62,7 +63,8 @@ class FacebookProvider implements UserProviderInterface
                     $user = $this->userManager->createUser();
                     $user->setEnabled(true);
                     $user->setPassword('');
-                    
+                    $newUser = true;
+
                     if ( isset($facebookUserData['first_name']) ) {
                         $user->setDisplayName($facebookUserData['first_name']);
                     }
@@ -80,11 +82,8 @@ class FacebookProvider implements UserProviderInterface
                     if ( isset($facebookUserData['email']) ) {
                         $user->setEmail($facebookUserData['email']);
                         $user->setUsername($facebookUserData['email']);
-                    } else {
-                        $user->setEmail(null);
                     }
 
-                    $user->setThumbUrl("http://graph.facebook.com/$facebookUserId/picture?width=200&height=200");                    
                 }
             }
     
@@ -96,6 +95,10 @@ class FacebookProvider implements UserProviderInterface
                 $username = $user->getUsername();
                 if ( !isset($username) ) {
                     $user->setUsername($facebookUserId);
+                }
+
+                if ( $newUser == true ) {
+                    $user->setThumbUrl("http://graph.facebook.com/$facebookUserId/picture?width=200&height=200");                    
                 }
             }
             
