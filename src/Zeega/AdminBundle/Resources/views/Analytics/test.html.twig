@@ -96,69 +96,7 @@ table tr:last-child td:last-child {
 <body>
 
 
-<h1>Totals</h1>
 
-<table>
-	<tr>
-		<td>Zeegas</td>
-		<td>{{totals.totalZeegas}}</td>
-	</tr>
-	<tr>
-		<td>Users with more at least 1 Zeega</td>
-		<td>{{totals.activeUsers}}</td>
-	</tr>
-	<tr>
-		<td>Users with more than 1 Zeega</td>
-		<td>{{totals.activeOneUsers}}</td>
-	</tr>
-	<tr>
-		<td>Users with more than 5 Zeega</td>
-		<td>{{totals.activeFiveUsers}}</td>
-	</tr>
-	<tr>
-		<td>Users with more than 10 Zeega</td>
-		<td>{{totals.activeTenUsers}}</td>
-	</tr>
-	<tr>
-		<td>Users with more than 20 Zeega</td>
-		<td>{{totals.activeTwentyUsers}}</td>
-	</tr>
-	<tr>
-		<td>Users with more than 50 Zeega</td>
-		<td>{{totals.activeFiftyUsers}}</td>
-	</tr>
-</table>
-<br><br>
-
-<h1>Weekly</h1>
-
-<table>
-<tr>
-	<td>Date</td>
-	<td>Zeegas</td> 
-	<td>All New Users</td>
-	<td>New Users w at least one Zeega</td>
-	<td>New Users w more than one Zeega</td>
-	<td>Users w at least one Zeega</td>
-	<td>Users w more than one Zeega</td>
-	<td>Users w at least one Zeega this week and the previous week</td>
-	<td>Users w at least one Zeega this week and during the previous 4 weeks</td>
-</tr>
-{% for week in weekly %}
-<tr>
-	<td>{{ week.date }} </td>
-	<td>{{ week.count }} </td>
-	<td>{{ week.allNewUsersCount }}</td>
-	<td>{{ week.newUsersCount }}</td>
-	<td>{{ week.activeNewUsersCount }}</td>
-	<td>{{ week.usersCount }} </td> 
-	<td>{{ week.activeUsersCount }}</td>
-</tr>
-{% endfor %}
-<br><br>
-</table>
-
-<br><br>
 
 <h1>Daily</h1>
 
@@ -175,12 +113,10 @@ table tr:last-child td:last-child {
 {% for day in daily %}
 <tr>
 	<td>{{ day.date }} </td>
-	<td>{{ day.count }} </td> 
-	<td>{{ day.allNewUsersCount }}</td>
-	<td>{{ day.newUsersCount }}</td>
-	<td>{{ day.activeNewUsersCount }}</td>
-	<td>{{ day.usersCount }} </td>
-	<td>{{ day.activeUsersCount }}</td>
+	<td>{{ day.zeegaCount }} </td> 
+	<td>{{ day.userCount }}</td>
+	<td>{{ day.activeUserCount }}</td>
+
 </tr>
 {% endfor %}
 <br><br>
