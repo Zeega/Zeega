@@ -60,7 +60,12 @@
 
                 <div class="upper clearfix">
                     <h1>Join Zeega!</h1>
-                    <div class="errors">{{ form_errors(form) }}</div>
+                    <div class="errors">
+                        {{ form_errors(form) }}
+                        {{ form_errors(form.displayName) }}
+                        {{ form_errors(form.email) }}
+                        {{ form_errors(form.plainPassword) }}
+                    </div>
                     <div class="col-left">
                         <a href="#" onclick="fbLogin();" class="btnz btnz-facebook"><i class="social-signin-facebook"></i> Sign Up With Facebook</a>
                         <a href="{{ path('ZeegaSocialBundle_twitter_connect') }}" class="btnz btnz-twitter"><i class="social-signin-twitter"></i> Sign Up With Twitter</a>
@@ -76,13 +81,12 @@
                             
                                 <fieldset>
                                 
-                                {{ form_errors(form.displayName) }}
                                 {{ form_widget(form.displayName, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Name'} }) }}
 
-                                {{ form_errors(form.email) }}
+                                
                                 {{ form_widget(form.email, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Email'} }) }}
                                 
-                                {{ form_errors(form.plainPassword) }}
+                                
                                 {{ form_widget(form.plainPassword, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Create a Password'} }) }}
                                 <br>
                                 <a href="#" onclick="document.getElementById('register').submit();" class="btnz btnz-submit">Do it!</a>
