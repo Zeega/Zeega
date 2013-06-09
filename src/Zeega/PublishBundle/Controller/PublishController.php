@@ -20,12 +20,12 @@ class PublishController extends BaseController
     public function frameAction($projectId, $frameId)
     {
         $frameAndLayers = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findProjectFrameWithLayers($projectId, $frameId);
-        $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frameAndLayers["frame"]));
+        $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frameAndLayers['frame']));
 
         return $this->render('ZeegaPublishBundle:Frame:frame.html.twig', array(
-            'frameId'=> $frameAndLayers["frame"]->getId(),
+            'frameId'=> $frameAndLayers['frame']->getId(),
             'frame'=>$frameView,
-            'layers'=>$frameAndLayers["layers"]
+            'layers'=>$frameAndLayers['layers']
         ));
     }
      
@@ -33,24 +33,43 @@ class PublishController extends BaseController
     {   
 
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        $relatedProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findRelated($id);
+
 
         if (null === $project) {
-            throw $this->createNotFoundException("The project with the id $id does not exist or is not published.");
+            throw $this->createNotFoundException('The project with the id $id does not exist or is not published.');
         }
-        ;
+        
         // favorites begin - changes here should be replicaded on api/projects/:id
         $user = $this->getUser();
         $favorite = false;
         if ( isset($user) ) {
             $favorite = $this->getDoctrine()->getRepository('ZeegaDataBundle:Favorite')->findOneBy(array(
-                "user.id" => $user->getId(),
-                "project.id" => $id));
+                'user.id' => $user->getId(),
+                'project.id' => $id));
             $favorite = isset($favorite);
         }
         // favorites end
+        
         $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array(
-            'project' => $project,
-            'favorite' => $favorite));
+                'project' => $project,
+                'favorite' => $favorite
+            ));
+
+
+        // $key = rand( 0, count( $relatedProjects ) );
+        // $key2 = rand( 0, count( $relatedProjects - 1 ) );
+        // $relProjects[] = $relatedProjects[ $key ];
+        // unset( $relatedProjects[ $key ] );
+        // $relProjects[] = $relatedProjects[ $key2 ];
+
+
+
+        $relatedProjectsData = $this->renderView('ZeegaApiBundle:Projects:index.json.twig', array(
+                'projects' => $relatedProjects,
+                'request' => null
+            ));
+
 
         $isProjectMobile = $project->getMobile();
         $projectVersion = $project->getVersion();
@@ -65,7 +84,7 @@ class PublishController extends BaseController
             if ( $projectVersion < 1.1) {                
                 if( $isProjectMobile ) {
                     
-                    return $this->render("ZeegaPublishBundle:Player:mobile_player_1_0.html.twig", array(
+                    return $this->render('ZeegaPublishBundle:Player:mobile_player_1_0.html.twig', array(
                         'project'=>$project,
                         'project_data' => $projectData                
                     ));
@@ -77,13 +96,16 @@ class PublishController extends BaseController
                 }
             } else if( $projectVersion == 1.1 ) {
                 return $this->render('ZeegaPublishBundle:Player:mobile_player_1_1.html.twig', array(                    
-                    "project"=>$project,
-                    "project_data" => $projectData,                
+                    'project'=>$project,
+                    'related_projects_data'=>$relatedProjectsData,
+                    'project_data' => $projectData     
                 ));            
             } else  {
                 return $this->render('ZeegaPublishBundle:Player:mobile_player.html.twig', array(                    
-                    "project"=>$project,
-                    "project_data" => $projectData,                
+                    'project'=>$project,
+                    'related_projects_data'=>$relatedProjectsData,
+                    'project_data' => $projectData
+                                  
                 ));            
             }
         } else {
@@ -95,11 +117,13 @@ class PublishController extends BaseController
             } else if ( $projectVersion == 1.1) {
                 return $this->render('ZeegaPublishBundle:Player:player_1_1.html.twig', array(
                     'project'=>$project,
+                    'related_projects_data'=>$relatedProjectsData,
                     'project_data' => $projectData
                 ));
             } else {
                 return $this->render('ZeegaPublishBundle:Player:player.html.twig', array(
                     'project'=>$project,
+                    'related_projects_data'=>$relatedProjectsData,
                     'project_data' => $projectData
                 ));
             }
@@ -111,9 +135,9 @@ class PublishController extends BaseController
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
         $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
 
-        return $this->render("ZeegaPublishBundle:Player:player.html.twig", array(
-            "project"=>$project,
-            "project_data" => $projectData,
+        return $this->render('ZeegaPublishBundle:Player:player.html.twig', array(
+            'project'=>$project,
+            'project_data' => $projectData,
         ));
     }
      
@@ -123,7 +147,7 @@ class PublishController extends BaseController
         $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project)); 
         
         if (null === $project || null === $projectData) {
-            throw $this->createNotFoundException("The project with the id $id does not exist or is not published.");
+            throw $this->createNotFoundException('The project with the id $id does not exist or is not published.');
         }
         
         $projectVersion = $project->getVersion(); 
@@ -131,9 +155,9 @@ class PublishController extends BaseController
         if ( $projectVersion < 1.1) {
             return $this->render('ZeegaPublishBundle:Player:embed_1_0.html.twig', array('project'=>$project));
         } else if( $projectVersion == 1.1 ) {
-            return $this->render("ZeegaPublishBundle:Player:embed_1_1.html.twig", array("project"=>$project ));
+            return $this->render('ZeegaPublishBundle:Player:embed_1_1.html.twig', array('project'=>$project ));
         } else {
-            return $this->render("ZeegaPublishBundle:Player:embed.html.twig", array("project"=>$project ));
+            return $this->render('ZeegaPublishBundle:Player:embed.html.twig', array('project'=>$project ));
         }
     }
 }

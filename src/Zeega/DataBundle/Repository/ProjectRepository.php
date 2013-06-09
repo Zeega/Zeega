@@ -45,6 +45,24 @@ class ProjectRepository extends DocumentRepository
             ->getQuery()->execute()->count();
     }
 
+
+    // Place holder for related Zeegas
+    public function findRelated( $id = null, $query = null ){
+
+        $qb = $this->createQueryBuilder('Project')
+                        ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created', 'tags')
+                        ->field('user')->prime(true)
+                        ->field('id')->notEqual( $id )
+                        ->eagerCursor(true)
+                        ->limit( 2 )
+                        ->skip( rand(0, 8) )
+                        ->sort('date_created','DESC');
+
+        $qb->field('tags.name')->equals("featured");
+        
+        return $qb->getQuery()->execute();
+    }
+
     public function findByQuery($query)
     {
         if ( isset($query["text"]) ) {

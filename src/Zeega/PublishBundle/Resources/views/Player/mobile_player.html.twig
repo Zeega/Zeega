@@ -67,9 +67,11 @@
             data-views="{{project.views}}"
         />
 
+        
+
+        {% block player_stylesheets %}
+
         <base href="/js/app/player.mobile/">
-
-
 
         {% if app.environment == 'prod' %}
 
@@ -81,12 +83,14 @@
 
         {% endif %}
 
+        {% endblock player_stylesheets %}
+
         <script> 
             // because windows is the worst
             if (!window.console) console = { log: function() {}};
              //Project data
             var projectJSON = "{{ project_data|e('js') }}";
-        
+            var relatedProjectsJSON = "{{ related_projects_data|e('js') }}";
         </script>
 
         {% if app.environment == 'prod' %}
@@ -105,14 +109,21 @@
             
            
         </script>
-        
+        {% endif %}
+
+        {% block player_scripts %}
+
+        {% if app.environment == 'prod' %}
+
         <script src="{{ asset('js/app/player.mobile/dist/release/require.js') }}" ></script>
+        
         {% else %}
 
         <script src="{{ asset('js/app/player.mobile/dist/debug/require.js') }}" ></script>
 
         {% endif %}
 
+        {% endblock player_scripts %}
 
     </head>
 

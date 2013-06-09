@@ -1,10 +1,23 @@
 {% extends "ZeegaPublishBundle:Player:player.html.twig" %}
 
 {% block player_stylesheets %}
-<link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone_1_1/dist/release/index.css') }}">
+
+    {% if app.environment == 'prod' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone_1_1/dist/release/index.css') }}">
+    {% else %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone_1_1/dist/release/index.css') }}">
+
+    {% endif %}
 {% endblock player_stylesheets %}
 
 {% block player_script %}
-<script src="{{ asset('js/app/player.standalone_1_1/dist/debug/require.js') }}" ></script>
+
+
+        {% if app.environment == 'prod' %}
+            <script src="{{ asset('js/app/player.standalone_1_1/dist/release/require.js') }}" ></script>
+        {% else %}
+            <script src="{{ asset('js/app/player.standalone_1_1/dist/debug/require.js') }}" ></script>
+        {% endif %}
+
 {% endblock player_script %}
 
