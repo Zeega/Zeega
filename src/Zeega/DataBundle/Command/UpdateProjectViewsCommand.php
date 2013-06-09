@@ -83,42 +83,60 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
         } else {
             $redis = $this->getContainer()->get('snc_redis.default');
         
-            $redis->multi();
-            $redis->smembers('update');
-            $redis->del('update');
-            $queryResult = $redis->exec();
+            $viewKeys = $redis->keys('views:*');
+            $projectsToUpdateIds = array();
+            $projectsToUpdateValues = array();
 
-            $itemsToUpdateIds = $queryResult[0];
-            if ( isset($itemsToUpdateIds) && is_array($itemsToUpdateIds) && count($itemsToUpdateIds) > 0 ) {
-                $redis->multi();
-                $redis->mget($itemsToUpdateIds);
-                $redis->del($itemsToUpdateIds);
-                $queryResult = $redis->exec();
-
-                $itemsToUpdate = array_combine($itemsToUpdateIds, $queryResult[0]);            
-            } 
-        }
-        
-        if (isset($itemsToUpdate) && is_array($itemsToUpdate) && count($itemsToUpdate) > 0) {            
-            $em = $this->getContainer()->get('doctrine')->getEntityManager();
-            $databaseItems = $em->getRepository("ZeegaDataBundle:Item")->findInId(array_keys($itemsToUpdate));
-                        
-            foreach ($databaseItems as $dbItem) {
-
-                $id = $dbItem->getId();
-                $currViews = $dbItem->getViews();
-                if ( isset($itemsToUpdate[$id]) ) {
-                    if ( null !== $csvPath ) {
-                        $dbItem->setViews($itemsToUpdate[$id]);
-                    } else {
-                        $dbItem->setViews($currViews + $itemsToUpdate[$id]);
-                    }
-                    
-                    $em->persist($dbItem);
+            foreach($viewKeys as $viewKey) {
+                $projectId = str_replace("views:","",$viewKey);
+                $viewKeyForCopy = str_replace("views:","views-copy:",$viewKey);
+                $redis->rename($viewKey, $viewKeyForCopy);                
+                $views = $redis->get($viewKeyForCopy);
+                
+                if (is_numeric($projectId)) {
+                    $projectId = (int)$projectId;
                 }
-            }
 
-            $em->flush();
+                array_push($projectsToUpdateIds, $projectId);
+                $projectsToUpdateValues[$projectId] = $views;
+            }
+            
+            if ( count($projectsToUpdateIds > 0) ) {
+                $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
+                $projects = $dm->createQueryBuilder('Zeega\DataBundle\Document\Project')
+                    ->field('id')->in($projectsToUpdateIds)
+                    ->getQuery()->execute();
+                
+                foreach($projects as $project) {
+                    $views = $project->getViews();
+                    $projectId = (string)$project->getId();
+                    $project->setViews($views + $projectsToUpdateValues[$projectId]);
+                    $dm->persist($project);
+                    $redis->del($viewKeyForCopy);
+                    unset($projectsToUpdateIds[$projectId]);
+
+                    $output->writeln("Updated $projectId");
+                }
+
+                // temp method to update projects that use the old ids
+                if( count($projectsToUpdateIds) > 0 ) {
+                    $projects = $dm->createQueryBuilder('Zeega\DataBundle\Document\Project')
+                        ->field('rdbmsIdPublished')->in($projectsToUpdateIds)
+                        ->getQuery()->execute();
+                    
+                    foreach($projects as $project) {
+                        $views = $project->getViews();
+                        $projectId = (string)$project->getRdbmsIdPublished();
+                        $project->setViews($views + $projectsToUpdateValues[$projectId]);
+                        $dm->persist($project);
+                        $redis->del($viewKeyForCopy);
+                    
+                        $output->writeln("Updated $projectId");
+                    }                    
+                }
+
+                $dm->flush();
+            }
         }
     }
 }
