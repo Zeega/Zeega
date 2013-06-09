@@ -36,7 +36,7 @@ class User extends BaseUser
     protected $thumbUrl;
 
     /**     
-     * @MongoDB\Field(type="date",name="media_creator_realname")
+     * @MongoDB\Field(type="date",name="created_at")
      */
     protected $createdAt;
 
