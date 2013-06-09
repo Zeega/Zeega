@@ -80,10 +80,11 @@ class FacebookProvider implements UserProviderInterface
                     if ( isset($facebookUserData['email']) ) {
                         $user->setEmail($facebookUserData['email']);
                         $user->setUsername($facebookUserData['email']);
+                    } else {
+                        $user->setEmail(null);
                     }
 
-
-                    
+                    $user->setThumbUrl("http://graph.facebook.com/$facebookUserId/picture?width=200&height=200");                    
                 }
             }
     
@@ -96,8 +97,6 @@ class FacebookProvider implements UserProviderInterface
                 if ( !isset($username) ) {
                     $user->setUsername($facebookUserId);
                 }
-
-                $user->setThumbUrl("http://graph.facebook.com/$facebookUserId/picture?width=200&height=200");
             }
             
             if (count($this->validator->validate($user, 'Facebook'))) {
