@@ -18,6 +18,7 @@ framework:
     trusted_proxies:  ~
     session:          ~
     fragments:        ~
+    translator: { fallback: en }
 
 # Twig Configuration
 twig:
