@@ -18,7 +18,7 @@ class AnalyticsController extends BaseController
 {
     public function indexAction( $detail )
     {
-
+        
         if($this->container->get('security.context')->isGranted('ROLE_ADMIN')){
 
 
@@ -38,62 +38,62 @@ class AnalyticsController extends BaseController
             $i=0;
 
             while( $t < $currentTime ){
-                $dateBegin = date("Y-m-d H:i:s", $t );
-                $dateEnd = date("Y-m-d H:i:s",  $t + 24*60*60 );
+                $dateBegin =  new \DateTime(date("Y-m-d H:i:s", $t ));
+                $dateEnd =  new \DateTime(date("Y-m-d H:i:s",  $t + 24*60*60 ));
 
                 if( $detail == "daily" ){
-                    $countZeegas = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findProjectsCountByDates( $dateBegin, $dateEnd );
-                    $countAllNewUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findNewUsersCountByDates( $dateBegin, $dateEnd );
+                    $countZeegas = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findProjectsCountByDates( $dateBegin, $dateEnd );
+                    $countAllNewUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:User")->findNewUsersCountByDates( $dateBegin, $dateEnd );
                     
-                    $countUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateEnd );
-                    $countNewUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateEnd, true );
-                    $countActiveUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateEnd, null, 1 );
-                    $countActiveNewUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateEnd, true, 1 );
+                    $countUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateEnd );
+                    $countNewUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateEnd, true );
+                    $countActiveUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateEnd, null, 1 );
+                    $countActiveNewUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateEnd, true, 1 );
                     
                     $daily [ $i ] = array( 
                             "date" => date('M d, Y', $t ), 
-                            "count" => $countZeegas[0][1],
-                            "allNewUsersCount" => $countAllNewUsers[0][1],
-                            "usersCount" => $countUsers[0][1],
-                            "newUsersCount" => $countNewUsers[0][1],
-                            "activeUsersCount" => $countActiveUsers[0][1],
-                            "activeNewUsersCount" => $countActiveNewUsers[0][1],
+                            "count" => $countZeegas,
+                            "allNewUsersCount" => $countAllNewUsers,
+                            "usersCount" => $countUsers,
+                            "newUsersCount" => $countNewUsers,
+                            "activeUsersCount" => $countActiveUsers,
+                            "activeNewUsersCount" => $countActiveNewUsers,
                             "dateBegin" => $dateBegin,
                             "dateEnd" => $dateEnd
                     );
                 }
 
                 if( $i % 7 == 0 ){
-                    $dateWeekEnd = date("Y-m-d H:i:s",  $t + 7*24*60*60 );
-                    $weekPrevious = date("Y-m-d H:i:s",  $t - 7*24*60*60 );
-                    $fourWeekPrevious = date("Y-m-d H:i:s",  $t - 4*7*24*60*60 );
+                    $dateWeekEnd =  new \DateTime(date("Y-m-d H:i:s",  $t + 7*24*60*60 ));
+                    $weekPrevious =  new \DateTime(date("Y-m-d H:i:s",  $t - 7*24*60*60 ));
+                    $fourWeekPrevious =  new \DateTime(date("Y-m-d H:i:s",  $t - 4*7*24*60*60 ));
 
-                    $countZeegas = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findProjectsCountByDates( $dateBegin, $dateWeekEnd );
-                    $countAllNewUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findNewUsersCountByDates( $dateBegin, $dateWeekEnd );
+                    $countZeegas = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findProjectsCountByDates( $dateBegin, $dateWeekEnd );
+                    $countAllNewUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:User")->findNewUsersCountByDates( $dateBegin, $dateWeekEnd );
                 
 
-                    $countUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd );
-                    $countNewUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, true );
-                    $countActiveUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, null, 1 );
-                    $countActiveNewUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, true, 1 );
+                    $countUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd );
+                    $countNewUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, true );
+                    $countActiveUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, null, 1 );
+                    $countActiveNewUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, true, 1 );
                     
 
                     
 
-                    $countActiveReturningUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, null, 0, $weekPrevious );
-                    $countActiveLongReturningUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, null, 0, $fourWeekPrevious );
+                    //$countActiveReturningUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, null, 0, $weekPrevious );
+                    //$countActiveLongReturningUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( $dateBegin, $dateWeekEnd, null, 0, $fourWeekPrevious );
 
 
                     $weekly [ $i / 7 ] = array( 
                         "date" => "Week of ".date('M d, Y', $t ), 
-                        "count" => $countZeegas[0][1],
-                        "allNewUsersCount" => $countAllNewUsers[0][1],
-                        "usersCount" => $countUsers[0][1], 
-                        "newUsersCount" => $countNewUsers[0][1], 
-                        "activeUsersCount" => $countActiveUsers[0][1], 
-                        "activeNewUsersCount" => $countActiveNewUsers[0][1],
-                        "activeReturningUsersCount" => $countActiveReturningUsers[0][1],
-                        "activeLongReturningUsersCount" => $countActiveLongReturningUsers[0][1],
+                        "count" => $countZeegas,
+                        "allNewUsersCount" => $countAllNewUsers,
+                        "usersCount" => $countUsers, 
+                        "newUsersCount" => $countNewUsers, 
+                        "activeUsersCount" => $countActiveUsers, 
+                        "activeNewUsersCount" => $countActiveNewUsers,
+                        //"activeReturningUsersCount" => $countActiveReturningUsers,
+                        //"activeLongReturningUsersCount" => $countActiveLongReturningUsers,
                         "dateBegin" => $dateBegin,
                         "dateEnd" => $dateEnd
                     );
@@ -101,29 +101,28 @@ class AnalyticsController extends BaseController
 
                 $t = $t + 24*60*60;
                 $i++;
+                $this->get('doctrine_mongodb')->getManager()->clear();
 
             }
 
-            $totalZeegas = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findProjectsCountByDates( date("Y-m-d H:i:s",  0 ), date("Y-m-d H:i:s",  $currentTime) );
-            $activeUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( date("Y-m-d H:i:s",  0 ), date("Y-m-d H:i:s"), null, 0 );
-            $activeOneUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( date("Y-m-d H:i:s",  0 ), date("Y-m-d H:i:s"), null, 1 );
-            $activeFiveUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( date("Y-m-d H:i:s",  0 ), date("Y-m-d H:i:s"), null, 5 );
-            $activeTenUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( date("Y-m-d H:i:s",  0 ), date("Y-m-d H:i:s"), null, 10 );
-            $activeTwentyUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( date("Y-m-d H:i:s",  0 ), date("Y-m-d H:i:s"), null, 20 );
-            $activeFiftyUsers = $this->getDoctrine()->getEntityManager()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( date("Y-m-d H:i:s",  0 ), date("Y-m-d H:i:s"), null, 50 );
+            $totalZeegas = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findByPublished(true)->count();
+            $activeUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( new \DateTime(date("Y-m-d H:i:s",  0 )), new \DateTime(date("Y-m-d H:i:s")), null, 0 );
+            $activeOneUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( new \DateTime(date("Y-m-d H:i:s",  0 )), new \DateTime(date("Y-m-d H:i:s")), null, 1 );
+            $activeFiveUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( new \DateTime(date("Y-m-d H:i:s",  0 )), new \DateTime(date("Y-m-d H:i:s")), null, 5 );
+            $activeTenUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( new \DateTime(date("Y-m-d H:i:s",  0 )), new \DateTime(date("Y-m-d H:i:s")), null, 10 );
+            $activeTwentyUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( new \DateTime(date("Y-m-d H:i:s",  0 )), new \DateTime(date("Y-m-d H:i:s")), null, 20 );
+            $activeFiftyUsers = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findActiveUsersCountByDates( new \DateTime(date("Y-m-d H:i:s",  0 )), new \DateTime(date("Y-m-d H:i:s")), null, 50 );
+            $this->get('doctrine_mongodb')->getManager()->clear();
 
             $totals=array(
-                    "totalZeegas"=>$totalZeegas[0][1],
-                    "activeUsers"=>$activeUsers[0][1],
-                    "activeOneUsers"=>$activeOneUsers[0][1],
-                    "activeFiveUsers"=>$activeFiveUsers[0][1],
-                    "activeTenUsers"=>$activeTenUsers[0][1],
-                    "activeTwentyUsers"=>$activeTwentyUsers[0][1],
-                    "activeFiftyUsers"=>$activeFiftyUsers[0][1],
+                    "totalZeegas"=>$totalZeegas,
+                    "activeUsers"=>$activeUsers,
+                    "activeOneUsers"=>$activeOneUsers,
+                    "activeFiveUsers"=>$activeFiveUsers,
+                    "activeTenUsers"=>$activeTenUsers,
+                    "activeTwentyUsers"=>$activeTwentyUsers,
+                    "activeFiftyUsers"=>$activeFiftyUsers
                 );
-
-
-
 
             
             return $this->render('ZeegaAdminBundle:Analytics:index.html.twig', array(
