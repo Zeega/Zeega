@@ -18,25 +18,28 @@ class CommunityController extends BaseController
 {
     public function homeAction()
     {
-        $queryFields = array("description","tags","id", "title", "thumbnail_url", "attribution_uri", "views", "display_name","user_id", "user_thumbnail");
-        $zeegaQuery = json_decode($this->forward("ZeegaApiBundle:Projects:getProjectsSearch", array(), array("tags" => "zeegaoftheday", "limit" =>"1"))->getContent());
-        
-        if (isset($zeegaQuery->projects[0])) {
-            $topZeega = $zeegaQuery->projects[0];
-        } else {
-            $topZeega = null;
-        }
+        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=>"homepage"));
+    }
 
-        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("topZeega" => $topZeega));
+    public function tagAction( $tag )
+    {
+        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=> $tag, "local_path"=>"tag/".$tag ));
     }
     
     public function userAction($id)
     {
+        $loggedUser = $this->getUser();
         $user = $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findOneById($id);
-        $projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id))->getContent();
-        $loggedUser = $this->get('security.context')->getToken()->getUser();
 
-        return $this->render("ZeegaCommunityBundle:User:user.html.twig",array("user"=>$user, "logged_user"=>$loggedUser, "user_projects" => $projects));
+
+        if(is_null($loggedUser) || $loggedUser->getId() != $id) {
+            //$background = $user->getBackGroundUrl
+            return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("profile_id"=> $id, "local_path"=>"profile/".$id, "user"=>$user ));
+        } else {
+            
+            $projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id))->getContent();
+            return $this->render("ZeegaCommunityBundle:User:user.html.twig",array("user"=>$user, "logged_user"=>$loggedUser, "user_projects" => $projects));
+        }
     }
     
     public function dashboardAction()

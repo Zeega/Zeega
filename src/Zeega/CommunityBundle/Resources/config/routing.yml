@@ -2,6 +2,10 @@ ZeegaCommunityBundle_home:
     pattern:  /
     defaults: { _controller: ZeegaCommunityBundle:Community:home }
 
+ZeegaCommunityBundle_tag:
+    pattern:  /tag/{tag}
+    defaults: { _controller: ZeegaCommunityBundle:Community:tag }
+
 ZeegaCommunityBundle_user:
     pattern:  /profile/{id}
     defaults: { _controller: ZeegaCommunityBundle:Community:user }

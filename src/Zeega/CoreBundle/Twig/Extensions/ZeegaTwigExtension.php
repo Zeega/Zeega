@@ -41,6 +41,7 @@ class ZeegaTwigExtension extends \Twig_Extension
                         return array(
                             'user_id' => $user->getId(),
                             'displayname' => $user->getDisplayName(),
+                            'user_thumb' => $user->getThumbUrl()
                         );
                     }
                 }
