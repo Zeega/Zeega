@@ -18,26 +18,27 @@ class CommunityController extends BaseController
 {
     public function homeAction()
     {
-        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=>"homepage"));
+        $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array("tags"=>"homepage", "limit"=>10))->getContent();
+        
+        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=>"homepage", "feed_data"=>$projects));
     }
 
     public function tagAction( $tag )
     {
-        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=> $tag, "local_path"=>"tag/".$tag ));
+        $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array("tags"=>$tag, "limit"=>10))->getContent();
+        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=> $tag, "local_path"=>"tag/".$tag, "feed_data"=>$projects ));
     }
     
     public function userAction($id)
     {
         $loggedUser = $this->getUser();
         $user = $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findOneById($id);
-
+        $projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id, "limit"=>10))->getContent();
 
         if(is_null($loggedUser) || $loggedUser->getId() != $id) {
-            //$background = $user->getBackGroundUrl
-            return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("profile_id"=> $id, "local_path"=>"profile/".$id, "user"=>$user ));
-        } else {
             
-            $projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id))->getContent();
+            return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("profile_id"=> $id, "local_path"=>"profile/".$id, "user"=>$user, "feed_data"=>$projects ));
+        } else {
             return $this->render("ZeegaCommunityBundle:User:user.html.twig",array("user"=>$user, "logged_user"=>$loggedUser, "user_projects" => $projects));
         }
     }

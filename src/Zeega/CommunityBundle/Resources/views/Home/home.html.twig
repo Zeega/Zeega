@@ -76,6 +76,9 @@
             if ( !window.console ) {
                 console = {log: function() {}};
             }
+
+            var feedData = "{{ feed_data|e('js') }}";
+
         </script>
 
 </head>
@@ -84,7 +87,7 @@
 
 
   <header>
-          <a href="{{ path('ZeegaCommunityBundle_home') }}" class="ZEEGA-tab">
+          <a href="{{ path('ZeegaCommunityBundle_home') }}" data-bypass="true" class="ZEEGA-tab">
               <span class="ZTab-logo"></span>
           </a>
           {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -125,12 +128,16 @@
               <p class="bio">{{user.getBio()}}</p>
             </span>
         </div>
-          
+    {% else %}       
+         <div class="cover homepage" >
+            <span class="tagline">
+              <h2>Make the web you want</h2>
+            </span>
+    </div>
 
 
 
-
-          {% endif %}
+    {% endif %}
   <!-- Main container. -->
   <div role="main" id="main"></div>
 
