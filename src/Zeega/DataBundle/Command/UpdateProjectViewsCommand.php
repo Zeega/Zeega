@@ -76,7 +76,7 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
                 $projectId = (string)$project->getId();
                 $project->setViews($views + $projectsToUpdateValues[$projectId]);
                 $dm->persist($project);
-                $redis->del($viewKeyForCopy);
+                $redis->del("views-copy:$projectId");
                 unset($projectsToUpdateIds[$projectId]);
 
                 $output->writeln("Updated $projectId");
@@ -93,7 +93,7 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
                     $projectId = (string)$project->getRdbmsIdPublished();
                     $project->setViews($views + $projectsToUpdateValues[$projectId]);
                     $dm->persist($project);
-                    $redis->del($viewKeyForCopy);
+                    $redis->del("views-copy:$projectId");
                 
                     $output->writeln("Updated $projectId");
                 }                    
