@@ -88,11 +88,28 @@
               <span class="ZTab-logo"></span>
           </a>
           {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-          <a class="btnz create-a-zeega" href="http://www.zeega.com/project/new" > Create A New Zeega</a>
-            <a class="logged-in-user" data-bypass="true" href="http://dev.zeega.com/jmongo/web/dashboard">
-              <div class="profile-token" style="background-image: url({{user_thumb}});"></div>
-            </a>
-        
+          
+
+            <div class="nav col-left navbar">
+              <ul class="pull-left">
+                  <li>
+                      <a href="{{ path('ZeegaCommunityBundle_dashboard') }}" class="logged-in-user" data-bypass="true" >
+                            <span class="profile-token" 
+                            {% if user_thumb != "" %}
+                                style="background-image: url({{user_thumb}}));">
+                            {% endif %}
+                            </span></a>
+                  </li>
+                  <li>
+                      <a class="btnz create-a-zeega" href="{{ path('ZeegaEditorBundle_new') }}" > Create A New Zeega</a>
+                  </li>
+                 
+              </ul>
+          </div>
+
+            <a class="btnz login" href="http://dev.zeega.com/jmongo/web/logout">Logout</a> 
+
+
             {% else %}
                 <a class="btnz login" href="http:{{hostname}}{{directory}}login">Login</a>
             {% endif %}
@@ -109,6 +126,8 @@
             </span>
         </div>
           
+
+
 
 
           {% endif %}
