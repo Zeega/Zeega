@@ -78,7 +78,9 @@
             }
 
             var feedData = "{{ feed_data|e('js') }}";
-
+            {% if profile_data is defined  %}
+              var profileData ="{{ profile_data|e('js') }}";
+            {% endif %}
         </script>
 
 </head>
@@ -114,30 +116,14 @@
 
 
             {% else %}
+
                 <a class="btnz login" href="{{ path('fos_user_security_login') }}">Login</a>
+            
             {% endif %}
           
 
 </header>
-    {% if profile_id != "" %}
 
-        <div class="cover"  {% if user.getBackgroundImageUrl() != "" %} style ="background-image:url({{ user.getBackgroundImageUrl()}})" {% endif %} >
-            <div   class="profile-token-large" {% if user.getThumbUrl() != "" %}style="background-image:url({{user.getThumbUrl()}})" {% endif %}  ></div>
-            <span class="headline">
-              <h2>{{user.getDisplayName()}}</h2>
-              <p class="bio">{{user.getBio()}}</p>
-            </span>
-        </div>
-    {% else %}       
-         <div class="cover homepage" >
-            <span class="tagline">
-              <h2>Make the web you want</h2>
-            </span>
-    </div>
-
-
-
-    {% endif %}
   <!-- Main container. -->
   <div role="main" id="main"></div>
 

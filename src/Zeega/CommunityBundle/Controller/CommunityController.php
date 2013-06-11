@@ -32,13 +32,15 @@ class CommunityController extends BaseController
     public function userAction($id)
     {
         $loggedUser = $this->getUser();
-        $user = $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findOneById($id);
         $projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id, "limit"=>10))->getContent();
+        $profile = $this->forward('ZeegaApiBundle:Users:getUser', array("id" => $id))->getContent();
 
-        if(is_null($loggedUser) || $loggedUser->getId() != $id) {
+
+        if(is_null($loggedUser) || $loggedUser->getId() != $id || true) {
             
-            return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("profile_id"=> $id, "local_path"=>"profile/".$id, "user"=>$user, "feed_data"=>$projects ));
+            return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("profile_id"=> $id, "local_path"=>"profile/".$id, "feed_data"=>$projects, "profile_data"=>$profile ));
         } else {
+            $user = $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findOneById($id);
             return $this->render("ZeegaCommunityBundle:User:user.html.twig",array("user"=>$user, "logged_user"=>$loggedUser, "user_projects" => $projects));
         }
     }
