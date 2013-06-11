@@ -1,0 +1,32 @@
+<title>{{project.title}}</title>
+<link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
+<meta name="description" content="{{project.description}}">
+<meta name="author" content="{{project.user.displayName}}">
+
+<!-- FB -->
+
+<meta property="og:site_name" content="Zeega"/>
+<meta property="og:title" content="{{project.title}}"/>
+<meta property="og:description" content="{{project.description}}"/>
+<meta property="og:type" content="movie"/>
+<meta property="og:url" content="http:{{hostname}}{{directory}}{{project.id}}"/>
+<meta property="og:image" content="{{thumbnailUrl}}"/>
+
+<!-- END FB --> 
+
+
+<!-- Twitter -->
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@zeega">
+{% if project.title == "" %}
+<meta name="twitter:title" content="">
+{% else %}
+<meta name="twitter:title" content="A Zeega by {{project.user.displayName}} &#9658; {{project.title}}">
+{% endif %}
+<meta name="twitter:description" content="Zeega is a new form of interactive media, enabling anyone to express themselves by easily combining media from the cloud. Make the web you want.">
+<meta name="twitter:creator" content="">
+<meta name="twitter:image:src" content="{{thumbnailUrl}}">
+<meta name="twitter:domain" content="zeega.com">
+
+<!-- End Twitter -->

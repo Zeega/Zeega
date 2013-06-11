@@ -24,23 +24,9 @@
             {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
         {% endif %}
 
-        <title>{{project.title}}</title>
-        <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
-        <meta name="description" content="{{project.description}}">
-        <meta name="author" content="{{project.user.displayName}}">
-
-        <!-- FB -->
         
-        <meta property="og:site_name" content="Zeega"/>
-        <meta property="og:title" content="{{project.title}}"/>
-        <meta property="og:description" content="{{project.description}}"/>
-        <meta property="og:author" content="{{project.user.displayName}}"/>
-        <meta property="og:type" content="movie"/>
-        <meta property="og:url" content="{{hostname}}{{directory}}{{project.id}}"/>
-        <meta property="og:image" content="{{thumbnailUrl}}"/>
-            
-        <!-- END FB --> 
-
+        {% include "ZeegaPublishBundle:Player:meta.html.twig" %}  
+        
         <meta name="zeega" content="zeega-mobile"
             data-directory="{{directory}}"
             data-hostname="{{hostname}}"
@@ -53,23 +39,13 @@
 
         <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.mobile_1_0/dist/release/index.css') }}">
         
+
+        {% include '::analytics.html.twig' %}
+
+
         <script> 
             // because windows is the worst
             if (!window.console) console = { log: function() {}};
-            
-
-            {% if app.environment == 'prod' %}
-            //Google analytics
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-37456730-1']);
-            _gaq.push(['_trackPageview']);
-
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-            {% endif %}
             
             //Project data
             var projectJSON = "{{ project_data|e('js') }}";

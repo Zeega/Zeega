@@ -3,46 +3,7 @@
     <head>
         <meta charset="utf-8">
 
-        <title>{{project.title}}</title>
-        <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
-        <meta name="description" content="{{project.description}}">
-        <meta name="author" content="{{project.user.displayName}}">
-
-        {% if project.thumbnailUrl is defined and project.thumbnailUrl is not empty %}
-            {% set thumbnailUrl = project.thumbnailUrl %}
-        {% elseif project.coverImage is defined and project.coverImage is not empty %}
-            {% set thumbnailUrl = project.coverImage %}
-        {% else %}
-            {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
-        {% endif %}
-
-        <!-- FB -->
-        
-        <meta property="og:site_name" content="Zeega"/>
-        <meta property="og:title" content="{{project.title}}"/>
-        <meta property="og:description" content="{{project.description}}"/>
-        <meta property="og:type" content="movie"/>
-        <meta property="og:url" content="http:{{hostname}}{{directory}}{{project.id}}"/>
-        <meta property="og:image" content="{{thumbnailUrl}}"/>
-            
-        <!-- END FB --> 
-
-        <!-- Twitter -->
-
-        <meta name="twitter:card" content="summary">
-        <meta name="twitter:site" content="@zeega">
-        {% if project.title == "" %}
-        <meta name="twitter:title" content="">
-        {% else %}
-        <meta name="twitter:title" content="A Zeega by {{project.user.displayName}} &#9658; {{project.title}}">
-        {% endif %}
-        <meta name="twitter:description" content="Zeegas are a new format of interactive media, enabling anyone to easily combine animated GIFs, audio, images, text and video from across the web. Make the web you want.">
-        <meta name="twitter:creator" content="">
-        <meta name="twitter:image:src" content="{{thumbnailUrl}}">
-        <meta name="twitter:domain" content="zeega.com">
-
-        <!-- End Twitter -->
-        
+        {% include "ZeegaPublishBundle:Player:meta.html.twig" %}        
 
         <!-- STYLESHEETS -->
         {% block player_stylesheets %}
@@ -52,9 +13,6 @@
         {% else %}
             <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.standalone/dist/debug/index.css') }}">
         {% endif %}
-
-
-        
 
         {% endblock player_stylesheets %}
         <!-- END STYLESHEETS -->
@@ -74,31 +32,22 @@
          />
          
         <script type="text/javascript" charset="utf-8" data-requirecontext="_" data-requiremodule="lib/swfobject" src="{{ asset('js/lib/swfobject.js') }}"></script>
+        
+        {% include '::analytics.html.twig' %}
+
 
         <script>
-        {% if app.environment == 'prod' %}
-            // Google analytics
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-37456730-1']);
-            _gaq.push(['_trackPageview']);
-
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-        {% endif %}
-
 
             // Because IE sucks
             if ( !window.console ) {
                 console = {log: function() {}};
             }
+            
             {% block player_data %}
             // Project data
             
-            var projectJSON = "{{ project_data|e('js') }}";
-            var relatedProjectsJSON = "{{ related_projects_data|e('js') }}";
+                var projectJSON = "{{ project_data|e('js') }}";
+                var relatedProjectsJSON = "{{ related_projects_data|e('js') }}";
 
 
             {% endblock player_data %}

@@ -24,40 +24,9 @@
             {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
         {% endif %}
 
-        <title>{{project.title}}</title>
-        <link rel="shortcut icon" type="image/x-icon" href="{{asset('images/zeega.ico')}}"> 
-        <meta name="description" content="{{project.description}}">
-        <meta name="author" content="{{project.user.displayName}}">
+       {% include "ZeegaPublishBundle::Player:meta.html.twig" %}   
 
-        <!-- FB -->
-        
-        <meta property="og:site_name" content="Zeega"/>
-        <meta property="og:title" content="{{project.title}}"/>
-        <meta property="og:description" content="{{project.description}}"/>
-        <meta property="og:type" content="movie"/>
-        <meta property="og:url" content="http:{{hostname}}{{directory}}{{project.id}}"/>
-        <meta property="og:image" content="{{thumbnailUrl}}"/>
-            
-        <!-- END FB --> 
-
-
-        <!-- Twitter -->
-
-        <meta name="twitter:card" content="summary">
-        <meta name="twitter:site" content="@zeega">
-        {% if project.title == "" %}
-        <meta name="twitter:title" content="">
-        {% else %}
-        <meta name="twitter:title" content="A Zeega by {{project.user.displayName}} &#9658; {{project.title}}">
-        {% endif %}
-        <meta name="twitter:description" content="Zeegas are a new format of interactive media, enabling anyone to easily combine animated GIFs, audio, images, text and video from across the web. Make the web you want.">
-        <meta name="twitter:creator" content="">
-        <meta name="twitter:image:src" content="{{thumbnailUrl}}">
-        <meta name="twitter:domain" content="zeega.com">
-
-        <!-- End Twitter -->
-
-
+       
         <meta name="zeega" content="zeega-mobile"
             data-directory="{{directory}}"
             data-hostname="{{hostname}}"
@@ -71,17 +40,17 @@
 
         {% block player_stylesheets %}
 
-        <base href="/js/app/player.mobile/">
+            <base href="/js/app/player.mobile/">
 
-        {% if app.environment == 'prod' %}
+            {% if app.environment == 'prod' %}
 
-        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.mobile/dist/release/index.css') }}">
-        
-        {% else %}
+                <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.mobile/dist/release/index.css') }}">
+            
+            {% else %}
 
-        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.mobile/dist/debug/index.css') }}">
+                <link rel="stylesheet" type="text/css" href="{{ asset('js/app/player.mobile/dist/debug/index.css') }}">
 
-        {% endif %}
+            {% endif %}
 
         {% endblock player_stylesheets %}
 
@@ -93,35 +62,19 @@
             var relatedProjectsJSON = "{{ related_projects_data|e('js') }}";
         </script>
 
-        {% if app.environment == 'prod' %}
-
-        <script>
-            //Google analytics
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-37456730-1']);
-            _gaq.push(['_trackPageview']);
-
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-            
-           
-        </script>
-        {% endif %}
+        {% include '::analytics.html.twig' %} 
 
         {% block player_scripts %}
 
-        {% if app.environment == 'prod' %}
+            {% if app.environment == 'prod' %}
 
-        <script src="{{ asset('js/app/player.mobile/dist/release/require.js') }}" ></script>
-        
-        {% else %}
+                <script src="{{ asset('js/app/player.mobile/dist/release/require.js') }}" ></script>
+            
+            {% else %}
 
-        <script src="{{ asset('js/app/player.mobile/dist/debug/require.js') }}" ></script>
+                <script src="{{ asset('js/app/player.mobile/dist/debug/require.js') }}" ></script>
 
-        {% endif %}
+            {% endif %}
 
         {% endblock player_scripts %}
 

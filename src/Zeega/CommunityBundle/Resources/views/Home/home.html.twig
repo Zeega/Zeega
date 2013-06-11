@@ -9,25 +9,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" style="height:100%" lang="en-US">
     <head>
-        <link rel="icon" type="image/png" href="{{ asset('images/zeega.ico')}}">
-        <title>{% block title %}Zeega{% endblock %}</title>
         
-        <meta name="description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web.">
-        <meta name="keywords" content="zeega, storytelling, documentary, interactive">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-        {% block fbshare %}
-        
-        <!-- FB -->
-        <meta property="og:site_name" content="Zeega"/>
-        <meta property="og:title" content="Zeega"/>
-        <meta property="og:description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web."/>
-        <meta property="og:type" content="website"/>
-        <meta property="og:url" content="http:{{hostname}}"/>
-        <meta property="og:image" content="http:{{hostname}}images/z-logo-fb.png"/>
-        <!-- END FB --> 
-        
-        {% endblock %}
+        {% include "::meta.html.twig" %}   
          
 
 
@@ -56,28 +40,16 @@
         
         {% endblock stylesheets %}
         
+        {% include '::analytics.html.twig' %}
+
         <script type="text/javascript">
-        {% if app.environment == 'prod' %}
-            
-                        var _gaq = _gaq || [];
-                        _gaq.push(['_setAccount', 'UA-37456730-1']);
-                        _gaq.push(['_trackPageview']);
-
-                        (function() {
-                            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                        })();
-
-           
-        {% endif %}
 
         // Because IE sucks
             if ( !window.console ) {
                 console = {log: function() {}};
             }
 
-            var feedData = "{{ feed_data|e('js') }}";
+              var feedData = "{{ feed_data|e('js') }}";
             {% if profile_data is defined  %}
               var profileData ="{{ profile_data|e('js') }}";
             {% endif %}

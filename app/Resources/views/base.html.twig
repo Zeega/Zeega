@@ -5,25 +5,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" style="height:100%" lang="en-US">
     <head>
-       	<link rel="icon" type="image/png" href="{{ asset('images/zeega.ico')}}">
-       	<title>{% block title %}Zeega{% endblock %}</title>
-        
-		<meta name="description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web.">
-		<meta name="keywords" content="zeega, storytelling, documentary, interactive">
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-        {% block fbshare %}
-        
-        <!-- FB -->
-		<meta property="og:site_name" content="Zeega"/>
-		<meta property="og:title" content="Zeega"/>
-		<meta property="og:description" content="Zeega is a community of makers passionate about creating immersive experiences that combine original content with media from across the web."/>
-   		<meta property="og:type" content="website"/>
-   		<meta property="og:url" content="http://{{hostname}}"/>
-    	<meta property="og:image" content="http://{{hostname}}images/z-logo-fb.png"/>
-		<!-- END FB -->	
-        
-        {% endblock %}
+       	{% include "::meta.html.twig" %}
          
         {% block stylesheets %}			
 	
@@ -40,20 +22,7 @@
 		
 		{% endblock stylesheets %}
 		
-		{% if app.environment == 'prod' %}
-		    <script type="text/javascript">
-                        var _gaq = _gaq || [];
-                        _gaq.push(['_setAccount', 'UA-37456730-1']);
-                        _gaq.push(['_trackPageview']);
-
-                        (function() {
-                            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                        })();
-
-                    </script>
-		{% endif %}
+		{% include "::analytics.html.twig" %}
 
 
 		<script>
@@ -62,12 +31,6 @@
 			sessionStorage.setItem('hostname','{{hostname}}');
 			sessionStorage.setItem('userid','{{user_id}}');
 		</script>
-		
-		{% block browser_detection %}
-		<script>
-			var BrowserDetect={init:function(){this.browser=this.searchString(this.dataBrowser)||"An unknown browser";this.version=this.searchVersion(navigator.userAgent)||this.searchVersion(navigator.appVersion)||"an unknown version";this.OS=this.searchString(this.dataOS)||"an unknown OS";this.isMobile=navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)},searchString:function(e){for(var t=0;t<e.length;t++){var n=e[t].string;var r=e[t].prop;this.versionSearchString=e[t].versionSearch||e[t].identity;if(n){if(n.indexOf(e[t].subString)!=-1)return e[t].identity}else if(r)return e[t].identity}},searchVersion:function(e){var t=e.indexOf(this.versionSearchString);if(t==-1)return;return parseFloat(e.substring(t+this.versionSearchString.length+1))},dataBrowser:[{string:navigator.userAgent,subString:"Chrome",identity:"Chrome"},{string:navigator.userAgent,subString:"OmniWeb",versionSearch:"OmniWeb/",identity:"OmniWeb"},{string:navigator.vendor,subString:"Apple",identity:"Safari",versionSearch:"Version"},{prop:window.opera,identity:"Opera",versionSearch:"Version"},{string:navigator.vendor,subString:"iCab",identity:"iCab"},{string:navigator.vendor,subString:"KDE",identity:"Konqueror"},{string:navigator.userAgent,subString:"Firefox",identity:"Firefox"},{string:navigator.vendor,subString:"Camino",identity:"Camino"},{string:navigator.userAgent,subString:"Netscape",identity:"Netscape"},{string:navigator.userAgent,subString:"MSIE",identity:"Explorer",versionSearch:"MSIE"},{string:navigator.userAgent,subString:"Gecko",identity:"Mozilla",versionSearch:"rv"},{string:navigator.userAgent,subString:"Mozilla",identity:"Netscape",versionSearch:"Mozilla"}],dataOS:[{string:navigator.platform,subString:"Win",identity:"Windows"},{string:navigator.platform,subString:"Mac",identity:"Mac"},{string:navigator.userAgent,subString:"iPhone",identity:"iPhone/iPod"},{string:navigator.platform,subString:"Linux",identity:"Linux"}]};BrowserDetect.init();
-		</script>
-		{% endblock browser_detection %}
 		
 		{% block head %}
 		{% endblock %}
@@ -142,21 +105,6 @@
 				{% endif %}	
 			{% endblock header %}
 
-			{% block browser_detection_content %}
-				<div class="modal hide fade" id="unsupported-browser">
-					  <div class="modal-header">
-					    <button type="button" class="close" data-dismiss="modal">×</button>
-					    <h3>Please update your browser</h3>
-					  </div>
-					  <div class="modal-body">
-					    <p>Your browser is out of date and your experience is important to us. Please update your browser to ensure you can access all of Zeega's features.</p>
-					    <div class="pull-left" style="width:46%;padding:5px;background-color:#fad0d0;margin:5px;border-radius:3px;height:134px;text-align:center"><h4>You are using</h4><span id="unsupported-browser-data" style="font-size:11px;"></span></div>
-					    <div class="pull-left" style="width:46%;padding:5px;background-color:#d3fad0;margin:5px;border-radius:3px;height:134px;text-align:center"><h4>We support </h4><a href="http://www.google.com/chrome/"><div class="browser-logo-chrome"></div></a><a href="http://www.mozilla.org/en-US/firefox/new/"><div class="browser-logo-firefox"></div></a><a href=""><div class="browser-logo-safari"></div></a><a href="http://www.microsoft.com/IE9"><div class="browser-logo-ie"></div></a><br/><span style="font-size:11px">Latest versions</span>
-
-					    </div>
-					  </div>			  
-				</div>
-			{% endblock browser_detection_content %}
 		
 			<div id="editor" class='clearfix'>
 				{% block body %}

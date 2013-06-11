@@ -1,20 +1,17 @@
+{% if project.thumbnailUrl is defined and project.thumbnailUrl is not empty %}
+    {% set thumbnailUrl = project.thumbnailUrl %}
+{% elseif project.coverImage is defined and project.coverImage is not empty %}
+    {% set thumbnailUrl = project.coverImage %}
+{% else %}
+    {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
+{% endif %}
 <!doctype html>
 <html>
 	<head>
-		<title>{{project.title}}</title> 
-		<link rel="shortcut icon" type="image/x-icon" href="{{asset("images/zeega.ico")}}"> 	
-		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+		
+        {% include "ZeegaPublishBundle:Player:meta.html.twig" %}
 
-
-        {% if project.thumbnailUrl is defined and project.thumbnailUrl is not empty %}
-            {% set thumbnailUrl = project.thumbnailUrl %}
-        {% elseif project.coverImage is defined and project.coverImage is not empty %}
-            {% set thumbnailUrl = project.coverImage %}
-        {% else %}
-            {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
-        {% endif %}
-
-    
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>    
 		<style type="text/css">
 			body {
 					margin:0px
@@ -114,22 +111,7 @@
 		    }
 
 		</style>	
-
-		{% if app.environment == "prod" %}
-		    <script type="text/javascript">
-		        var _gaq = _gaq || [];
-		        _gaq.push(["_setAccount", "UA-37456730-1"]);
-		        _gaq.push(["_trackPageview"]);
-
-		        (function() {
-		            var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
-		            ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
-		            var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
-		        })();
-
-            </script>
-   
-        {% endif %}
+        {% include "::analytics.html.twig" %}  
 	</head>
 
 	<body id="zeega-embed" >
