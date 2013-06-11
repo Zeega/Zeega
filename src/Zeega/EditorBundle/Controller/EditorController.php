@@ -22,10 +22,12 @@ class EditorController extends BaseController
     
     public function editorAction($id)
     {   
+
         $user = $this->get('security.context')->getToken()->getUser();
         
         $dm = $this->get('doctrine_mongodb')->getManager();
         $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        
         
         if ( !isset($project) ) {
              return new Response( json_encode(array(
@@ -45,22 +47,27 @@ class EditorController extends BaseController
 
         $editable = $project->getEditable();
 
+        
+
         if ( $editable === true ) {
             $projectOwners = $project->getUser();       
             $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
         
-            if($project->getVersion() == 1.1 ){
+            if( $project->getVersion() == 1.2 ) {
+                return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
+                    'project'   =>$project,
+                    'project_data' => $projectData,
+                    'new_user' => $newUser
+                ));
+            }
+            else if($project->getVersion() == 1.1 ){
                 return $this->render('ZeegaEditorBundle:Editor:editor_1_1.html.twig', array(
                     'project'   =>$project,
                     'project_data' => $projectData,
                     'new_user' => $newUser
                 )); 
             } else {
-                return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
-                    'project'   =>$project,
-                    'project_data' => $projectData,
-                    'new_user' => $newUser
-                ));
+                 throw new \Exception("This project doesn't exist or cannot be edited");
             }
 
              

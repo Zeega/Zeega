@@ -1,3 +1,11 @@
+{% if project.thumbnailUrl is defined and project.thumbnailUrl is not empty %}
+    {% set thumbnailUrl = project.thumbnailUrl %}
+{% elseif project.coverImage is defined and project.coverImage is not empty %}
+    {% set thumbnailUrl = project.coverImage %}
+{% else %}
+    {% set thumbnailUrl = "http://zeega.com/images/default_cover.png" %}
+{% endif %}
+
 <!doctype html>
 <html>
     <head>

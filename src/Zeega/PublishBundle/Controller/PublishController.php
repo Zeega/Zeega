@@ -78,10 +78,21 @@ class PublishController extends BaseController
             $projectVersion = 1;    
         }
 
-
-
         if ( $mobile ) {
-            if ( $projectVersion < 1.1) {                
+            if ( $projectVersion == 1.2) {
+                return $this->render('ZeegaPublishBundle:Player:mobile_player.html.twig', array(                    
+                    'project'=>$project,
+                    'related_projects_data'=>$relatedProjectsData,
+                    'project_data' => $projectData
+                                  
+                ));            
+            } else if( $projectVersion == 1.1 ) {
+                return $this->render('ZeegaPublishBundle:Player:mobile_player_1_1.html.twig', array(                    
+                    'project'=>$project,
+                    'related_projects_data'=>$relatedProjectsData,
+                    'project_data' => $projectData     
+                ));            
+            } else if ( $projectVersion == 1 ) {                
                 if( $isProjectMobile ) {
                     
                     return $this->render('ZeegaPublishBundle:Player:mobile_player_1_0.html.twig', array(
@@ -94,38 +105,30 @@ class PublishController extends BaseController
                         'project'=>$project                
                     ));                    
                 }
-            } else if( $projectVersion == 1.1 ) {
-                return $this->render('ZeegaPublishBundle:Player:mobile_player_1_1.html.twig', array(                    
-                    'project'=>$project,
-                    'related_projects_data'=>$relatedProjectsData,
-                    'project_data' => $projectData     
-                ));            
-            } else  {
-                return $this->render('ZeegaPublishBundle:Player:mobile_player.html.twig', array(                    
-                    'project'=>$project,
-                    'related_projects_data'=>$relatedProjectsData,
-                    'project_data' => $projectData
-                                  
-                ));            
+            } else{
+                throw new \Exception("This project doesn't exist or cannot be played");
             }
         } else {
-            if ( $projectVersion < 1.1) {
-                return $this->render('ZeegaPublishBundle:Player:player_1_0.html.twig', array(
-                    'project'=>$project,
-                    'project_data' => $projectData
-                ));
-            } else if ( $projectVersion == 1.1) {
-                return $this->render('ZeegaPublishBundle:Player:player_1_1.html.twig', array(
-                    'project'=>$project,
-                    'related_projects_data'=>$relatedProjectsData,
-                    'project_data' => $projectData
-                ));
-            } else {
+            if ( $projectVersion == 1.2 ) {
                 return $this->render('ZeegaPublishBundle:Player:player.html.twig', array(
                     'project'=>$project,
                     'related_projects_data'=>$relatedProjectsData,
                     'project_data' => $projectData
                 ));
+            } else if ( $projectVersion == 1.1 ) {
+                return $this->render('ZeegaPublishBundle:Player:player_1_1.html.twig', array(
+                    'project'=>$project,
+                    'related_projects_data'=>$relatedProjectsData,
+                    'project_data' => $projectData
+                ));
+            } else if ( $projectVersion == 1 ) {
+                return $this->render('ZeegaPublishBundle:Player:player_1_0.html.twig', array(
+                    'project'=>$project,
+                    'project_data' => $projectData,
+                    'related_projects_data'=>null,
+                ));
+            } else{
+                throw new \Exception("This project doesn't exist or cannot be played");
             }
         }
     }
