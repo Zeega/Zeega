@@ -33,8 +33,8 @@ class User extends BaseUser
     /**     
      * @MongoDB\Field(type="string",name="thumb_url")
      */
-    protected $thumbUrl;
-
+    protected $thumbUrl = "http://s3.amazonaws.com/zeegastatic/default_profile.jpeg";
+ 
     /**     
      * @MongoDB\Field(type="date",name="media_creator_realname")
      */
