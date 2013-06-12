@@ -28,11 +28,7 @@
         "media_creator_username":{{ item.mediaCreatorUsername | default(null) | json_encode | raw }},
         "media_creator_realname":{{ item.mediaCreatorRealname | default(null) | json_encode | raw }},
         "child_items_count":{{ item.childItemsCount | default(0) }},
-        {%- if item.attributes is defined and item.attributes is solr_array -%}
-            "attributes":{{ item.attributes[0] | default("") | unserialize_array | json_encode | raw}},
-        {%- else -%}
-            "attributes":{{ item.attributes | default([ ]) | json_encode | raw}},
-        {%- endif -%}
+        "attributes":{{ item.attributes | default([ ]) | json_encode | raw}},
         "child_items":
         [
             {%- if (item.childItems is defined) -%}
@@ -46,7 +42,11 @@
             {%- endif -%}
         ],
         "tags":{{ item.tags | default([ ]) | json_encode | raw}},
-        "editable":{{ editable | default(false) | json_encode | raw}},
+        {% if item.editable is defined %}
+        "editable":{{ isEditable(item.id, item.editable) | default(false) | json_encode | raw}},
+        {% else %}
+        "editable":{{ false | json_encode | raw}},
+        {%- endif -%}
         "published":{{ item.published | default(false) | json_encode | raw}},
         "enabled":{{ item.enabled | default(false) | json_encode | raw}},
         "views":{{ item.views | default(0) | json_encode | raw}}
