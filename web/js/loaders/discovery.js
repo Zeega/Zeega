@@ -19,7 +19,7 @@ require (
 			'order!lib/leaflet/leaflet',
 			
 			//core
-			'order!app/zeega.discovery',
+			'order!app/discovery/zeega.discovery',
 			
 			//plugins
 			'order!lib/imagesloaded/jquery.imagesloaded',
@@ -36,25 +36,23 @@ require (
 			'order!plugins/players/plyr',
 
 			//models
-			'order!app/models/discovery.model.item',
+			'order!app/discovery/discovery.model.item',
 			
 			//collections
-			'order!app/collections/discovery.collection.item',
+			'order!app/discovery/discovery.collection.item',
 		
 			
 			//views
 
-			'order!app/views/discovery.items/discovery.view.item',
-
-			'order!app/views/editor.common/editor.view.common.leaflet-map',
-			'order!app/views/editor.common/editor.view.common.tag-display-edit',
-			'order!app/views/editor.item/editor.view.item.viewer',
-			
-			'order!app/views/discovery.collections/discovery.view.collection.results',
+			'order!app/discovery/discovery.view.item',
+			'order!app/discovery/discovery.view.leaflet-map',
+			'order!app/discovery/discovery.view.tag-display-edit',
+			'order!app/discovery/discovery.view.item.viewer',
+			'order!app/discovery/discovery.view.collection.results',
 			
 				//custom
 			'order!helpers/utils',
-			'order!app/index.discovery'
+			'order!app/discovery/index.discovery'
 	
 	],function(){});
 
