@@ -1177,11 +1177,15 @@ h6{font-size:11px;color:#999999;font-family:Georgia,"Times New Roman",Times,seri
 .control-group .row{margin-bottom:20px;}
 .control-group .span4{position:relative;}
 .control-group .span4 .required{position:absolute;right:-15px;top:12px;border-radius:50%;width:8px;height:8px;background-color:#ff6666;}
-.sign-in{width:50%;width:350px;}
-.sign-in .sign-in-head{padding-bottom:10px;border-bottom:#555555;border-bottom-style:solid;border-bottom-width:thin;margin-bottom:10px;}
-.sign-in .sign-in-head h2{margin-top:5px;margin-bottom:0;color:#999999;}
+.sign-in{font-family:'Futura',sans-serif;width:50%;width:350px;}
+.sign-in .form-vertical{color:black;}
+.sign-in .form-vertical h4{font-family:'Futura',sans-serif;}
+.sign-in .form-vertical .controls input{background-color:#777777;}
+.sign-in .form-vertical .controls input:focus{background-color:#999999;}
+.sign-in .sign-in-head{padding-bottom:10px;margin-bottom:10px;}
+.sign-in .sign-in-head h2{font-family:'Futura',sans-serif;margin-top:5px;margin-bottom:0;color:#999999;}
 .sign-in h4{margin-bottom:10px;font-size:17px;}
-.sign-in .message{margin-bottom:20px;}
+.sign-in .message{font-family:'Futura',sans-serif;color:black;margin-bottom:20px;}
 .sign-in input{padding:4px 0;}
 .sign-in .input-xlarge{width:390px;}
 .sign-in .login-social img{margin-bottom:10px;width:400px;}
