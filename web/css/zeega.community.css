@@ -1186,6 +1186,8 @@ h6{font-size:11px;color:#999999;font-family:Georgia,"Times New Roman",Times,seri
 .sign-in .sign-in-head h2{font-family:'Futura',sans-serif;margin-top:5px;margin-bottom:0;color:#999999;}
 .sign-in h4{margin-bottom:10px;font-size:17px;}
 .sign-in .message{font-family:'Futura',sans-serif;color:black;margin-bottom:20px;}
+.sign-in .forget-pwd{color:black;}
+.sign-in .forget-pwd:hover{color:orangered;}
 .sign-in input{padding:4px 0;}
 .sign-in .input-xlarge{width:390px;}
 .sign-in .login-social img{margin-bottom:10px;width:400px;}
