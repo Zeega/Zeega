@@ -5,31 +5,39 @@
         http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
 
     <class name="FOS\UserBundle\Model\User">
+        <constraint name="Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique">
+            <option name="fields">emailCanonical</option>
+            <option name="errorPath">email</option>
+            <option name="message">fos_user.email.already_used</option>
+            <option name="groups">
+                <value>ZeegaRegistration</value>
+                <value>Profile</value>
+            </option>
+        </constraint>
+
         <property name="email">
             <constraint name="NotBlank">
                 <option name="message">fos_user.email.blank</option>
                 <option name="groups">
-					<value>ZeegaRegistration</value>
+                    <value>ZeegaRegistration</value>
+                    <value>Profile</value>
                 </option>
             </constraint>
-            <constraint name="MinLength">
-                <option name="limit">2</option>
-                <option name="message">fos_user.email.short</option>
-                <option name="groups">
-					<value>ZeegaRegistration</value>
-				</option>
-            </constraint>
-            <constraint name="MaxLength">
-                <option name="limit">254</option>
-                <option name="message">fos_user.email.long</option>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">fos_user.email.short</option>
+                <option name="max">254</option>
+                <option name="maxMessage">fos_user.email.long</option>
                 <option name="groups">
                     <value>ZeegaRegistration</value>
+                    <value>Profile</value>
                 </option>
             </constraint>
             <constraint name="Email">
                 <option name="message">fos_user.email.invalid</option>
                 <option name="groups">
                     <value>ZeegaRegistration</value>
+                    <value>Profile</value>
                 </option>
             </constraint>
         </property>
@@ -37,22 +45,34 @@
         <property name="plainPassword">
             <constraint name="NotBlank">
                 <option name="message">fos_user.password.blank</option>
-                <option name="groups">
-                    <value>Registration</value>
-                    <value>ResetPassword</value>
-                    <value>ChangePassword</value>
-                    <value>ZeegaRegistration</value>                    
-                </option>
+                <option name="groups">ZeegaRegistration</option>
             </constraint>
             <constraint name="Length">
                 <option name="min">2</option>
                 <option name="minMessage">fos_user.password.short</option>
                 <option name="groups">
-                    <value>Registration</value>
-                    <value>Profile</value>
-                    <value>ResetPassword</value>
-                    <value>ChangePassword</value>
                     <value>ZeegaRegistration</value>
+                    <value>Profile</value>
+                </option>
+            </constraint>
+        </property>
+    </class>
+
+    <class name="FOS\UserBundle\Form\Model\ChangePassword">
+        <property name="new">
+            <constraint name="NotBlank">
+                <option name="message">fos_user.new_password.blank</option>
+                <option name="groups">
+                    <value>ChangePassword</value>
+                    <value>ResetPassword</value>
+                </option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">fos_user.new_password.short</option>
+                <option name="groups">
+                    <value>ChangePassword</value>
+                    <value>ResetPassword</value>
                 </option>
             </constraint>
         </property>
@@ -64,14 +84,75 @@
                 <option name="message">fos_user.group.blank</option>
                 <option name="groups">ZeegaRegistration</option>
             </constraint>
-            <constraint name="MinLength">
-                <option name="limit">2</option>
-                <option name="message">fos_user.group.short</option>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">fos_user.group.short</option>
+                <option name="max">255</option>
+                <option name="maxMessage">fos_user.group.long</option>
                 <option name="groups">ZeegaRegistration</option>
             </constraint>
-            <constraint name="MaxLength">
-                <option name="limit">255</option>
-                <option name="message">fos_user.group.long</option>
+           
+        </property>
+    </class>
+
+    <!-- Propel classes. This should stay in sync with the Model classes -->
+
+    <class name="FOS\UserBundle\Propel\User">
+
+        <property name="email">
+            <constraint name="NotBlank">
+                <option name="message">fos_user.email.blank</option>
+                <option name="groups">
+                    <value>ZeegaRegistration</value>
+                    <value>Profile</value>
+                </option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">fos_user.email.short</option>
+                <option name="max">255</option>
+                <option name="maxMessage">fos_user.email.long</option>
+                <option name="groups">
+                    <value>ZeegaRegistration</value>
+                    <value>Profile</value>
+                </option>
+            </constraint>
+            <constraint name="Email">
+                <option name="message">fos_user.email.invalid</option>
+                <option name="groups">
+                    <value>ZeegaRegistration</value>
+                    <value>Profile</value>
+                </option>
+            </constraint>
+        </property>
+
+        <property name="plainPassword">
+            <constraint name="NotBlank">
+                <option name="message">fos_user.password.blank</option>
+                <option name="groups">ZeegaRegistration</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">fos_user.password.short</option>
+                <option name="groups">
+                    <value>ZeegaRegistration</value>
+                    <value>Profile</value>
+                </option>
+            </constraint>
+        </property>
+    </class>
+
+    <class name="FOS\UserBundle\Propel\Group">
+        <property name="name">
+            <constraint name="NotBlank">
+                <option name="message">fos_user.group.blank</option>
+                <option name="groups">ZeegaRegistration</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">fos_user.group.short</option>
+                <option name="max">255</option>
+                <option name="maxMessage">fos_user.group.long</option>
                 <option name="groups">ZeegaRegistration</option>
             </constraint>
         </property>

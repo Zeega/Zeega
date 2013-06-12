@@ -65,6 +65,7 @@ class TwitterProvider implements UserProviderInterface
             $username = $info->screen_name;
 
             $user->setTwitterID($info->id);
+            $user->setEmail(null);
             $user->setTwitterUsername($username);
             $user->setUsername($username);
             $user->setDisplayname($info->name);
