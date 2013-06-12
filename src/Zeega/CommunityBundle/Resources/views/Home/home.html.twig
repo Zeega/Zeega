@@ -65,12 +65,13 @@
           <a href="{{ path('ZeegaCommunityBundle_home') }}" data-bypass="true" class="ZEEGA-tab">
               <span class="ZTab-logo"></span>
           </a>
-          {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+         
           
 
             <div class="nav col-left navbar">
               <ul class="pull-left">
                   <li>
+                      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         {% if user_id != profile_id %}
                           <a href="{{ path('ZeegaCommunityBundle_dashboard') }}" class="logged-in-user" data-bypass="true" >
                             <span class="profile-token" 
@@ -78,23 +79,34 @@
                                 style="background-image: url({{user_thumb}});">
                             {% endif %}
                             </span></a>
-                         {% endif %}   
+                         {% endif %}
+                      {% endif %}  
                   </li>
                   <li>
-                      <a class="btnz create-a-zeega" href="{{ path('ZeegaEditorBundle_new') }}" > Create A New Zeega</a>
+                       {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+
+                        <a class="btnz login" href="{{ path('fos_user_security_logout') }}">Logout</a> 
+                      {% else %}
+
+                          <a class="btnz login" href="{{ path('fos_user_security_login') }}">Login</a>
+                      
+                      {% endif %}
                   </li>
                  
               </ul>
           </div>
 
-            <a class="btnz login" href="{{ path('fos_user_security_logout') }}">Logout</a> 
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
-
+              <a class="btnz create-a-zeega bold-btnz" href="{{ path('ZeegaEditorBundle_new') }}" >Create A New Zeega</a>
             {% else %}
 
-                <a class="btnz login" href="{{ path('fos_user_security_login') }}">Login</a>
+              <a class="btnz join bold-btnz" href="{{ path('fos_user_registration_register') }}" >Sign Up</a>
             
             {% endif %}
+            
+
+            
           
 
 </header>
