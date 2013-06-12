@@ -1,9 +1,9 @@
 {
 	{% if user is defined %}
 	"id" : {{ user.getId | json_encode | raw}},
-	"bio" : {{ user.getBio | json_encode | raw}},
+	"bio" : {{ user.getBio | default("") | json_encode | raw}},
 	"display_name" : {{ user.getDisplayName | json_encode | raw}},
-	"thumbnail_url" : {{ user.getThumbUrl | json_encode | raw}},
+	"thumbnail_url" : {{ user.getThumbUrl | default("https://s3.amazonaws.com/zeegastatic/default_profile.jpeg") | json_encode | raw}},
 	"location" : {{ user.getLocation | json_encode | raw}},
 	"created_at" : "{{ user.getCreatedAt | date("Y-m-d") }}",
 	"locationLatitude" : {{ user.getLocationLatitude | json_encode | raw}},
