@@ -6,6 +6,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
  * @MongoDB\Document(repositoryClass="Zeega\DataBundle\Repository\ProjectRepository")
+ * @MongoDB\HasLifecycleCallbacks
  */
 class Project
 {
@@ -774,5 +775,17 @@ class Project
     public function getFavorites()
     {
         return $this->favorites;
+    }
+
+    /** @MongoDB\PrePersist */
+    public function onPrePersist()
+    {
+        $this->value = 'changed from prePersist callback!';
+    }
+
+    /** @MongoDB\PreUpdate */
+    public function onPreUpdate()
+    {
+        $this->value = 'changed from prePersist callback!';
     }
 }
