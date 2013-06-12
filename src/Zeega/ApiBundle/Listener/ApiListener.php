@@ -55,6 +55,11 @@ class ApiListener
                             401));
                             }
                         }
+                    } else {
+                        $event->setResponse(new Response(json_encode(array(
+                            "code" => 401,
+                            "message" => "The request requires user authentication")), 
+                        401));
                     }
                 }
             }

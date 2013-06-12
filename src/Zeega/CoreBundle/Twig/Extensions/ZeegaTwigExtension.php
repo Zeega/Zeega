@@ -51,42 +51,43 @@ class ZeegaTwigExtension extends \Twig_Extension
         return array();
     }
 
-	public function getFilters()
+	public function getFunctions()
 	{
         return array(
-            'json_encode_entity' => new \Twig_Filter_Method($this, 'entityNormalizer'),
-            'unserialize_array' => new \Twig_Filter_Method($this, 'unserializeArray')
+            'isEditable' => new \Twig_Function_Method($this, 'isEditable')
         );
     }
 
-    public function getTests()
-    {
-        return array(
-            'solr_array' => new \Twig_Test_Method($this,'isSolrArray')
-        );
+    public function isEditable($objectUserId, $editable = true) {
+        if ($editable === false) {
+            return false;
+        }
+        if ( !isset($objectUserId) ) {
+            return false;
+        }
+
+        $securityToken = $this->container->get('security.context')->getToken();
+                
+        if(isset($securityToken)) {
+            $user = $this->container->get('security.context')->getToken()->getUser();
+            if($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+                if ( $objectUserId === $user->getId() ) {
+                    return true;
+                }
+
+                $userRoles = $user->getRoles();
+                foreach($userRoles as $userRole) {
+                    if ( $userRole === "ROLE_ADMIN" ) {
+        
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
-    public function entityNormalizer($arrayObject)
-    {
-        $serializer = new Serializer(array(new ItemCustomNormalizer()),array('json' => new JsonEncoder()));
-        return $serializer->serialize($arrayObject, 'json');
-    }
-
-    public function isSolrArray($value) {
-        return isset($value) && is_array($value) && count($value) == 1 && isset($value[0]);
-    }
-
-    public function unserializeArray($value)
-    {
-    	if(isset($value) && is_string($value)) {   
-    		$uvalue = unserialize($value);
-    		if(is_array($uvalue)){
-    			return $uvalue;	
-    		}
-    	}
-
-    	return $value;
-    }
 	
 	public function getName()
 	{

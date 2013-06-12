@@ -18,6 +18,7 @@ framework:
     trusted_proxies:  ~
     session:          ~
     fragments:        ~
+    translator: { fallback: en }
 
 # Twig Configuration
 twig:
@@ -29,7 +30,7 @@ twig:
         directory: %directory%
         web_directory: %web_directory%
         event_logger_host: %event_logger_host%
-
+        event_logger_host_web: %event_logger_host_web%
 doctrine:
     dbal:
         charset: UTF8

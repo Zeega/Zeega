@@ -209,8 +209,6 @@ class ProjectsController extends BaseController
         return new Response($projectView);    
     }
 
-
-
     /**
      * Delete a project
      * Route: Delete api/projects/:id
@@ -225,7 +223,6 @@ class ProjectsController extends BaseController
         $dm->flush();
         return new Response('SUCCESS',200);
     }
-
 
     /**
      * Add a tag to a project
@@ -285,9 +282,6 @@ class ProjectsController extends BaseController
         $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));        
         return new Response($projectView);    
     }
-
-
-
 
     /**
      * Update a sequence
