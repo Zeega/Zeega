@@ -77,6 +77,11 @@ class CommunityController extends BaseController
         return $this->render("ZeegaCommunityBundle:About:team.html.twig");
     }
 
+     public function notfoundAction()
+    {
+        return $this->render("ZeegaCommunityBundle:Notfound:notfound.html.twig");
+    }
+
     public function contactAction()
     {
         return $this->render("ZeegaCommunityBundle:About:contact.html.twig");

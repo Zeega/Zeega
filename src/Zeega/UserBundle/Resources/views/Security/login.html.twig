@@ -6,11 +6,7 @@
     
     <style type="text/css">
     
-        /*
-            Background image code lives here, not in CSS, because this is specific to each page
-            and could be made dynamic too (i.e. randomly picking a different image each load)
-            quite easily. Exposing the code here should be helpful.
-        */
+      
     
         html { 
             background: url({{asset("images/graphpaper.png")}});
@@ -81,7 +77,7 @@
                 
                 <div class="pull-right">
 
-                    <a href="{{path("fos_user_resetting_request")}}" class="sidebar">Forgot password?</a>
+                    <a href="{{path("fos_user_resetting_request")}}" class="sidebar forget-pwd">Forgot password?</a>
 
                 </div>
                 
