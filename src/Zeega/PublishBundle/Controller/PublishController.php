@@ -132,17 +132,6 @@ class PublishController extends BaseController
             }
         }
     }
-
-    public function projectPreviewAction($id)
-    { 
-        $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-        $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
-
-        return $this->render('ZeegaPublishBundle:Player:player.html.twig', array(
-            'project'=>$project,
-            'project_data' => $projectData,
-        ));
-    }
      
     public function embedAction ($id)
     {

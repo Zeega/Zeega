@@ -16,12 +16,8 @@ ZeegaPublishBundle_project_mobile:
 
 ZeegaPublishBundle_project_oldview:
     pattern: /{id}/view
-    defaults: { _controller:  ZeegaPublishBundle:Publish:project }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:project, mobile: False }
 
 ZeegaPublishBundle_project_altview:
     pattern: /project/{id}/view
-    defaults: { _controller:  ZeegaPublishBundle:Publish:project }
-
-ZeegaPublishBundle_project_preview:
-    pattern: /projects/{id}/preview
-    defaults: { _controller:  ZeegaPublishBundle:Publish:projectPreview }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:project, mobile: False }

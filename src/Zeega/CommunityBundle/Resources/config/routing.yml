@@ -14,26 +14,6 @@ ZeegaCommunityBundle_dashboard:
     pattern:  /dashboard
     defaults: { _controller: ZeegaCommunityBundle:Community:dashboard}
 
-ZeegaCommunityBundle_team:
-    pattern:  /team
-    defaults: { _controller: ZeegaCommunityBundle:Community:team}
-
-ZeegaCommunityBundle_contact:
-    pattern:  /contact
-    defaults: { _controller: ZeegaCommunityBundle:Community:contact}
-
-ZeegaCommunityBundle_terms:
-    pattern:  /terms
-    defaults: { _controller: ZeegaCommunityBundle:Community:terms}
-
-ZeegaCommunityBundle_privacy:
-    pattern:  /privacy
-    defaults: { _controller: ZeegaCommunityBundle:Community:privacy}
-
-ZeegaCommunityBundle_faq:
-    pattern: /faq
-    defaults: { _controller: ZeegaCommunityBundle:Community:faq }
-
 ZeegaCommunityBundle_notfound:
     pattern:  /notfound
     defaults: { _controller: ZeegaCommunityBundle:Community:notfound}
