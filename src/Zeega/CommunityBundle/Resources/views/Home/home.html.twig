@@ -23,6 +23,7 @@
             data-tags="{{ tags }}"
             data-profile-id="{{ profile_id }}"
             data-user-id="{{user_id}}"
+            data-media-server="http:{{hostname}}{{media_host}}"
 
         />
 
@@ -70,12 +71,14 @@
             <div class="nav col-left navbar">
               <ul class="pull-left">
                   <li>
-                      <a href="{{ path('ZeegaCommunityBundle_dashboard') }}" class="logged-in-user" data-bypass="true" >
+                        {% if user_id != profile_id %}
+                          <a href="{{ path('ZeegaCommunityBundle_dashboard') }}" class="logged-in-user" data-bypass="true" >
                             <span class="profile-token" 
                             {% if user_thumb != "" %}
                                 style="background-image: url({{user_thumb}});">
                             {% endif %}
                             </span></a>
+                         {% endif %}   
                   </li>
                   <li>
                       <a class="btnz create-a-zeega" href="{{ path('ZeegaEditorBundle_new') }}" > Create A New Zeega</a>
