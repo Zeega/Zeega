@@ -536,7 +536,7 @@ class ProjectsController extends BaseController
         $dm = $this->get('doctrine_mongodb')->getManager();
         $project= $dm->getRepository('ZeegaDataBundle:Project')->find($projectId);
         
-        $project->setDateUpdated(new \DateTime("now"));
+        //$project->setDateUpdated(new \DateTime("now"));
         $layer = new MongoLayer();
         
         $request = $this->getRequest();

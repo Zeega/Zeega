@@ -13,3 +13,11 @@ services:
         arguments:
             thumbnailService: "@zeega_thumbnail"
 
+    zeega.doctrine.dateupdate_listener:
+        class: Zeega\DataBundle\EventListener\DateUpdateListener
+        tags:
+            - { name: doctrine_mongodb.odm.event_listener, event: prePersist }
+            - { name: doctrine_mongodb.odm.event_listener, event: preUpdate }
+
+
+   
