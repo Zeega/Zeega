@@ -153,11 +153,9 @@ class ProjectsController extends BaseController
         $tags = $this->getRequest()->request->get('tags');
         $coverImage = $this->getRequest()->request->get('cover_image');
         $authors = $this->getRequest()->request->get('authors');
-        $published = $this->getRequest()->request->get('published');
         $estimatedTime = $this->getRequest()->request->get('estimated_time'); 
         $location = $this->getRequest()->request->get('location');
         $description = $this->getRequest()->request->get('description');
-        $publishUpdate = $this->getRequest()->request->get('publish_update');
         $mobile = $this->getRequest()->request->get('mobile');
 
         if ( $this->getRequest()->request->has('title') ) {
@@ -181,10 +179,6 @@ class ProjectsController extends BaseController
         if( $this->getRequest()->request->has('authors') ) {
             $project->setAuthors( $this->getRequest()->request->get('authors') );
         }
-
-        if( $this->getRequest()->request->has('published') ) {
-            $project->setPublished( $this->getRequest()->request->get('published') );
-        } 
 
         if( $this->getRequest()->request->has('estimated_time') ) {
             $project->setEstimatedTime( $this->getRequest()->request->get('estimated_time') );
@@ -555,8 +549,14 @@ class ProjectsController extends BaseController
 
         $layer->setEnabled(true);
         $project->addLayer($layer);
+        $project->setPublished(true);
         
         $dm->persist($layer);
+        
+
+
+
+
         $dm->flush();
 
         $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
