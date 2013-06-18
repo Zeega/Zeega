@@ -16,13 +16,13 @@ abstract class ParserAbstract
 	 * @param String  $message  Parser message
 	 * @return Array|response
      */
-	protected function returnResponse($object, $success, $isSet, $message = "")
+	protected function returnResponse($object, $success, $isSet, $message = "", $more = false)
 	{
         if(null !== $object && !is_array($object)) {
             $object = array($object);
         }
 
-		return array("items" => $object, "details" => array("is_set" => $isSet, "message" => $message, "success" => $success));
+		return array("items" => $object, "details" => array("is_set" => $isSet, "message" => $message, "success" => $success, "more" => $more));
 	}
 	
 	/**

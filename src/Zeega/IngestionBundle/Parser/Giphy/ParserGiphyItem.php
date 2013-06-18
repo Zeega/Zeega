@@ -16,13 +16,13 @@ class ParserGiphyItem extends ParserAbstract
             if ( isset($parameters["regex_matches"][1]) ) {
                 $id = $parameters["regex_matches"][1];
 
-                $embedApiUrl = "http://giphy.com/api/gifs/$id";
+                $embedApiUrl = "http://giphy.com/api/v1/gifs/$id";
                 
                 $embedInfo = file_get_contents($embedApiUrl,0,null,null);
-                $embedInfo = json_decode($embedInfo,true);
                 
-                if(null != $embedInfo && isset($embedInfo["data"])) {
-                    $mediaDetails = $embedInfo["data"];
+                $mediaDetails = json_decode($embedInfo,true);
+                
+                if(null != $mediaDetails ) {
                     $id = $mediaDetails["id"];
 
                     $item = new Item();
@@ -58,12 +58,29 @@ class ParserGiphyItem extends ParserAbstract
                         $item->setTags($itemTags);
                     }
 
+
+                    $item->setTitle( "#" . implode($itemTags, " #"));
+
+                    if( ( int ) $mediaDetails["image_fixed_width_still_width"] >  200 || ( int) $mediaDetails["image_fixed_width_still_height"] >  200 ){
+                        $item->setThumbnailUrl( $mediaDetails["image_fixed_height_still_url"]);
+                        $animateUrl = $mediaDetails["image_fixed_height_url"];
+                        $width = ( int ) $mediaDetails["image_fixed_height_still_width"];
+                        $height = ( int ) $mediaDetails["image_fixed_height_still_height"];
+                    } else {
+                        $item->setThumbnailUrl( $mediaDetails["image_fixed_width_still_url"]);
+                        $animateUrl = $mediaDetails["image_fixed_width_url"];
+                        $width = ( int ) $mediaDetails["image_fixed_width_still_width"];
+                        $height = ( int ) $mediaDetails["image_fixed_width_still_height"];
+                    }
+
+                    $item->setAttributes(array("id" => $mediaDetails["id"], "width"=>$width, "height"=>$height, "animate_url"=>$animateUrl ));
+
                     return $this->returnResponse(array($item), true, false);
                 }
             }
         }
         
 
-        return $this->returnResponse(array(), false, true);
+        return $this->returnResponse(array(), false, true, $kale);
     }
 }

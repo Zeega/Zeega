@@ -62,13 +62,19 @@ class ParserGiphyTag extends ParserAbstract
 
 
 
-                        $item->setAttributes(array("id" => $id, "more"=>$more ));
+                       
                         
-                        if( (integer) $itemJson["images"]["fixed_width_still"]["width"] >  200 || (integer) $itemJson["images"]["fixed_width_still"]["height"] >  200 ){
+                        if( ( int ) $itemJson["images"]["fixed_width_still"]["width"] >  200 || ( int) $itemJson["images"]["fixed_width_still"]["height"] >  200 ){
                             $item->setThumbnailUrl( $itemJson["images"]["fixed_height_still"]["url"]);
+                            $width = ( int ) $itemJson["images"]["fixed_height_still"]["width"];
+                            $height = ( int ) $itemJson["images"]["fixed_height_still"]["height"];
                         } else {
                             $item->setThumbnailUrl( $itemJson["images"]["fixed_width_still"]["url"]);
+                            $width = ( int ) $itemJson["images"]["fixed_width_still"]["width"];
+                            $height = ( int ) $itemJson["images"]["fixed_width_still"]["height"];
                         }
+
+                        $item->setAttributes(array("id" => $id, "width"=>$width, "height"=>$height ));
                          array_push($items,$item);
                     }
 
@@ -77,7 +83,7 @@ class ParserGiphyTag extends ParserAbstract
         }
         
 
-        return $this->returnResponse($items, true, true);
+        return $this->returnResponse($items, true, true, "", $more);
     }
 
 }
