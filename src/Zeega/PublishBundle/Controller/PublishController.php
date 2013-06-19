@@ -144,7 +144,7 @@ class PublishController extends BaseController
             return parent::getStatusResponse(401);
         }
 
-        $newProjectId = $dm->getRepository('ZeegaDataBundle:Project')->cloneProjectAndGetId($id);
+        $newProjectId = $dm->getRepository('ZeegaDataBundle:Project')->cloneProjectAndGetId($id, $user->getId());
         
         return $this->redirect($this->generateUrl("ZeegaEditorBundle_editor", array("id"=>$newProjectId), true), 301);  
     }
