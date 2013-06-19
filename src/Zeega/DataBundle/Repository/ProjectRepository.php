@@ -100,15 +100,29 @@ class ProjectRepository extends DocumentRepository
                         ->field('user')->prime(true)
                         ->eagerCursor(true)
                         ->limit($query['limit'])
-                        ->skip($query['limit'] * $query['page'])
-                        ->sort('date_created','DESC');
+                        ->skip($query['limit'] * $query['page']);
+                        
 
             if (isset($query["tags"])) {
                 $qb->field('tags.name')->equals($query["tags"]);
+                $qb->sort('date_updated','DESC');
             }
 
             if (isset($query["user"])) {
                 $qb->field('user.id')->equals($query["user"]);
+            }
+
+            if(isset($query['sort'])) {
+                $sort = $query['sort'];
+                if($sort == 'date-updated-desc') {
+                    $qb->sort('date_updated','DESC');
+                } else if($sort == 'date-updated-asc') {
+                    $qb->sort('date_updated','ASC');
+                } else {
+                    $qb->sort('date_created','DESC');
+                }
+            } else {
+                $qb->sort('date_created','DESC');
             }
 
             return $qb->getQuery()->execute();

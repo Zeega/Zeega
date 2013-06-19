@@ -18,14 +18,22 @@ class CommunityController extends BaseController
 {
     public function homeAction()
     {
-        $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array("tags"=>"homepage", "limit"=>10))->getContent();
+        $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array(
+            "tags"=>"homepage", 
+            "limit"=>10, 
+            "sort"=>"date-updated-desc"
+        ))->getContent();
         
         return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=>"homepage", "feed_data"=>$projects));
     }
 
     public function tagAction( $tag )
     {
-        $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array("tags"=>$tag, "limit"=>10))->getContent();
+        $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array(
+            "tags"=>$tag, 
+            "limit"=>10, 
+            "sort"=>"date-updated-desc"
+        ))->getContent();
         return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=> $tag, "local_path"=>"tag/".$tag, "feed_data"=>$projects ));
     }
     
