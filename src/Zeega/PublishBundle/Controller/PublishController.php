@@ -132,7 +132,23 @@ class PublishController extends BaseController
             }
         }
     }
-     
+    
+    public function projectRemixAction($id)
+    {   
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        
+        $user = $this->getUser();
+
+        if ( !isset($user) ) {
+            return parent::getStatusResponse(401);
+        }
+
+        $newProjectId = $dm->getRepository('ZeegaDataBundle:Project')->cloneProjectAndGetId($id);
+        
+        return $this->redirect($this->generateUrl("ZeegaEditorBundle_editor", array("id"=>$newProjectId), true), 301);  
+    }
+
     public function embedAction ($id)
     {
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);

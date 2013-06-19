@@ -228,4 +228,26 @@ class ProjectRepository extends DocumentRepository
 
         return $count;
     }
+
+    public function cloneProjectAndGetId($id)
+    {
+        $connection = $this->getDocumentManager()->getConnection();
+        $database = $this->getDocumentManager()->getConfiguration()->getDefaultDB();
+        $project = $connection->selectDatabase($database)->selectCollection("Project")->findOne(array("_id"=>new \MongoId($id)));
+
+        if (isset($project) && is_array($project)) {
+            $newProjectId = new \MongoId();
+            $project["_id"] = $newProjectId;
+            $response = $connection->selectDatabase($database)->selectCollection("Project")->insert($project);
+
+            if( isset($response["ok"]) && $response["ok"] === 1.0 ) {
+                
+                return $newProjectId;    
+            }            
+        } else {
+            throw $this->createNotFoundException('The project with the id $id does not exist or is not published.');
+        }
+        
+        throw $this->createRuntimeException("Unable to clone the project");
+    }
 }
