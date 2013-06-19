@@ -243,15 +243,19 @@ class ProjectRepository extends DocumentRepository
         return $count;
     }
 
-    public function cloneProjectAndGetId($id)
+    public function cloneProjectAndGetId($id, $targetUserId)
     {
         $connection = $this->getDocumentManager()->getConnection();
         $database = $this->getDocumentManager()->getConfiguration()->getDefaultDB();
         $project = $connection->selectDatabase($database)->selectCollection("Project")->findOne(array("_id"=>new \MongoId($id)));
-
+        $connection = $this->getDocumentManager()->getConnection();
         if (isset($project) && is_array($project)) {
             $newProjectId = new \MongoId();
             $project["_id"] = $newProjectId;
+            $project["user"]["\$id"] = new \MongoId($targetUserId);
+            $project["date_updated"] = new \MongoDate(time());
+            $project["date_created"] = new \MongoDate(time());
+                        
             $response = $connection->selectDatabase($database)->selectCollection("Project")->insert($project);
 
             if( isset($response["ok"]) && $response["ok"] === 1.0 ) {
