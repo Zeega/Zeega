@@ -26,16 +26,14 @@ security:
                 default_target_path: /dashboard
                 use_forward: true
                 check_path: fos_user_security_check
-            fos_twitter:
-                check_path: ZeegaSocialBundle_twitter_login_check
+            oauth:
+                resource_owners:
+                    twitter:      
+                login_path:        /login
+                failure_path:      /login
                 default_target_path: /dashboard
-                provider: fos_twitter
-            fos_facebook:
-                app_url: "http://apps.facebook.com/Zeega/"
-                server_url: "http://apache.zeega.oeg/zeega/web"
-                check_path: ZeegaSocialBundle_facebook_login_check
-                default_target_path: /dashboard
-                provider: fos_facebook
+                oauth_user_provider:
+                    service: hwi_oauth.user.provider.fosub_bridge
             logout:
                 path:   /logout
                 target: /

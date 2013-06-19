@@ -88,18 +88,13 @@ sensio_framework_extra:
     view:
         annotations: false
 
-fos_twitter:
-        file: %kernel.root_dir%/../vendor/kertz/twitteroauth/twitteroauth/twitteroauth.php
-        consumer_key: %twitter_consumer_key%
-        consumer_secret: %twitter_consumer_secret%
-        callback_url: %twitter_callback_url%
-
-fos_facebook:
-    alias:  facebook
-    app_id: %facebook_appid%
-    secret: %facebook_secret%
-    cookie: true
-    permissions: [email, user_birthday, user_location]
+hwi_oauth:
+    firewall_name: main
+    resource_owners:
+        twitter:
+            type:                twitter
+            client_id:           %twitter_consumer_key%
+            client_secret:       %twitter_consumer_secret%
 
 sonata_block:
     default_contexts: [cms]

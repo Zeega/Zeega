@@ -21,9 +21,6 @@
         "jms/security-extra-bundle": "1.4.*",
         "jms/di-extra-bundle": "1.3.*",
         "friendsofsymfony/user-bundle": "1.3.1",
-        "friendsofsymfony/twitter-bundle": "dev-master",
-        "kertz/twitteroauth": "*@dev",
-        "friendsofsymfony/facebook-bundle": "1.1.*",
         "doctrine/mongodb-odm": "1.0.*@dev",
         "doctrine/mongodb-odm-bundle": "3.0.*@dev",
         "snc/redis-bundle": "2.1.x-dev",
@@ -36,7 +33,8 @@
         "kunstmaan/sentry-bundle": "2.2.*@dev",
         "raven/raven": "dev-master@dev",
         "jms/serializer-bundle": "0.12.*@dev",
-        "friendsofsymfony/rest-bundle": "0.12.0" 
+        "friendsofsymfony/rest-bundle": "0.12.0",
+        "hwi/oauth-bundle": "*"
     },
     "scripts": {
         "post-install-cmd": [
