@@ -263,7 +263,8 @@ class ProjectRepository extends DocumentRepository
             $project["date_created"] = new \MongoDate(time());
 
             unset($project["title"]);
-            unset($project["views"]);                        
+            unset($project["views"]);
+            unset($project["tags"]);                      
 
             $response = $connection->selectDatabase($database)->selectCollection("Project")->insert($project);
 
