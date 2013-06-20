@@ -144,13 +144,13 @@ class PublishController extends BaseController
             return parent::getStatusResponse(401);
         }
 
-        if ( !$this->isUserAdmin( $project->getUser() ) ) {
-            throw $this->createNotFoundException('This project cannot be remixed.');   
-        }
-
-        $newProjectId = $dm->getRepository('ZeegaDataBundle:Project')->cloneProjectAndGetId($id, $user->getId());
+        if ( $this->isUserAdmin( $user ) || $this->isUserAdmin( $project->getUser() ) ) {
+            $newProjectId = $dm->getRepository('ZeegaDataBundle:Project')->cloneProjectAndGetId($id, $user->getId());
         
-        return $this->redirect($this->generateUrl("ZeegaEditorBundle_editor", array("id"=>$newProjectId), true), 301);  
+            return $this->redirect($this->generateUrl("ZeegaEditorBundle_editor", array("id"=>$newProjectId), true), 301);  
+        }
+        
+        throw new \Exception('This project cannot be remixed.');
     }
 
     public function embedAction ($id)
