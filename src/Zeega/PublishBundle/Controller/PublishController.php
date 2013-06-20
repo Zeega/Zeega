@@ -144,6 +144,10 @@ class PublishController extends BaseController
             return parent::getStatusResponse(401);
         }
 
+        if ( !$this->isUserAdmin( $project->getUser() ) ) {
+            throw $this->createNotFoundException('This project cannot be remixed.');   
+        }
+
         $newProjectId = $dm->getRepository('ZeegaDataBundle:Project')->cloneProjectAndGetId($id, $user->getId());
         
         return $this->redirect($this->generateUrl("ZeegaEditorBundle_editor", array("id"=>$newProjectId), true), 301);  
