@@ -50,4 +50,5 @@ security:
         - { path: ^/library, role: ROLE_USER }
         - { path: ^/editor/, role: ROLE_USER }
         - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }
+        - { path: ^/[a-zA-Z0-9]+/remix, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }    # force http for project playback
         - { path: ^/[a-zA-Z0-9]+, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }    # force http for project playback

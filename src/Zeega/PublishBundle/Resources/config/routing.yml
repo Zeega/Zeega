@@ -21,3 +21,8 @@ ZeegaPublishBundle_project_oldview:
 ZeegaPublishBundle_project_altview:
     pattern: /project/{id}/view
     defaults: { _controller:  ZeegaPublishBundle:Publish:project, mobile: False }
+
+ZeegaPublishBundle_project_remix:
+    pattern: /{id}/remix
+    defaults: { _controller:  ZeegaPublishBundle:Publish:projectRemix }
+
