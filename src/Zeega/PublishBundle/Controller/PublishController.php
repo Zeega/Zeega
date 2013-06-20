@@ -141,7 +141,7 @@ class PublishController extends BaseController
         $user = $this->getUser();
 
         if ( !isset($user) ) {
-            return parent::getStatusResponse(401);
+            throw new \Exception('You need to be logged in to remix a project.');
         }
 
         if ( $this->isUserAdmin( $user ) || $this->isUserAdmin( $project->getUser() ) ) {
