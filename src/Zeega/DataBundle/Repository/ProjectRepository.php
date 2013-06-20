@@ -236,12 +236,21 @@ class ProjectRepository extends DocumentRepository
         $project = $connection->selectDatabase($database)->selectCollection("Project")->findOne(array("_id"=>new \MongoId($id)));
         $connection = $this->getDocumentManager()->getConnection();
         if (isset($project) && is_array($project)) {
+            if ( !isset($project["title"]) ) {
+                $project["title"] = null;
+            }
+
+            $project["parent"] = array("id"=> new \MongoId($id), "title" => $project["title"], "user"=> $project["user"]);
+
             $newProjectId = new \MongoId();
             $project["_id"] = $newProjectId;
             $project["user"]["\$id"] = new \MongoId($targetUserId);
             $project["date_updated"] = new \MongoDate(time());
             $project["date_created"] = new \MongoDate(time());
-                        
+
+            unset($project["title"]);
+            unset($project["views"]);                        
+
             $response = $connection->selectDatabase($database)->selectCollection("Project")->insert($project);
 
             if( isset($response["ok"]) && $response["ok"] === 1.0 ) {
