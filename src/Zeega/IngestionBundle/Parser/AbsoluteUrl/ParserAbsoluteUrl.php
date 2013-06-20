@@ -25,18 +25,6 @@ class ParserAbsoluteUrl extends ParserAbstract
 		{
 		    $contentType = 'Image';
 		}
-		elseif(in_array($fileFormat,array('.mov','.mp4')))
-		{
-		    $contentType = 'Video';
-		}
-		elseif(in_array($fileFormat,array('.wav','.mp3','.aiff')))
-		{
-			if($fileFormatLong == '.aiff') 
-			{
-			    $urlInfo['fileFormat'] = $fileFormatLong;
-			}
-			$contentType = 'Audio';
-		}
 		else
 		{
 		    $item=new Item();
@@ -46,6 +34,9 @@ class ParserAbsoluteUrl extends ParserAbstract
 		$archive = 'Absolute';
 		$split = explode('/',$urlClean);
 		$title = $split[count($split)-1];
+		
+		$url = str_replace(" ", "%20", $url);
+
 		$thumbUrl = $url;
 		$itemUrl = $url;
         
