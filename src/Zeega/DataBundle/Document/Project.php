@@ -13,6 +13,11 @@ class Project
      * @MongoDB\Id(strategy="auto")
      */
     protected $id;
+
+    /**
+     * @MongoDB\Field(type="string", name="public_id")
+     */
+    protected $publicId;
     
     /**
      * @MongoDB\Field(type="int",name="rdbms_id")
@@ -774,5 +779,27 @@ class Project
     public function getFavorites()
     {
         return $this->favorites;
+    }
+
+    /**
+     * Set publicId
+     *
+     * @param string $publicId
+     * @return self
+     */
+    public function setPublicId($publicId)
+    {
+        $this->publicId = $publicId;
+        return $this;
+    }
+
+    /**
+     * Get publicId
+     *
+     * @return string $publicId
+     */
+    public function getPublicId()
+    {
+        return $this->publicId;
     }
 }

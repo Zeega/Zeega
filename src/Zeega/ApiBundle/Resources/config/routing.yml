@@ -27,7 +27,7 @@ api_projects_delete_projects_tags:
 api_projects_post_project:
     path: /api/project.{_format}
     defaults: { _controller:  ZeegaApiBundle:Projects:postProject, _format: json }
-    methods: [POST]
+    methods: [POST,GET]
 
 api_projects_post_project_frames_layers:
     path: /api/projects/{projectId}/frames/{frameId}/layers.{_format}

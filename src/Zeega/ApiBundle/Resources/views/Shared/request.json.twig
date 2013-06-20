@@ -10,7 +10,7 @@
 "user":{
     {% if app.user %}
         "authenticated": true,
-        "id":{{ app.user.id | default("null") | json_encode | raw}}
+        "id":{{ app.user.publicId | default(app.user.id) | json_encode | raw}}
     {% else %}
         "authenticated": false
     {% endif %}

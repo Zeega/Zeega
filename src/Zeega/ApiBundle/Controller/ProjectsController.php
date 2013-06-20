@@ -118,6 +118,7 @@ class ProjectsController extends BaseController
         $project= new MongoProject();
         $project->setDateCreated(new \DateTime("now"));
         $project->setEnabled(true);
+        $project->setPublicId($this->get('zeega_id')->generateId());
         $project->setPublished(false);
         $project->setAuthors($user->getDisplayName());
         $project->setUser($user);
@@ -130,7 +131,7 @@ class ProjectsController extends BaseController
         $dm->persist($project);
         $dm->flush();
 
-        return new Response($project->getId());
+        return new Response($project->getPublicId());
     }
 
     /**

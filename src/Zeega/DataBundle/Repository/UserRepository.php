@@ -7,13 +7,15 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
 class UserRepository extends DocumentRepository
 {
     public function findOneById($id){
-        if (is_numeric($id) ) {
-            $user = parent::findOneBy(array("rdbms_id" => (int)$id));
-        } else {
+        if(strlen($id) == 24) {
             $user = parent::findOneById($id);
-        }        
+        } else {
+            $user = parent::findOneBy(array("publicId" => (int)$id));
+        }
+
         return $user;
     }
+    
     public function findUsersCountByDates($dateBegin, $dateEnd )
     {
         $qb = $this->createQueryBuilder('User');
