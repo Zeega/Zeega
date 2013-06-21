@@ -21,9 +21,9 @@ class ParserGiphyTag extends ParserAbstract
 
                 if( $parameters["regex_matches"][2] ){
                     $offset = $parameters["regex_matches"][2];
-                    $embedApiUrl = "http://api.giphy.com/v1/gifs/search?q=$tag&api_key=Uy5fohPTSnze8&offset=$offset";
+                    $embedApiUrl = "http://api.giphy.com/v1/gifs/search?q=$tag&api_key=Uy5fohPTSnze8&offset=$offset&limit=50";
                 } else {
-                    $embedApiUrl = "http://api.giphy.com/v1/gifs/search?q=$tag&api_key=Uy5fohPTSnze8";
+                    $embedApiUrl = "http://api.giphy.com/v1/gifs/search?q=$tag&api_key=Uy5fohPTSnze8&limit=50";
                 }
                 
 
