@@ -1,5 +1,5 @@
 {
-{% if project.publicId is defined %}
+{% if project.publicId is defined and project.publicId is not empty %}
 "id" : {{ project.publicId | default("") | json_encode | raw }},
 {% else %}
 "id" : {{ project.id | default("") | json_encode | raw }},
