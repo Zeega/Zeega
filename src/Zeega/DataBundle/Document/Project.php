@@ -142,10 +142,30 @@ class Project
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->sequences = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->frames = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->layers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sequences = new ArrayCollection();
+        $this->frames = new ArrayCollection();
+        $this->layers = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+    }
+
+    public function __clone()
+    {
+        if ($this->id) {
+            $this->id = new \MongoId();
+            $this->date_created = new \DateTime();
+            $this->sequences = new \Doctrine\Common\Collections\ArrayCollection(
+                $this->sequences->toArray()
+            );
+            $this->frames = new \Doctrine\Common\Collections\ArrayCollection(
+                $this->frames->toArray()
+            );
+            $this->layers = new \Doctrine\Common\Collections\ArrayCollection(
+                $this->layers->toArray()
+            );
+
+            $this->title = null;
+            $this->views = 0;
+        }
     }
     
     /**
