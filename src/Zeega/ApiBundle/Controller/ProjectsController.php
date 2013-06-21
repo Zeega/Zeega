@@ -266,7 +266,6 @@ class ProjectsController extends BaseController
                 if( $t->getName() == $tag ){
                     $project->removeTag($t);
                 }
-
             }
         }
 
@@ -286,52 +285,8 @@ class ProjectsController extends BaseController
     public function putProjectSequencesAction($projectId, $sequenceId)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        
-        $sequencesQuery = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-            ->select('sequences')
-            ->findAndUpdate()
-            ->returnNew()
-            ->field('id')->equals($projectId)
-            ->field('sequences.id')->equals($sequenceId)
-            ->field('sequences.id')->equals($sequenceId);
-            
-        $request = $this->getRequest();
-        if( $this->getRequest()->request->has('frames') ) {
-            $frames = $this->getRequest()->request->get('frames');
-            $sequencesQuery->field('sequences.$.frames')->set( array_filter($frames) );
-        } else {
-            $sequencesQuery->field('sequences.$.frames')->set( null );
-        }
-
-        if($request->request->has('title')) {
-            $sequencesQuery->field('sequences.$.title')->set( $request->request->get('title') );
-        }
-
-        if($request->request->has('attr')) {
-            $sequencesQuery->field('sequences.$.attr')->set( $request->request->get('attr') );
-        }
-            
-        if($request->request->has('persistent_layers')) {
-            $sequencesQuery->field('sequences.$.persistentLayers')->set( $request->request->get('persistent_layers') );
-        }
-        
-        if($request->request->has('description')) {
-            $sequencesQuery->field('sequences.$.description')->set( $request->request->get('description') );
-        }
-
-        if($request->request->has('advance_to')) {
-            $sequencesQuery->field('sequences.$.advanceTo')->set( $request->request->get('advance_to') );
-        }
-        
-        $sequencesQuery->field('sequences.$.dateUpdated')->set(new \DateTime("now"));
-        
-        $project = $sequencesQuery->getQuery()->execute();
-        $sequence = $project->getSequences()->filter(
-            function($seq) use ($sequenceId){
-                return $seq->getId() == $sequenceId;
-            }
-        )->first();
-
+        $request = $request = $this->getRequest()->request->all();
+        $sequence = $dm->getRepository('ZeegaDataBundle:Project')->updateProjectSequence($projectId, $sequenceId,$request);        
         $sequenceView = $this->renderView('ZeegaApiBundle:Sequences:show.json.twig', array('sequence' => $sequence));
 
         return new Response($sequenceView);
@@ -367,14 +322,7 @@ class ProjectsController extends BaseController
         }
 
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $frameQuery = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-            ->update()
-            ->field('id')->equals($projectId)
-            ->field('sequences.id')->equals($sequenceId)
-            ->field('sequences.$.frames')->push((string)$frame["_id"])
-            ->field('frames')->push($frame)
-            ->getQuery()
-            ->execute();
+        $frameQuery = $dm->getRepository('ZeegaDataBundle:Project')->newProjectSequenceFrame($projectId, $sequenceId, $frame);        
         $frame["id"] = (string)$frame["_id"];
         $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
 
@@ -390,22 +338,7 @@ class ProjectsController extends BaseController
     public function putProjectFramesAction($projectId, $frameId)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-                    ->field('id')->equals($projectId)
-                    ->select('frames')
-                    ->getQuery()
-                    ->getSingleResult();
-
-        if ( !isset($project) || !$project instanceof MongoProject) {
-            return new Response("Project does not exist");
-        } 
-
-        $frames = $project->getFrames();
-        $frame = $project->getFrames()->filter(
-            function($fram) use ($frameId){
-                return $fram->getId() == $frameId;
-            }
-        )->first();
+        $frame = $dm->getRepository('ZeegaDataBundle:Project')->findProjectFrame($projectId, $frameId);
         
         if ( !isset($frame) || !$frame instanceof MongoFrame) {
             return new Response("Frame does not exist");  
@@ -434,7 +367,6 @@ class ProjectsController extends BaseController
         }
 
         $dm->persist($frame);
-        $dm->persist($project);
         $dm->flush();
 
         $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
@@ -468,15 +400,7 @@ class ProjectsController extends BaseController
         }
 
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $layerQuery = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-            ->update()
-            ->field('id')->equals($projectId)
-            ->field('frames.id')->equals($frameId)
-            ->field('frames.$.layers')->push((string)$layer["_id"])
-            ->field('layers')->push($layer)
-            ->getQuery()
-            ->execute();
-        
+        $layerQuery = $dm->getRepository('ZeegaDataBundle:Project')->newProjectFrameLayer($projectId, $frameId, $layer);        
         $layer["id"] = (string)$layer["_id"];
         $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
 
@@ -490,25 +414,10 @@ class ProjectsController extends BaseController
 
         if ( isset($thumbnail) ) {
             $dm = $this->get('doctrine_mongodb')->getManager();
-            $project = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-                    ->field('id')->equals($projectId)
-                    ->select('frames')
-                    ->getQuery()
-                    ->getSingleResult();
+            $frame = $dm->getRepository('ZeegaDataBundle:Project')->findProjectFrame($projectId, $frameId);
 
-            if ( !isset($project) || !$project instanceof MongoProject) {
-                return null;
-            } 
-
-            $frames = $project->getFrames();
-            $frame = $project->getFrames()->filter(
-                function($fram) use ($frameId){
-                    return $fram->getId() == $frameId;
-                }
-            )->first();
-        
             if ( !isset($frame) || !$frame instanceof MongoFrame) {
-                return null;  
+                return null;
             }
             
             $frame->setThumbnailUrl($thumbnail);
@@ -528,7 +437,7 @@ class ProjectsController extends BaseController
     public function postProjectLayersAction($projectId)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        $project= $dm->getRepository('ZeegaDataBundle:Project')->find($projectId);
+        $project= $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
         
         //$project->setDateUpdated(new \DateTime("now"));
         $layer = new MongoLayer();
@@ -552,11 +461,6 @@ class ProjectsController extends BaseController
         $project->setPublished(true);
         
         $dm->persist($layer);
-        
-
-
-
-
         $dm->flush();
 
         $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
@@ -573,31 +477,20 @@ class ProjectsController extends BaseController
     public function putProjectLayersAction($projectId, $layerId)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
-        
-        $projectQuery = $dm->createQueryBuilder('ZeegaDataBundle:Project')
-            ->select('layers')
-            ->findAndUpdate()
-            ->returnNew()
-            ->field('id')->equals($projectId)
-            ->field('layers.id')->equals($layerId);
-        
+        $layer = $dm->getRepository('ZeegaDataBundle:Project')->findProjectLayer($projectId, $layerId);
+
         $text = $this->getRequest()->request->get('text');
         $attributes = $this->getRequest()->request->get('attr');
 
         if( isset($text) ) {
-            $projectQuery->field('layers.$.text')->set($text);
+            $layer->setText($text);
         } 
 
         if( isset($attributes) ) {
-            $projectQuery->field('layers.$.attr')->set($attributes);
+            $layer->setAttr($attributes);
         }
-        
-        $layers = $projectQuery->getQuery()->execute();
-        $layer = $layers->getLayers()->filter(
-            function($layr) use ($layerId){
-                return $layr->getId() == $layerId;
-            }
-        )->first();
+        $dm->persist($layer);
+        $dm->flush();
 
         $layerView = $this->renderView('ZeegaApiBundle:Layers:show.json.twig', array('layer' => $layer));
         
@@ -618,6 +511,8 @@ class ProjectsController extends BaseController
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
         
+        $projectId = $project->getId();
+
         $favorite = $dm->getRepository('ZeegaDataBundle:Favorite')->findOneBy(array(
             "user.id" => $user->getId(),
             "project.id" => $projectId));
@@ -650,6 +545,8 @@ class ProjectsController extends BaseController
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
         
+        $projectId = $project->getId();
+
         $favorite = $dm->getRepository('ZeegaDataBundle:Favorite')->findOneBy(array(
             "user.id" => $user->getId(),
             "project.id" => $projectId));

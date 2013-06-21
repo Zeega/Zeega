@@ -5,6 +5,8 @@ namespace Zeega\DataBundle\Repository;
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Zeega\DataBundle\Document\Project;
 use JMS\DiExtraBundle\Annotation as DI;
+use Zeega\DataBundle\Document\Frame;
+use Zeega\DataBundle\Document\Layer;
 
 class ProjectRepository extends DocumentRepository
 {
@@ -20,20 +22,11 @@ class ProjectRepository extends DocumentRepository
             }
         } else {
             if ( $equal ) {
-                return $this->createQueryBuilder('Project')->field('projectId')->equals($id);   
+                return $this->createQueryBuilder('Project')->field('project_id')->equals($id);   
             } else {
-                return $this->createQueryBuilder('Project')->field('projectId')->notEqual($id);
+                return $this->createQueryBuilder('Project')->field('project_id')->notEqual($id);
             }
         }
-    }
-
-    /**
-     * @DI\InjectParams({
-     *     "generator" = @DI\Inject("zeega_id")
-     * })
-     */
-    public function setPublicIdGenerator($generator) {
-        $this->idGenerator = $generator;
     }
 
     public function findOneById($id)
@@ -77,7 +70,6 @@ class ProjectRepository extends DocumentRepository
             ->eagerCursor(true)
             ->getQuery()->execute()->count();
     }
-
 
     // Place holder for related Zeegas
     public function findRelated( $id = null, $query = null )
@@ -162,27 +154,44 @@ class ProjectRepository extends DocumentRepository
     }
 
     public function findProjectFrame($projectId, $frameId) {
-        $qb = $this->createQueryBuilderWithId($projectId);
-        $project = $qb->eagerCursor(true)
+        $project = $this->createQueryBuilderWithId($projectId)
             ->select('frames')
             ->getQuery()
             ->getSingleResult();
 
-        if ( !isset($project) || !$project instanceof MongoProject) {
+        if ( !isset($project) ) {
             return null;
         } 
 
-        $frames = $project->getFrames();
         $frame = $project->getFrames()->filter(
             function($fram) use ($frameId){
                 return $fram->getId() == $frameId;
             }
         )->first();
-        
-        if ( !isset($frame) || !$frame instanceof MongoFrame) {
+
+        if ( !isset($frame) || !$frame instanceof Frame) {
             return null;  
         } else {
             return $frame;
+        }
+    }
+
+    public function findProjectLayer($projectId, $layerId) {
+        $project = $this->createQueryBuilderWithId($projectId)
+            ->select('layers')
+            ->getQuery()
+            ->getSingleResult();
+
+        $layer = $project->getLayers()->filter(
+            function($layr) use ($layerId){
+                return $layr->getId() == $layerId;
+            }
+        )->first();
+
+        if ( !isset($layer) || !$layer instanceof Layer) {
+            return null;  
+        } else {
+            return $layer;
         }
     }
 
@@ -226,7 +235,77 @@ class ProjectRepository extends DocumentRepository
         return array("frame"=> $frame, "layers" => array());
     }
 
+    public function updateProjectSequence($projectId, $sequenceId, $params)
+    {
+        $qb = $this->createQueryBuilderWithId($projectId)
+            ->select('sequences')
+            ->findAndUpdate()
+            ->returnNew()
+            ->field('sequences.id')->equals($sequenceId)
+            ->field('sequences.id')->equals($sequenceId);
+            
+        if( isset($params["frames"] )) {
+            $qb->field('sequences.$.frames')->set( array_filter($params["frames"]) );
+        } else {
+            $qb->field('sequences.$.frames')->set( null );
+        }
 
+        if( isset($params["title"]) ) {
+            $qb->field('sequences.$.title')->set( $params["title"] );
+        }
+
+        if( isset($params["attr"]) ) {
+            $qb->field('sequences.$.attr')->set( $params["attr"] );
+        }
+            
+        if( isset($params["persistent_layers"]) ) {
+            $qb->field('sequences.$.persistentLayers')->set( $params["persistent_layers"] );
+        }
+        
+        if( isset($params["description"]) ) {
+            $qb->field('sequences.$.description')->set( $params["description"] );
+        }
+
+        if( isset($params["advance_to"]) ) {
+            $qb->field('sequences.$.advanceTo')->set( $params["advance_to"] );
+        }
+        
+        $qb->field('sequences.$.dateUpdated')->set(new \DateTime("now"));
+        
+        $project = $qb->getQuery()->execute();
+        $sequence = $project->getSequences()->filter(
+            function($seq) use ($sequenceId){
+                return $seq->getId() == $sequenceId;
+            }
+        )->first();
+
+        return $sequence;
+    }
+
+    public function newProjectSequenceFrame($projectId, $sequenceId, $frame)
+    {
+        return $this->createQueryBuilderWithId($projectId)
+            ->update()
+            ->field('sequences.id')->equals($sequenceId)
+            ->field('sequences.$.frames')->push((string)$frame["_id"])
+            ->field('frames')->push($frame)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function newProjectFrameLayer($projectId, $frameId, $layer)
+    {
+        return $this->createQueryBuilderWithId($projectId)
+            ->update()
+            ->field('frames.id')->equals($frameId)
+            ->field('frames.$.layers')->push((string)$layer["_id"])
+            ->field('layers')->push($layer)
+            ->getQuery()
+            ->execute();
+    }
+
+    
+    // analytics experiments - to be removed
     public function findProjectsCountByDates($dateBegin, $dateEnd )
     {
         $qb = $this->createQueryBuilder('Project');
