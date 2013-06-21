@@ -4,10 +4,42 @@ namespace Zeega\DataBundle\Repository;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
 use Zeega\DataBundle\Document\Project;
+use JMS\DiExtraBundle\Annotation as DI;
 
 class ProjectRepository extends DocumentRepository
 {
-    public function findOneById($id){
+    private $idGenerator;
+
+    private function createQueryBuilderWithId($id, $equal = True) 
+    {
+        if(strlen($id) == 24) {
+            if ( $equal ) {
+                return $this->createQueryBuilder('Project')->field('id')->equals($id);   
+            } else {
+                return $this->createQueryBuilder('Project')->field('id')->notEqual($id);
+            }
+        } else {
+            if ( $equal ) {
+                return $this->createQueryBuilder('Project')->field('projectId')->equals($id);   
+            } else {
+                return $this->createQueryBuilder('Project')->field('projectId')->notEqual($id);
+            }
+        }
+    }
+
+    /**
+     * @DI\InjectParams({
+     *     "generator" = @DI\Inject("zeega_id")
+     * })
+     */
+    public function setPublicIdGenerator($generator) {
+        $this->idGenerator = $generator;
+    }
+
+    public function findOneById($id)
+    {
+        $qb = $this->createQueryBuilder('Project');
+
         if(strlen($id) == 24) {
             $project = parent::findOneById($id);
         } else {
@@ -48,16 +80,15 @@ class ProjectRepository extends DocumentRepository
 
 
     // Place holder for related Zeegas
-    public function findRelated( $id = null, $query = null ){
-
-        $qb = $this->createQueryBuilder('Project')
-                        ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created', 'tags')
-                        ->field('user')->prime(true)
-                        ->field('id')->notEqual( $id )
-                        ->eagerCursor(true)
-                        ->limit( 2 )
-                        ->skip( rand(0, 8) )
-                        ->sort('date_created','DESC');
+    public function findRelated( $id = null, $query = null )
+    {
+        $qb = $this->createQueryBuilderWithId($id, False);
+        $qb->select('user','id','title','uri', 'cover_image', 'authors', 'date_created', 'tags')
+            ->field('user')->prime(true)
+            ->eagerCursor(true)
+            ->limit( 2 )
+            ->skip( rand(0, 8) )
+            ->sort('date_created','DESC');
 
         $qb->field('tags.name')->equals("featured");
         
@@ -131,12 +162,11 @@ class ProjectRepository extends DocumentRepository
     }
 
     public function findProjectFrame($projectId, $frameId) {
-        $project = $this->createQueryBuilder('ZeegaDataBundle:Project')
-                ->field('id')->equals($projectId)
-                ->eagerCursor(true)
-                ->select('frames')
-                ->getQuery()
-                ->getSingleResult();
+        $qb = $this->createQueryBuilderWithId($projectId);
+        $project = $qb->eagerCursor(true)
+            ->select('frames')
+            ->getQuery()
+            ->getSingleResult();
 
         if ( !isset($project) || !$project instanceof MongoProject) {
             return null;
@@ -157,17 +187,17 @@ class ProjectRepository extends DocumentRepository
     }
 
     public function findProjectFrameWithLayers($projectId, $frameId) {
-        $project = $this->createQueryBuilder('ZeegaDataBundle:Project')
-                ->field('id')->equals($projectId)
-                ->select('frames','layers')
-                ->eagerCursor(true)
-                ->getQuery()
-                ->getSingleResult();
+        $qb = $this->createQueryBuilderWithId($projectId);
+
+        $project = $qb->createQueryBuilder('ZeegaDataBundle:Project')
+            ->select('frames','layers')
+            ->eagerCursor(true)
+            ->getQuery()
+            ->getSingleResult();
 
         if ( !isset($project) ) {
             return "null";
         } 
-
         
         $frame = $project->getFrames()->filter(
             function($fram) use ($frameId){
@@ -242,41 +272,5 @@ class ProjectRepository extends DocumentRepository
         }
 
         return $count;
-    }
-
-    public function cloneProjectAndGetId($id, $targetUserId)
-    {
-        $connection = $this->getDocumentManager()->getConnection();
-        $database = $this->getDocumentManager()->getConfiguration()->getDefaultDB();
-        $project = $connection->selectDatabase($database)->selectCollection("Project")->findOne(array("_id"=>new \MongoId($id)));
-        $connection = $this->getDocumentManager()->getConnection();
-        if (isset($project) && is_array($project)) {
-            if ( !isset($project["title"]) ) {
-                $project["title"] = null;
-            }
-
-            $project["parent"] = array("id"=> new \MongoId($id), "title" => $project["title"], "user"=> $project["user"]);
-
-            $newProjectId = new \MongoId();
-            $project["_id"] = $newProjectId;
-            $project["user"]["\$id"] = new \MongoId($targetUserId);
-            $project["date_updated"] = new \MongoDate(time());
-            $project["date_created"] = new \MongoDate(time());
-
-            unset($project["title"]);
-            unset($project["views"]);
-            unset($project["tags"]);                      
-
-            $response = $connection->selectDatabase($database)->selectCollection("Project")->insert($project);
-
-            if( isset($response["ok"]) && $response["ok"] === 1.0 ) {
-                
-                return $newProjectId;    
-            }            
-        } else {
-            throw $this->createNotFoundException('The project with the id $id does not exist or is not published.');
-        }
-        
-        throw $this->createRuntimeException("Unable to clone the project");
     }
 }
