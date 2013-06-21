@@ -20,13 +20,15 @@ class DateUpdateListener
     public function preUpdate(LifecycleEventArgs $args)
     {
         $document = $args->getDocument();
-        
+
         // perhaps you only want to act on some "Product" document
         if ($document instanceof Project) {
-            $document->setDateUpdated(new \DateTime("now"));
-            $dm = $args->getDocumentManager();
-            $class = $dm->getClassMetadata("Zeega\DataBundle\Document\Project");
-            $dm->getUnitOfWork()->recomputeSingleDocumentChangeSet($class, $document);
+            if ( !$args->hasChangedField("views") ) {
+                $dm = $args->getDocumentManager();
+                $document->setDateUpdated(new \DateTime("now"));
+                $class = $dm->getClassMetadata("Zeega\DataBundle\Document\Project");
+                $dm->getUnitOfWork()->recomputeSingleDocumentChangeSet($class, $document);
+            }
         }
     }
 }
