@@ -32,6 +32,9 @@ snc_redis:
             type: predis
             alias: default
             dsn: redis://%event_logger_host%
+            options:
+                connection_timeout: 5
+                read_write_timeout: 10
         session:
             type: predis
             alias: session
