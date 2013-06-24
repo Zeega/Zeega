@@ -3,8 +3,8 @@
 "user": {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': project.user} %},
 "title" : {{ project.title | default("") | json_encode | raw}},
 "date_created" : "{{ project.dateCreated is empty ? "" : project.getDateCreated()  | date("m/d/Y ") }}",
-"date_updated" : "{{ project.dateUpdated is empty ? "" : project.getDateUpdated()  | date("U") }}",
-"date_published" : "{{ project.datePublished is empty ? "" : project.getDatePublished()  | date("U") }}",
+"date_updated" : "{{ project.dateUpdated is empty ? "" : project.getDateUpdated()  | date("m/d/Y h:m:s")}}",
+"date_published" : "{{ project.datePublished is empty ? "" : project.getDatePublished()  | date("m/d/Y h:m:s") }}",
 "tags" : {{ project.tags | default("") | json_encode | raw}},
 {% if project.getTags is defined %}
 "tags" : [        

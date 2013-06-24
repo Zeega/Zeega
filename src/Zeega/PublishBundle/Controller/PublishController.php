@@ -132,7 +132,27 @@ class PublishController extends BaseController
             }
         }
     }
-     
+    
+    public function projectRemixAction($id)
+    {   
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
+        
+        $user = $this->getUser();
+
+        if ( !isset($user) ) {
+            throw new \Exception('You need to be logged in to remix a project.');
+        }
+
+        if ( $this->isUserAdmin( $user ) || $this->isUserAdmin( $project->getUser() ) ) {
+            $newProjectId = $dm->getRepository('ZeegaDataBundle:Project')->cloneProjectAndGetId($id, $user->getId());
+        
+            return $this->redirect($this->generateUrl("ZeegaEditorBundle_editor", array("id"=>$newProjectId), true), 301);  
+        }
+        
+        throw new \Exception('This project cannot be remixed.');
+    }
+
     public function embedAction ($id)
     {
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);

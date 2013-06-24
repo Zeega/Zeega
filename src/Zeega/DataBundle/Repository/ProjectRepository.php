@@ -100,15 +100,29 @@ class ProjectRepository extends DocumentRepository
                         ->field('user')->prime(true)
                         ->eagerCursor(true)
                         ->limit($query['limit'])
-                        ->skip($query['limit'] * $query['page'])
-                        ->sort('date_created','DESC');
+                        ->skip($query['limit'] * $query['page']);
+                        
 
             if (isset($query["tags"])) {
                 $qb->field('tags.name')->equals($query["tags"]);
+                $qb->sort('date_updated','DESC');
             }
 
             if (isset($query["user"])) {
                 $qb->field('user.id')->equals($query["user"]);
+            }
+
+            if(isset($query['sort'])) {
+                $sort = $query['sort'];
+                if($sort == 'date-updated-desc') {
+                    $qb->sort('date_updated','DESC');
+                } else if($sort == 'date-updated-asc') {
+                    $qb->sort('date_updated','ASC');
+                } else {
+                    $qb->sort('date_created','DESC');
+                }
+            } else {
+                $qb->sort('date_created','DESC');
             }
 
             return $qb->getQuery()->execute();
@@ -227,5 +241,41 @@ class ProjectRepository extends DocumentRepository
         }
 
         return $count;
+    }
+
+    public function cloneProjectAndGetId($id, $targetUserId)
+    {
+        $connection = $this->getDocumentManager()->getConnection();
+        $database = $this->getDocumentManager()->getConfiguration()->getDefaultDB();
+        $project = $connection->selectDatabase($database)->selectCollection("Project")->findOne(array("_id"=>new \MongoId($id)));
+        $connection = $this->getDocumentManager()->getConnection();
+        if (isset($project) && is_array($project)) {
+            if ( !isset($project["title"]) ) {
+                $project["title"] = null;
+            }
+
+            $project["parent"] = array("id"=> new \MongoId($id), "title" => $project["title"], "user"=> $project["user"]);
+
+            $newProjectId = new \MongoId();
+            $project["_id"] = $newProjectId;
+            $project["user"]["\$id"] = new \MongoId($targetUserId);
+            $project["date_updated"] = new \MongoDate(time());
+            $project["date_created"] = new \MongoDate(time());
+
+            unset($project["title"]);
+            unset($project["views"]);
+            unset($project["tags"]);                      
+
+            $response = $connection->selectDatabase($database)->selectCollection("Project")->insert($project);
+
+            if( isset($response["ok"]) && $response["ok"] === 1.0 ) {
+                
+                return $newProjectId;    
+            }            
+        } else {
+            throw $this->createNotFoundException('The project with the id $id does not exist or is not published.');
+        }
+        
+        throw $this->createRuntimeException("Unable to clone the project");
     }
 }
