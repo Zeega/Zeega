@@ -22,9 +22,9 @@ class ProjectRepository extends DocumentRepository
             }
         } else {
             if ( $equal ) {
-                return $this->createQueryBuilder('Project')->field('project_id')->equals($id);   
+                return $this->createQueryBuilder('Project')->field('public_id')->equals($id);   
             } else {
-                return $this->createQueryBuilder('Project')->field('project_id')->notEqual($id);
+                return $this->createQueryBuilder('Project')->field('public_id')->notEqual($id);
             }
         }
     }
