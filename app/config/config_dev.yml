@@ -17,7 +17,7 @@ monolog:
         main:
             type:  stream
             path:  %kernel.logs_dir%/%kernel.environment%.log
-            level: debug
+            level: info
 
 assetic:
     use_controller: true
@@ -31,3 +31,10 @@ snc_redis:
             type: predis
             alias: default
             dsn: redis://%event_logger_host%
+        id:
+            type: predis
+            alias: session
+            dsn: redis://%id_host%
+            options:
+                connection_timeout: 5
+                read_write_timeout: 5
