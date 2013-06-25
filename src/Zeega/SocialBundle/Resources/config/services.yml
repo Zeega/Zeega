@@ -2,18 +2,6 @@ parameters:
 #    zeega_social.example.class: Zeega\SocialBundle\Example
 
 services:
-    zeega.twitter.user:
-        class: Zeega\SocialBundle\Security\User\Provider\TwitterProvider
-        arguments:
-            #twitter_oauth: "@fos_twitter.api"
-            #userManager: "@fos_user.user_manager"
-            #validator: "@validator"
-            #session: "@session"
-            logger: "@logger" 
-    zeega.facebook.user:
-        class: Zeega\SocialBundle\Security\User\Provider\FacebookProvider
-        arguments:
-            #facebook: "@fos_facebook.api"
-            #userManager: "@fos_user.user_manager"
-            #validator: "@validator"
-            logger: "@logger" 
+    zeega.social.user_provider:
+        class: Zeega\SocialBundle\Security\User\Provider\SocialProvider
+        arguments: [@fos_user.user_manager,{twitter: twitter_id, facebook: facebook_id}]
