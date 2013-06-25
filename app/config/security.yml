@@ -9,10 +9,6 @@ security:
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
-        fos_twitter:
-            id: zeega.twitter.user
-        fos_facebook:
-            id: zeega.facebook.user
 
     firewalls:
         dev:
@@ -28,12 +24,13 @@ security:
                 check_path: fos_user_security_check
             oauth:
                 resource_owners:
-                    twitter:      
+                    twitter:  "/login/check-twitter"
+                    facebook:  "/login/check-facebook"
                 login_path:        /login
                 failure_path:      /login
                 default_target_path: /dashboard
                 oauth_user_provider:
-                    service: hwi_oauth.user.provider.fosub_bridge
+                    service: zeega.social.user_provider
             logout:
                 path:   /logout
                 target: /
