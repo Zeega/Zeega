@@ -4,6 +4,7 @@ namespace Zeega\SocialBundle\Security\User\Provider;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class SocialProvider extends BaseClass
 {
@@ -80,7 +81,8 @@ class SocialProvider extends BaseClass
             if ( isset($paths["thumbnailUrl"]) ) {
                 $thumbnailUrl = $paths["thumbnailUrl"];
                 if ( isset( $data[$thumbnailUrl] ) ) {
-                    $user->setThumbUrl($data[$thumbnailUrl]);    
+                    $thumbnail = str_replace("_normal","",$data[$thumbnailUrl]);
+                    $user->setThumbUrl($thumbnail);    
                 }
             }
 
