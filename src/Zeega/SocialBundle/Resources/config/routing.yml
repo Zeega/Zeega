@@ -1,9 +1,16 @@
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
 ZeegaSocialBundle_twitter_connect:
+    pattern:  /connect/twitter
+
+ZeegaSocialBundle_facebook_connect:
+    pattern:  /connect/facebook
+
+ZeegaSocialBundle_twitter_check:
     pattern:  /login/check-twitter
 
-ZeegaSocialBundle_twitter_login_check:
-    pattern:  /twitter/login_check
-    defaults: { _controller: ZeegaSocialBundle:Twitter:securityCheck }
-
-ZeegaSocialBundle_facebook_login_check:
+ZeegaSocialBundle_facebook_check:
     pattern:  /login/check-facebook
+    defaults: { _controller: ZeegaSocialBundle:Facebook:securityCheck }
