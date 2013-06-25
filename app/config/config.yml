@@ -95,6 +95,23 @@ hwi_oauth:
             type:                twitter
             client_id:           %twitter_consumer_key%
             client_secret:       %twitter_consumer_secret%
+            paths:
+                bio: description
+                thumbnailUrl: profile_image_url
+        facebook:
+            type:                facebook
+            client_id:           %facebook_appid%
+            client_secret:       %facebook_secret%
+            infos_url:           https://graph.facebook.com/me?fields=email,id,link,name,username,verified,picture.type(square)
+            scope:               "email"
+            paths:
+                email:         email
+                thumbnailUrl:  picture.data.url
+
+    fosub:
+        username_iterations: 30
+        properties:
+            twitter: twitter_id
 
 sonata_block:
     default_contexts: [cms]
