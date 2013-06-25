@@ -31,6 +31,7 @@ twig:
         web_directory: %web_directory%
         event_logger_host: %event_logger_host%
         event_logger_host_web: %event_logger_host_web%
+        facebook_appid: %facebook_appid%
 doctrine:
     dbal:
         charset: UTF8
@@ -109,7 +110,7 @@ hwi_oauth:
                 thumbnailUrl:  picture.data.url
 
     fosub:
-        username_iterations: 30
+        username_iterations: 1
         properties:
             twitter: twitter_id
 
