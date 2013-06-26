@@ -55,7 +55,7 @@ class ProjectRepository extends DocumentRepository
                         ->field('id')->notEqual( $id )
                         ->eagerCursor(true)
                         ->limit( 2 )
-                        ->skip( rand(0, 8) )
+                        ->skip( rand(0, 50) )
                         ->sort('date_created','DESC');
 
         $qb->field('tags.name')->equals("featured");

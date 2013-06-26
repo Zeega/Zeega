@@ -34,6 +34,11 @@
             data-user-thumbnail="{{project.user.thumbUrl}}"
             data-user-id="{{project.user.id}}"
             data-views="{{project.views}}"
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            data-logged-in=true
+            {% else %}
+            data-logged-in=false
+            {% endif %}
         />
 
         
