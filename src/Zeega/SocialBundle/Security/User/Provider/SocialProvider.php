@@ -93,6 +93,10 @@ class SocialProvider extends BaseClass
                 }
             }
 
+            if ( ucfirst($service) == "Facebook" ) {
+                $user->setThumbUrl("http://graph.facebook.com/$username/picture?width=200&height=200");
+            }
+
             $this->userManager->updateUser($user);
             return $user;
         }
