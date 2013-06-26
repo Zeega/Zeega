@@ -115,7 +115,8 @@ this.zeega.discovery = {
         if (!_.isUndefined(query)) this.searchObject =  this.queryStringToObj(query);
         else this.searchObject = {
             page:1,
-            universe:1
+            universe:1,
+            content: "project"
         };
 
         //Update interface
@@ -252,7 +253,7 @@ this.zeega.discovery = {
         
 
         // Content Type
-
+        console.log(obj.content);
         if (!_.isUndefined(obj.content)) $("#zeega-content-type").val(obj.content);
         else $("#zeega-content-type").val("all");
         $("#select-wrap-text").text( $("#zeega-content-type option[value=\""+$("#zeega-content-type").val()+"\"]").text() );
