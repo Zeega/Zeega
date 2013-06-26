@@ -55,7 +55,12 @@
               var profileData ="{{ profile_data|e('js') }}";
             {% endif %}
         </script>
-
+        <script type="text/javascript">
+          // Facebook login hack
+          if (window.location.hash == '#_=_'){
+            window.location.hash = '';
+          }
+        </script>
 </head>
 
   <body>

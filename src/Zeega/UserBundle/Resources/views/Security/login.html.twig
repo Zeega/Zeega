@@ -49,9 +49,8 @@
         
             <h2>Make the web you want</h2>
         </div>
-        
-        
-        <a href="#" onclick="fbLogin();" class="login-social" ><img src="{{asset("images/registration/login-facebook.png")}}"/></a><br/>
+        <div id="fb-root"></div>
+        <a href="#" onclick="fb_login();" class="login-social" ><img src="{{asset("images/registration/login-facebook.png")}}"/></a><br/>
         <a href="{{ path("ZeegaSocialBundle_twitter_connect") }}" class="login-social" ><img src="{{asset("images/registration/login-twitter.png")}}"/></a> <br/>
 
         {% if error %}

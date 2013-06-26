@@ -31,6 +31,7 @@ twig:
         web_directory: %web_directory%
         event_logger_host: %event_logger_host%
         event_logger_host_web: %event_logger_host_web%
+        facebook_appid: %facebook_appid%
 doctrine:
     dbal:
         charset: UTF8
@@ -88,18 +89,30 @@ sensio_framework_extra:
     view:
         annotations: false
 
-fos_twitter:
-        file: %kernel.root_dir%/../vendor/kertz/twitteroauth/twitteroauth/twitteroauth.php
-        consumer_key: %twitter_consumer_key%
-        consumer_secret: %twitter_consumer_secret%
-        callback_url: %twitter_callback_url%
+hwi_oauth:
+    firewall_name: main
+    resource_owners:
+        twitter:
+            type:                twitter
+            client_id:           %twitter_consumer_key%
+            client_secret:       %twitter_consumer_secret%
+            paths:
+                bio: description
+                thumbnailUrl: profile_image_url
+        facebook:
+            type:                facebook
+            client_id:           %facebook_appid%
+            client_secret:       %facebook_secret%
+            infos_url:           https://graph.facebook.com/me?fields=email,id,link,name,username,verified,picture.type(square)
+            scope:               "email"
+            paths:
+                email:         email
+                thumbnailUrl:  picture.data.url
 
-fos_facebook:
-    alias:  facebook
-    app_id: %facebook_appid%
-    secret: %facebook_secret%
-    cookie: true
-    permissions: [email, user_birthday, user_location]
+    fosub:
+        username_iterations: 1
+        properties:
+            twitter: twitter_id
 
 sonata_block:
     default_contexts: [cms]
