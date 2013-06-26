@@ -79,6 +79,13 @@
 			var userProjectsJSON = "{{ user_projects | e('js') }}";
 		</script>
 	{% endif %}
+	<script type="text/javascript">
+		// Facebook login hack
+		if (window.location.hash == '#_=_'){
+			window.location.hash = '';
+		}
+	</script>
+
 {% endblock %}
 
 {% block body %}

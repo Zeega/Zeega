@@ -9,12 +9,13 @@ class TwitterController extends Controller
 {
     public function connectAction()
     {   
-        $request = $this->get('request');
-        $twitter = $this->get('fos_twitter.service');
-        $authURL = $twitter->getLoginUrl($request);
-        $response = new RedirectResponse($authURL);
+        //$request = $this->get('request');
+        //$twitter = $this->get('fos_twitter.service');
+        //$authURL = $twitter->getLoginUrl($request);
+        //$response = new RedirectResponse($authURL);
 
-        return $response;
+        //return $response;
+        //return null;
     }
 
     public function securityCheckAction()

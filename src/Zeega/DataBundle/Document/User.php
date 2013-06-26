@@ -86,9 +86,19 @@ class User extends BaseUser
     protected $twitterUsername;
 
     /**     
+     * @MongoDB\Field(type="string",name="twitter_access_token")
+     */
+    protected $twitterAccessToken;
+
+    /**     
      * @MongoDB\Field(type="string",name="facebook_id")
      */
     protected $facebookId;
+
+    /**     
+     * @MongoDB\Field(type="string",name="facebook_access_token")
+     */
+    protected $facebookAccessToken;
 
     /**
      * @MongoDB\ReferenceMany(targetDocument="Favorite", mappedBy="project")
@@ -514,5 +524,49 @@ class User extends BaseUser
     {
         $this->password = $password;
         return $this;
+    }
+
+    /**
+     * Set twitterAccessToken
+     *
+     * @param string $twitterAccessToken
+     * @return self
+     */
+    public function setTwitterAccessToken($twitterAccessToken)
+    {
+        $this->twitterAccessToken = $twitterAccessToken;
+        return $this;
+    }
+
+    /**
+     * Get twitterAccessToken
+     *
+     * @return string $twitterAccessToken
+     */
+    public function getTwitterAccessToken()
+    {
+        return $this->twitterAccessToken;
+    }
+
+    /**
+     * Set facebookAccessToken
+     *
+     * @param string $facebookAccessToken
+     * @return self
+     */
+    public function setFacebookAccessToken($facebookAccessToken)
+    {
+        $this->facebookAccessToken = $facebookAccessToken;
+        return $this;
+    }
+
+    /**
+     * Get facebookAccessToken
+     *
+     * @return string $facebookAccessToken
+     */
+    public function getFacebookAccessToken()
+    {
+        return $this->facebookAccessToken;
     }
 }
