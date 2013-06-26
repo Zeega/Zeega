@@ -4,6 +4,7 @@ namespace Zeega\DataBundle\EventListener;
 
 use Doctrine\ODM\MongoDB\Event\LifecycleEventArgs;
 use Zeega\DataBundle\Document\Project;
+use Zeega\DataBundle\Document\User;
 
 class DateUpdateListener
 {
@@ -14,6 +15,8 @@ class DateUpdateListener
         if ($document instanceof Project) {
             $document->setDateUpdated(new \DateTime("now"));
             $document->setDateCreated(new \DateTime("now"));
+        } else if ($document instanceof User) {
+            $document->setCreatedAt(new \DateTime("now"));
         }
     }
 
