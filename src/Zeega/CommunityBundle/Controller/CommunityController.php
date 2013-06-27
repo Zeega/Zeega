@@ -29,11 +29,21 @@ class CommunityController extends BaseController
 
     public function tagAction( $tag )
     {
-        $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array(
-            "tags"=>$tag, 
-            "limit"=>10, 
-            "sort"=>"date-updated-desc"
-        ))->getContent();
+        
+        if( $tag == "realtime" ){
+            $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array(
+                "limit"=>10, 
+                "sort"=>"date-updated-desc"
+            ))->getContent();
+        } else {
+            $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array(
+                "tags"=>$tag, 
+                "limit"=>10, 
+                "sort"=>"date-updated-desc"
+            ))->getContent();
+        }
+
+
         return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=> $tag, "local_path"=>"tag/".$tag, "feed_data"=>$projects ));
     }
     
