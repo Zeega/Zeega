@@ -599,12 +599,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/mongodb-odm.git",
-                "reference": "9bbe6a2ec98db4b66230f46f003129e7334943c5"
+                "reference": "0a1324a596a73e5d8ec2a26b957486dd56eba2c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/mongodb-odm/zipball/9bbe6a2ec98db4b66230f46f003129e7334943c5",
-                "reference": "9bbe6a2ec98db4b66230f46f003129e7334943c5",
+                "url": "https://api.github.com/repos/doctrine/mongodb-odm/zipball/0a1324a596a73e5d8ec2a26b957486dd56eba2c7",
+                "reference": "0a1324a596a73e5d8ec2a26b957486dd56eba2c7",
                 "shasum": ""
             },
             "require": {
@@ -664,7 +664,7 @@
                 "odm",
                 "persistence"
             ],
-            "time": "2013-06-17 01:52:45"
+            "time": "2013-06-27 14:07:45"
         },
         {
             "name": "doctrine/mongodb-odm-bundle",
@@ -2105,12 +2105,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/getsentry/raven-php.git",
-                "reference": "ee978e4260c87cb18f49d6ebd98c4c96ebe5bfd3"
+                "reference": "2f3f9fe0943049a195002376629f7ee76a5e2dcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getsentry/raven-php/zipball/ee978e4260c87cb18f49d6ebd98c4c96ebe5bfd3",
-                "reference": "ee978e4260c87cb18f49d6ebd98c4c96ebe5bfd3",
+                "url": "https://api.github.com/repos/getsentry/raven-php/zipball/2f3f9fe0943049a195002376629f7ee76a5e2dcd",
+                "reference": "2f3f9fe0943049a195002376629f7ee76a5e2dcd",
                 "shasum": ""
             },
             "require": {
@@ -2144,7 +2144,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2013-06-20 17:49:07"
+            "time": "2013-06-26 17:51:09"
         },
         {
             "name": "sensio/distribution-bundle",
