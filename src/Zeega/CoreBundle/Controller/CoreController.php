@@ -23,8 +23,8 @@ class CoreController extends BaseController
         return $this->render('ZeegaCoreBundle:Core:unsupportedbrowser.html.twig');
     }
 
-    public function mobileAction ()
+    public function notFoundAction ()
     {
-        return $this->render('ZeegaCoreBundle:Core:mobile.html.twig');
+        return $this->render('ZeegaCoreBundle:Core:notfound.html.twig');
     }
 }

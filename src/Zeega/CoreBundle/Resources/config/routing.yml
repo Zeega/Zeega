@@ -3,6 +3,6 @@ ZeegaCoreBundle_unsupportedBrowser:
     defaults: { _controller:  ZeegaCoreBundle:Core:unsupportedBrowser }
 
 ZeegaCoreBundle_mobile:
-    pattern: /mobile
-    defaults: { _controller:  ZeegaCoreBundle:Core:mobile }
+    pattern: /not/found
+    defaults: { _controller:  ZeegaCoreBundle:Core:notFound }
 
