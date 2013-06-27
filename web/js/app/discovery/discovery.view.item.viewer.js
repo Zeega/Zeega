@@ -52,6 +52,7 @@
             this.$el.find(".inner-content").html( itemView.render().el );
             if(this.state == "more" && itemView.mapView.isGeoLocated ) itemView.mapView.renderMap();
             this.inFocus.trigger("after_render");
+            $("#archive-select").val(this.inFocus.get("archive"));
         },
 
         events : {
@@ -268,7 +269,6 @@
             
             return this;
         },
-        
         toggleDetail : function(state)
         {
             if(this.editing === true) this.cancelItemEdit();
@@ -292,7 +292,8 @@
         events : {
             "click .edit-item-metadata" : "editItemMetadata",
             "click .save-item-metadata" : "saveItemMetadata",
-            "click .cancel-item-metadata" : "cancelItemEdit"
+            "click .cancel-item-metadata" : "cancelItemEdit",
+            "change #archive-select" : "onArchiveSelect"
         },
         
         editItemMetadata : function(e)
@@ -302,7 +303,7 @@
 
             $("#item-delete").hide();
             this.editing = true;
-            this.$el.find(".viewer-item-title .inner, .item-description-text").attr("contenteditable",true).addClass("editing-field");
+            this.$el.find(".viewer-item-title .inner, .item-attribution-link").attr("contenteditable",true).addClass("editing-field");
             this.$el.find(".edit-item-metadata").hide();
             this.$el.find(".save-item-metadata, .cancel-item-metadata").show();
             
@@ -322,8 +323,17 @@
             this.exitEditMode();
             // the save the model
             this.model.save({
-                description: this.$el.find(".item-description-text").text(),
+                attribution_uri: this.$el.find(".item-attribution-link").text(),
                 title: this.$el.find(".viewer-item-title .inner").text()
+            });
+            
+            
+            return false;
+        },
+
+        onArchiveSelect: function(){
+            this.model.save({
+                archive: this.$el.find("#archive-select").val()
             });
             
             
@@ -333,7 +343,7 @@
         exitEditMode : function()
         {
             if(this.model.get("media_type") != "Collection") $("#item-delete").show();
-            this.$el.find(".viewer-item-title .inner, .item-description-text").attr("contenteditable",false).removeClass("editing-field");
+            this.$el.find(".viewer-item-title .inner, .item-attribution-link").attr("contenteditable",false).removeClass("editing-field");
             this.$el.find(".edit-item-metadata").show();
             this.$el.find(".save-item-metadata, .cancel-item-metadata").hide();
             
@@ -345,7 +355,7 @@
         {
             this.editing = false;
             this.exitEditMode();
-            this.$el.find(".item-description-text").text(this.model.get("description"));
+            this.$el.find(".item-attribution-link").text(this.model.get("attribution_uri"));
             this.$el.find(".viewer-item-title .inner").text(this.model.get("title"));
         },
         
@@ -396,13 +406,27 @@
                     "</div>"+
                     "<div class='span6'>"+
                         "<div class='padded-content'>"+
-                            "<div><strong>Description:</strong>";
+                        "<strong>API Source: </strong>"+
+                          "<select id='archive-select'>"+
+                                "<option value='Flickr'>Flickr</option>"+
+                                "<option value='Tumblr'>Tublmr</option>"+
+                                "<option value='Giphy'>Giphy</option>"+
+                                "<option value='Soundcloud'>Soundcloud</option>"+
+                                "<option value='Absolute'>Absolute</option>"+
+                                "<option value='Upload'>Zeega</option>"+
+                            "</select>"+
+                        "</div"+    
+                        "<div class='padded-content'>"+
+
+                          
+
+                            "<div><strong>Attribution Link:</strong>";
                 if(this.isEditable) {
-                    html+= " <a href='#'' id='edit-description' class='edit-item-metadata'><i class='icon-pencil'></i></a>";
+                    html+= " <a href='#'' id='edit-attribution' class='edit-item-metadata'><i class='icon-pencil'></i></a>";
                 }
 
                 html+=  "</div>"+
-                            "<div class='item-description-text'><%= description %></div>"+
+                            "<div class='item-attribution-link' style='overflow:hidden;'><%= attribution_uri %></div>"+
                             "<button class='btn btn-mini pull-right hide cancel-item-metadata'>Cancel</button>"+
                             "<button class='btn btn-success btn-mini pull-right hide save-item-metadata'>Save Changes</button>"+
                         "</div>"+
@@ -541,6 +565,9 @@
         //happens after the view is rendered. so we know when the player is in the dom
         afterRender : function()
         {
+          
+
+
             if(this.isRendered===true){}
             else
             {

@@ -32,7 +32,7 @@
                 url += "&q=" + this.query.q.toString();
             }
 
-            url += "&sort=date-updated-desc";
+            url += "&sort=date-updated-desc&enabled=true";
             if( !_.isUndefined(this.query.page) ) url += "&page=" + this.query.page;
 
             return url;

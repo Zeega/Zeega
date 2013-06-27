@@ -1155,7 +1155,7 @@ body{background-color:transparent;}
 .item-viewer .leaflet-map .item-map{height:200px;}
 .item-viewer .leaflet-map .item-map .leaflet-map-control-custom{margin-top:5px;}
 .item-viewer .leaflet-map .item-map .leaflet-map-control-custom i{position:relative;top:2px;left:2px;}
-.item-viewer .item-description-text{height:200px;margin-bottom:10px;overflow:auto;}
+.item-viewer .item-attribution-link{height:200px;margin-bottom:10px;overflow:auto;}
 .item-viewer .edit-item-metadata{opacity:0.3;}
 .item-viewer .edit-item-metadata:hover{opacity:1;}
 .item-viewer .editing-field{background:#ccffff;}

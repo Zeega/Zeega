@@ -144,7 +144,7 @@ api_items_post_items:
 api_items_put_items:
     path: /api/items/{itemId}.{_format}
     defaults: { _controller:  ZeegaApiBundle:Items:putItems, _format: json }
-    methods: [POST]
+    methods: [PUT]
 
 api_items_delete_item:
     path: /api/items/{itemId}.{_format}
