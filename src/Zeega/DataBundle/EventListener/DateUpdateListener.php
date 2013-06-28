@@ -8,6 +8,11 @@ use Zeega\DataBundle\Document\User;
 
 class DateUpdateListener
 {
+    public function __construct($idService) 
+    {
+        $this->idService = $idService;
+    }
+
     public function prePersist(LifecycleEventArgs $args)
     {
         $document = $args->getDocument();
@@ -15,6 +20,7 @@ class DateUpdateListener
         if ($document instanceof Project) {
             $document->setDateUpdated(new \DateTime("now"));
             $document->setDateCreated(new \DateTime("now"));
+            $document->setPublicId($this->idService->generateId());
         } else if ($document instanceof User) {
             $document->setCreatedAt(new \DateTime("now"));
         }

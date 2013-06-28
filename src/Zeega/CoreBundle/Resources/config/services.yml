@@ -30,3 +30,8 @@ services:
 
     zeega_apc_cache:
         class: Zeega\CoreBundle\Service\ApcCacheService
+
+    zeega_id:
+        class: Zeega\CoreBundle\Service\IdService
+        arguments: 
+            redis: "@snc_redis.default"

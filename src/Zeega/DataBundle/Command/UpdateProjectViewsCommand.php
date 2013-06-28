@@ -85,7 +85,7 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
             // temp method to update projects that use the old ids
             if( count($projectsToUpdateIds) > 0 ) {
                 $projects = $dm->createQueryBuilder('Zeega\DataBundle\Document\Project')
-                    ->field('rdbmsIdPublished')->in($projectsToUpdateIds)
+                    ->field('publicId')->in($projectsToUpdateIds)
                     ->getQuery()->execute();
                 
                 foreach($projects as $project) {

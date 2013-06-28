@@ -13,6 +13,11 @@ class Project
      * @MongoDB\Id(strategy="auto")
      */
     protected $id;
+
+    /**
+     * @MongoDB\Field(type="string", name="public_id")
+     */
+    protected $publicId;
     
     /**
      * @MongoDB\Field(type="int",name="rdbms_id")
@@ -141,6 +146,26 @@ class Project
         $this->frames = new \Doctrine\Common\Collections\ArrayCollection();
         $this->layers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __clone()
+    {
+        if ($this->id) {
+            $this->id = new \MongoId();
+            $this->date_created = new \DateTime();
+            $this->sequences = new \Doctrine\Common\Collections\ArrayCollection(
+                $this->sequences->toArray()
+            );
+            $this->frames = new \Doctrine\Common\Collections\ArrayCollection(
+                $this->frames->toArray()
+            );
+            $this->layers = new \Doctrine\Common\Collections\ArrayCollection(
+                $this->layers->toArray()
+            );
+
+            $this->title = null;
+            $this->views = 0;
+        }
     }
     
     /**
@@ -774,5 +799,27 @@ class Project
     public function getFavorites()
     {
         return $this->favorites;
+    }
+
+    /**
+     * Set publicId
+     *
+     * @param string $publicId
+     * @return self
+     */
+    public function setPublicId($publicId)
+    {
+        $this->publicId = $publicId;
+        return $this;
+    }
+
+    /**
+     * Get publicId
+     *
+     * @return string $publicId
+     */
+    public function getPublicId()
+    {
+        return $this->publicId;
     }
 }
