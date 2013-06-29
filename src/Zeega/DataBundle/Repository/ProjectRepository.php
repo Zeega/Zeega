@@ -197,7 +197,7 @@ class ProjectRepository extends DocumentRepository
     }
 
     public function findProjectFrameWithLayers($projectId, $frameId) {
-        $project = $this->createQueryBuilderWithId($projectId);
+        $project = $this->createQueryBuilderWithId($projectId)
             ->select('frames','layers')
             ->eagerCursor(true)
             ->getQuery()
