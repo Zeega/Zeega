@@ -20,6 +20,11 @@ class User extends BaseUser
      */
     protected $rdbmsId;
 
+    /**
+     * @MongoDB\Field(type="string", name="public_id")
+     */
+    protected $publicId;
+    
     /**     
      * @MongoDB\Field(type="string",name="display_name")
      */
@@ -568,5 +573,27 @@ class User extends BaseUser
     public function getFacebookAccessToken()
     {
         return $this->facebookAccessToken;
+    }
+
+    /**
+     * Set publicId
+     *
+     * @param string $publicId
+     * @return self
+     */
+    public function setPublicId($publicId)
+    {
+        $this->publicId = $publicId;
+        return $this;
+    }
+
+    /**
+     * Get publicId
+     *
+     * @return string $publicId
+     */
+    public function getPublicId()
+    {
+        return $this->publicId;
     }
 }

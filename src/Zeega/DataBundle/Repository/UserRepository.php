@@ -10,7 +10,7 @@ class UserRepository extends DocumentRepository
         if(strlen($id) == 24) {
             $user = parent::findOneById($id);
         } else {
-            $user = parent::findOneBy(array("publicId" => (int)$id));
+            $user = parent::findOneBy(array("public_id" => $id));
         }
 
         return $user;
