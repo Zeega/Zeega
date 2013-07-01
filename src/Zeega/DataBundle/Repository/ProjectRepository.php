@@ -197,9 +197,7 @@ class ProjectRepository extends DocumentRepository
     }
 
     public function findProjectFrameWithLayers($projectId, $frameId) {
-        $qb = $this->createQueryBuilderWithId($projectId);
-
-        $project = $qb->createQueryBuilder('ZeegaDataBundle:Project')
+        $project = $this->createQueryBuilderWithId($projectId)
             ->select('frames','layers')
             ->eagerCursor(true)
             ->getQuery()
