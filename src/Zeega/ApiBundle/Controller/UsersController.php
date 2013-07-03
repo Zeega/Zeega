@@ -228,6 +228,6 @@ class UsersController extends BaseController
             }
         }
 
-        return json_encode(array("username"=>$username, "valid"=>$valid));
+        return new Response(json_encode(array("username"=>$username, "valid"=>$valid)));
     }
  }
