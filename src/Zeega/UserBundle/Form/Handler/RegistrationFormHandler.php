@@ -23,7 +23,7 @@ class RegistrationFormHandler extends BaseHandler
     
     protected function onSuccess(UserInterface $user, $confirmation)
     {
-		$user->setUsername($user->getEmail());
+		$user->setUsername($user->getUsername());
 		$user->setLocked(false);
 		$user->setEnabled(true);
         $user->setCreatedAt(new \DateTime('now'));

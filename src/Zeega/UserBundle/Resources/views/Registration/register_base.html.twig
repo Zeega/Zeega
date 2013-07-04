@@ -53,6 +53,7 @@
                     <div class="errors">
                         {{ form_errors(form) }}
                         {{ form_errors(form.displayName) }}
+                        {{ form_errors(form.username) }}
                         {{ form_errors(form.email) }}
                         {{ form_errors(form.plainPassword) }}
                     </div>
@@ -73,7 +74,7 @@
                                 <fieldset>
                                 
                                 {{ form_widget(form.displayName, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Name'} }) }}
-
+                                {{ form_widget(form.username, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Username'} }) }}
                                 
                                 {{ form_widget(form.email, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Email'} }) }}
                                 

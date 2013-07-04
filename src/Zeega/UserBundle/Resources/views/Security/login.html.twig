@@ -57,12 +57,12 @@
             <div class="error" style="color:red">{{ error }}</div>
         {% endif %}
         
-        <br><h2 class='message'>Or Login with Email</h2>
+        <br><h2 class='message'>Or Login with Email / Username</h2>
         <form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">
           <fieldset>
             <div class="control-group"> 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-                <h4>{{ 'Email'|trans({}, 'FOSUserBundle') }}</h4>
+                <h4>Email or Username</h4>
                 
                 <div class="controls">
                     <input type="text" id="username" name="_username" value="{{ last_username }}" class="input-xlarge" style='width:100%'>
