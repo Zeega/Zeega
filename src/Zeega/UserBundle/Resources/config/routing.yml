@@ -35,3 +35,7 @@ fos_user_registration_success:
 fos_user_registration_mobile:
     pattern:  /m/register/
     defaults: { _controller:  FOSUserBundle:Registration:register }
+
+fos_user_registration_extra:
+    pattern:  /register/social
+    defaults: { _controller:  ZeegaUserBundle:Registration:registerSocial }
