@@ -39,70 +39,7 @@
   	<body> 
 		<div id="wrapper">
 	    	{% block header %}
-				{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-					<header>
-						<div class="navbar navbar-fixed-top">
-							<div class="navbar-inner">
-								<div class="container" style="width:960px;">
-									
-									<a class="brand" href="{{path('ZeegaCommunityBundle_home')}}">
-										<img src="{{ asset('images/zeega-logo-header.png') }}"/>
-									</a>
-									
-									<ul class="nav">
-										{% if is_granted('ROLE_ADMIN') %}
-											<li><a href="{{ path('sonata_admin_dashboard') }}" target="_blank">Admin Dashboard</a></li>
-											<li><a href="{{ path('ZeegaDiscoveryBundle_library') }}" target="_blank">Library</a></li><br>
-										{% endif %}
-										
-									</ul>
-									
-									<ul class="nav pull-right">
-										
-										{% if user_projects is defined %}
-										{% else %}
-										<li ><a id="user-new-project" class="btn btn-info pull-right" href="{{path('ZeegaEditorBundle_new')}}" >Create a New Zeega!</a></li>
-										<li class="divider-vertical" ></li>
-										{% endif %}
-										
-										
-										<li class="dropdown" style="float:right;">
-											<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class='icon-user icon-white'></i> {{displayname}}<b class="caret"></b></a>
-											<ul class="dropdown-menu">
 
-												<li><a href="{{ path('ZeegaCommunityBundle_dashboard')}}">My Profile</a></li>
-												<li><a href='{{ path('_security_logout')}}'>Logout</a></li>
-											</ul>
-										</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</header>		
-				{% else %}
-					<!-- Header & Nav Begins -->
-					<div class="container header new-section">
-						<div class="row">		
-							<div class="span6">
-								<a href="{{ path('ZeegaCommunityBundle_home')}}"><img src="{{ asset('images/zeega-logo.png') }}" alt="zeega-logo" width="134" height="43"></a>
-								<div class="strapline">
-								Make the web you want
-								</div>
-							</div>
-							
-							<div class="span8">
-								<div class="navigation">	
-									<div>
-										<a href="http://blog.zeega.com" target="_blank">Blog</a>
-										<a href="{{path('fos_user_registration_register')}}">Sign Up</a><a href='{{path('fos_user_security_login')}}'>Login</a>
-									</div>
-								</div>
-							</div>
-					
-						</div>				
-					</div>
-					<!-- Header & Nav Ends -->
-				{% endif %}	
 			{% endblock header %}
 
 		
