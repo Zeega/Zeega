@@ -28,9 +28,8 @@
 
 
 {% block body %}
-<form action="{{ path('api_users_put_users',{id: id}) }}" method="put" {{ form_enctype(form) }}>
+<form id="register-social" action="{{ path('fos_user_registration_extra',{id: id}) }}" method="POST" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
-
-    <input type="submit" />
+    <a href="#" onclick="document.getElementById('register-social').submit();" class="btnz btnz-submit">Do it!</a>
 </form>
 {% endblock body %}
