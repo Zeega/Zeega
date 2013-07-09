@@ -1,0 +1,5 @@
+<form action="{{ path('api_projects_put_projects',{projectId: id}) }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+
+    <input type="submit" />
+</form>
