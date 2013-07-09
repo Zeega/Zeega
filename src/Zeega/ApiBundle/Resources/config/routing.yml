@@ -110,6 +110,11 @@ api_users_post_users_validate:
     defaults: { _controller:  ZeegaApiBundle:Users:postUsersValidate, _format: json }
     methods: [POST]
 
+api_users_put_users:
+    path: /api/users/{id}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Users:putUsers, _format: json }
+    methods: [PUT]
+
 # Items API
 api_items_get_items_parser:
     path: /api/items/parser.{_format}

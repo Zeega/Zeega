@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <meta name="zeega" content="zeega-home"
+             data-directory="{{directory}}"
+        data-hostname="{{hostname}}"
+        data-api= "http:{{hostname}}{{directory}}api/"
+        data-root= "{{directory}}settings/"
+        data-profile-id="{{ profile_id }}"
+        data-media-server= "http://dev.zeega.com/kinok/"
+        data-path="{{directory}}"
+    />
+
+    <title>Zeega Settings</title>
+
+    <!-- Application styles. -->
+       {% if app.environment == 'prod' %}
+            <link rel="stylesheet" type="text/css" href="{{ asset('js/app/settings/dist/release/index.css') }}">
+        {% else %}
+            <link rel="stylesheet" type="text/css" href="{{ asset('js/app/settings/dist/debug/index.css') }}">
+        {% endif %}
+
+    <script>
+        {% if profile_data is defined  %}
+              var profileData ="{{ profile_data|e('js') }}";
+        {% endif %}
+    </script>
+
+
+
+
+</head>
+
+<body>
+
+    {% include "::header.html.twig" %}
+    
+    <!-- Main container. -->
+    <div role="main" id="main"></div>
+
+   {% if app.environment == 'prod' %}
+    <script src="{{ asset('js/app/settings/dist/release/require.js') }}" ></script>
+    {% else %}
+    <script src="{{ asset('js/app/settings/dist/debug/require.js') }}" ></script>
+    {% endif %}
+</body>
+</html>
