@@ -25,3 +25,6 @@
 [submodule "web/js/app/player.mobile_1_1"]
 	path = web/js/app/player.mobile_1_1
 	url = https://github.com/Zeega/Zeega-Mobile-Player.git
+[submodule "web/js/app/settings"]
+	path = web/js/app/settings
+	url = https://github.com/Zeega/settings.git

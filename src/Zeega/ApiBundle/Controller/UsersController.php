@@ -108,7 +108,7 @@ class UsersController extends BaseController
     public function putUsersAction($id)
     {
         $em = $this->getDoctrine();
-        $loggedUser = $this->get('security.context')->getToken()->getUser();
+        $loggedUser = $this->getUser();
         
         if(!isset($loggedUser) || $loggedUser->getId() != $id)
         {
@@ -122,7 +122,7 @@ class UsersController extends BaseController
         $locationLatitude = $this->getRequest()->request->get('location_latitude');
         $locationLongitude = $this->getRequest()->request->get('location_longitude');
         $backgroundImageUrl = $this->getRequest()->request->get('background_image_url');
-        
+ 
         $user = $em->getRepository('ZeegaDataBundle:User')->find($id);
         if(isset($bio)) $user->setBio($bio); 
         if(isset($displayName)) $user->setDisplayName($displayName);
@@ -131,7 +131,13 @@ class UsersController extends BaseController
         if(isset($locationLatitude)) $user->setLocationLatitude($locationLatitude);
         if(isset($locationLongitude)) $user->setLocationLongitude($locationLongitude);
         if(isset($backgroundImageUrl)) $user->setBackgroundImageUrl($backgroundImageUrl);
-        
+        if($this->getRequest()->request->has('username')) {
+            $user->setUsername($this->getRequest()->request->get('username'));
+        }
+        if($this->getRequest()->request->has('email')) {
+            $user->setEmail($this->getRequest()->request->get('email'));
+        }
+
         $em->persist($user);
         $em->flush();
         

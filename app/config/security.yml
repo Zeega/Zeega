@@ -42,6 +42,7 @@ security:
         - { path: ^/register$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/dashboard, role: ROLE_USER }
+        - { path: ^/settings, role: ROLE_USER }
         - { path: ^/library, role: ROLE_ADMIN }
         - { path: ^/editor/, role: ROLE_USER }
         - { path: ^/[a-zA-Z0-9]+/remix, role: ROLE_USER }
