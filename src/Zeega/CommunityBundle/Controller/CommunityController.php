@@ -61,8 +61,7 @@ class CommunityController extends BaseController
     {      
         $user = $this->get("security.context")->getToken()->getUser();
         $userId = $this->get("security.context")->getToken()->getUser()->getId();
-        // $user->setRequestExtraInfo(true); // test
-        // ask the user to provide an email address
+
         if ( $user->getRequestExtraInfo() ) {
             return $this->redirect($this->generateUrl("fos_user_registration_extra", array(), true), 301);  
         }
