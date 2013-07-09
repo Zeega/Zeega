@@ -5,6 +5,7 @@ namespace Zeega\UserBundle\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
+use Symfony\Component\HttpFoundation\Request;
 
 class RegistrationController extends BaseController
 {
@@ -47,13 +48,24 @@ class RegistrationController extends BaseController
         
     }
 
-    public function registerSocialAction()
+    public function registerSocialAction(Request $request)
     {
         $user = $this->container->get("security.context")->getToken()->getUser();
 
         $form = $this->container->get('form.factory')->createBuilder('form', $user)
             ->add('email', 'text')
+            ->add('username', 'text')
             ->getForm();
+        
+        if ($request->isMethod('PUT')) {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                // perform some action, such as saving the task to the database
+
+                return $this->redirect($this->generateUrl('task_success'));
+            }
+        }
 
         $formView = $this->container->get('templating')->render('FOSUserBundle:Registration:register_complete.html.twig', array(
             'form' => $form->createView(),
