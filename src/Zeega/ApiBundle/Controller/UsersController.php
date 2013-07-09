@@ -135,7 +135,7 @@ class UsersController extends BaseController
             $user->setUsername($this->getRequest()->request->get('username'));
         }
         if($this->getRequest()->request->has('email')) {
-            $user->setEmail$this->getRequest()->request->get('email'));
+            $user->setEmail($this->getRequest()->request->get('email'));
         }
 
         $em->persist($user);
