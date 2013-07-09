@@ -59,6 +59,8 @@ class ParserGiphyTag extends ParserAbstract
                         $item->setAttributionUri($itemJson["bitly_gif_url"]);
                         
 
+                        $title = "#" . implode( " #", $itemJson["tags"] );
+                        $item->setTitle($title);
 
 
 
