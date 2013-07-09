@@ -1,69 +1,19 @@
-{# src/Zeega/CoreBundle/Resources/views/Search/search.html.twig #}
-
-{% extends '::editor.base.html.twig' %}
-
-{% block title %}Media Library{% endblock %}
-
-
-
-
-
-
-
-
-{% block body %}
-
-<div id='zeega-editor-main'>
-		<div id='zeega-edit-column'>
-			<div id="zeega-search-wrapper" class='clearfix'>
-				<div class="btn-group" id="zeega-view-toggle">
-					<a data-goto-view='list'><button id="list-button" class="btn btn-inverse active" rel="tooltip" title="List View" style="4px 0 0 4px"><i class="icon-list icon-white"></i></button></a>
-					<a data-goto-view='thumb'><button id="thumb-button" class="btn btn-inverse" rel="tooltip" title="Thumbnail View" style="border-radius:0"><i class="icon-th-large icon-white"></i></button></a>
-				</div>
-				<div id="jda-search-button-group" style="display:none">
-					<div id="search-bar" style="margin-right:5px">
-						<div id="zeega-visual-search-container" class="pull-left"></div>
-						<span id="select-wrap">
-							<span id="select-wrap-text"  >Items</span>
-							<div class="arrow-down"></div>
-							<select id="zeega-content-type">
-								<option value="project">Zeegas</option>
-								<option value="all">Items</option>
-								<option value="Image">Image</option>
-								<option value="Video">Video</option>
-								<option value="Audio">Audio</option>
-								
-							</select>
-						</span>
-					</div>
-					<a href="#" id="go-button" class="btn btn-info btn-large">Go</a>
-				</div>
-			</div>
-		
-			<div id='zeega-results-wrapper' style="max-height:-webkit-calc(100% - 50px);">
-				<div class="results-view-wrapper" id="results-thumb-wrapper">
-					<ul id="zeega-items-thumb" class="results-wrapper" ></ul>
-				</div>
-				<div class="results-view-wrapper"  id="results-list-wrapper" >
-					<table id="zeega-items-list" class="table results-wrapper"></table>
-				</div>
-				
-			</div>
-
-		</div>
-
-	</div>
-
-    
-
-{% endblock %}
-
-
-
-
-		{% block stylesheets %}
-		
-	
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" style="height:100%">
+    <head>
+       	<link rel="icon" type="image/png" href="{{ asset('images/zeega.ico')}}">
+       	<title>{% block title %}Zeega{% endblock %}</title>
+         
+       	<meta name="robots" content="noindex,follow">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        
+         
+         
+         {% block stylesheets %}
+			
 		
 			<!-- css imports -->
 		
@@ -89,12 +39,69 @@
 				<!--[if lt IE 9]>
 				<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 			 <![endif]-->
+			
+		{% endblock %}
+		
 
-      {% endblock %}    
+        <script src="//d3nslu0hdya83q.cloudfront.net/dist/1.0/raven.min.js"></script>
+		<script type="text/javascript" src="{{ asset('js//lib/leaflet/leaflet.js')}}"></script>	
+		<script>
+                        if (!window.console) console = {log: function() {}}; 
+			sessionStorage.setItem('directory', '{{directory}}');
+			sessionStorage.setItem('hostname','{{hostname}}');
+			sessionStorage.setItem('userid','{{user_id}}');
+			
+			
 
-      {% block scripts %}
+		
+		
+		</script>
+	
+		
+    </head>
+  <body> 
 
+	<div id='zeega-editor-main'>
+			<div id='zeega-edit-column'>
+				<div id="zeega-search-wrapper" class='clearfix'>
+					<div class="btn-group" id="zeega-view-toggle">
+						<a data-goto-view='list'><button id="list-button" class="btn btn-inverse active" rel="tooltip" title="List View" style="4px 0 0 4px"><i class="icon-list icon-white"></i></button></a>
+						<a data-goto-view='thumb'><button id="thumb-button" class="btn btn-inverse" rel="tooltip" title="Thumbnail View" style="border-radius:0"><i class="icon-th-large icon-white"></i></button></a>
+					</div>
+					<div id="jda-search-button-group" style="display:none">
+						<div id="search-bar" style="margin-right:5px">
+							<div id="zeega-visual-search-container" class="pull-left"></div>
+							<span id="select-wrap">
+								<span id="select-wrap-text"  >Items</span>
+								<div class="arrow-down"></div>
+								<select id="zeega-content-type">
+									<option value="project">Zeegas</option>
+									<option value="all">Items</option>
+									<option value="Image">Image</option>
+									<option value="Video">Video</option>
+									<option value="Audio">Audio</option>
+									
+								</select>
+							</span>
+						</div>
+						<a href="#" id="go-button" class="btn btn-info btn-large">Go</a>
+					</div>
+				</div>
+			
+				<div id='zeega-results-wrapper' style="max-height:-webkit-calc(100% - 50px);">
+					<div class="results-view-wrapper" id="results-thumb-wrapper">
+						<ul id="zeega-items-thumb" class="results-wrapper" ></ul>
+					</div>
+					<div class="results-view-wrapper"  id="results-list-wrapper" >
+						<table id="zeega-items-list" class="table results-wrapper"></table>
+					</div>
+					
+				</div>
 
+			</div>
+
+		</div>
+  
 			<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 			<script type="text/javascript" src="{{ asset('js//lib/leaflet/leaflet.js')}}"></script>
    			<script type="text/javascript" src="http://s3.documentcloud.org/viewer/loader.js"></script>
@@ -106,5 +113,7 @@
 				<!-- to load single aggregated JS library --> 
 				<script src="{{ asset('js/lib/require-jquery.js') }}" data-main="{{ asset('js_min/discovery.js') }}"></script>
 			{% endif %}
-
-		{% endblock %}
+		
+         
+    </body>
+</html>
