@@ -70,6 +70,7 @@ class SocialProvider extends BaseClass
             $user->setPassword('');
             $user->setEnabled(true);
             $user->setDisplayName($realName);
+            $user->setRequestExtraInfo(true);
 
             if ( isset($paths["email"]) ) {
                 $email = $paths["email"];
