@@ -3,6 +3,7 @@
 namespace Zeega\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
 
 class RegistrationController extends BaseController
@@ -19,7 +20,7 @@ class RegistrationController extends BaseController
             $user = $form->getData();
             $user->setConfirmationToken(null);
             $user->setEnabled(true);
-            $user->setLastLogin(new \DateTime());
+            $user->setRequestExtraInfo(true);
             $this->container->get('fos_user.user_manager')->updateUser($user);
             $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
             $response = new RedirectResponse($this->container->get('router')->generate('ZeegaCommunityBundle_dashboard'));
@@ -44,5 +45,21 @@ class RegistrationController extends BaseController
             ));
         }
         
+    }
+
+    public function registerSocialAction()
+    {
+        $user = $this->container->get("security.context")->getToken()->getUser();
+
+        $form = $this->container->get('form.factory')->createBuilder('form', $user)
+            ->add('email', 'text')
+            ->getForm();
+
+        $formView = $this->container->get('templating')->render('FOSUserBundle:Registration:register_complete.html.twig', array(
+            'form' => $form->createView(),
+            'id' => $user->getId()
+        ));
+
+        return new Response($formView);
     }
 }
