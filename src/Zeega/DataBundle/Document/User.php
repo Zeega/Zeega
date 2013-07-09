@@ -110,6 +110,11 @@ class User extends BaseUser
      */
     protected $favorites;
 
+    /**     
+     * @MongoDB\Field(type="boolean",name="request_extra_info")
+     */
+    protected $requestExtraInfo;
+
     public function __construct()
     {
         parent::__construct();
@@ -595,5 +600,27 @@ class User extends BaseUser
     public function getPublicId()
     {
         return $this->publicId;
+    }
+
+    /**
+     * Set requestExtraInfo
+     *
+     * @param boolean $requestExtraInfo
+     * @return self
+     */
+    public function setRequestExtraInfo($requestExtraInfo)
+    {
+        $this->requestExtraInfo = $requestExtraInfo;
+        return $this;
+    }
+
+    /**
+     * Get requestExtraInfo
+     *
+     * @return boolean $requestExtraInfo
+     */
+    public function getRequestExtraInfo()
+    {
+        return $this->requestExtraInfo;
     }
 }
