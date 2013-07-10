@@ -216,9 +216,10 @@ class UsersController extends BaseController
 
     public function postUsersValidateAction() {
         $valid = false;
+        $message = "";
 
         if ( $this->getRequest()->request->has("username") ) {
-            $username = $this->getRequest()->request->get("username");
+            $username = strtolower($this->getRequest()->request->get("username"));
             $user =  $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findOneByUsername($username);
 
             if ( !isset($user) ) {
@@ -229,11 +230,26 @@ class UsersController extends BaseController
                 if ( isset($loggedUser) ) {
                     if ( $user->getId() == $loggedUser->getId() ) {
                         $valid = true;
+                    } else {
+                        $message = "This username is already taken.";
                     }
                 }
             }
-        }
 
-        return new Response(json_encode(array("username"=>$username, "valid"=>$valid)));
+            $forbiddenWords = array("zeega", "admin");
+            foreach($forbiddenWords as $word) {
+                if (strpos($username, $word) !== FALSE) {
+                    $message = "The username cannot contain the words zeega or admin.";
+                    $valid = false;
+                    break;
+                }
+            }
+
+            if (is_numeric($username)) {
+                $message = "The username needs to include at least one letter.";
+                $valid = false;
+            }
+        }
+        return new Response(json_encode(array("username"=>$username, "valid"=>$valid, "message"=>$message)));
     }
  }
