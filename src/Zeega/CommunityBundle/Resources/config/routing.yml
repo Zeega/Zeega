@@ -10,9 +10,9 @@ ZeegaCommunityBundle_user_id:
     pattern:  /profile/{id}
     defaults: { _controller: ZeegaCommunityBundle:Community:user }
 
-ZeegaCommunityBundle_user:
-    pattern:  /@{id}
-    defaults: { _controller: ZeegaCommunityBundle:Community:user }
+ZeegaCommunityBundle_profile:
+    pattern:  /@{username}
+    defaults: { _controller: ZeegaCommunityBundle:Community:profile }
 
 ZeegaCommunityBundle_dashboard:
     pattern:  /dashboard

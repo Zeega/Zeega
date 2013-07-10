@@ -44,36 +44,51 @@ class CommunityController extends BaseController
         }
 
 
-        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=> $tag, "local_path"=>"tag/".$tag, "feed_data"=>$projects ));
+        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=> $tag, "feed_data"=>$projects ));
     }
     
-    public function userAction($id)
+    public function userAction( $id )
+    {
+        $user = $this->getDoctrine()->getRepository("ZeegaDataBundle:User")->findOneById( $id );
+
+        if(!isset($user)){
+            return $this->redirect($this->generateUrl('ZeegaCommunityBundle_home'), 301);  
+        }
+        $username = $user->getUsername();
+
+        return $this->redirect($this->generateUrl('ZeegaCommunityBundle_profile', array("username" => $username)), 301);
+
+    }
+
+
+    public function profileAction( $username )
     {
         $loggedUser = $this->getUser();
+        $user = $this->getDoctrine()->getRepository("ZeegaDataBundle:User")->findOneByUsername( $username );
+        
+        if(!isset($user)){
+            return $this->redirect($this->generateUrl('ZeegaCommunityBundle_home'), 301);  
+        }
+
+        $id = $user->getId();
+
         $projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id, "limit"=>10))->getContent();
         $profile = $this->forward('ZeegaApiBundle:Users:getUser', array("id" => $id))->getContent();
         
-        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("profile_id"=> $id, "local_path"=>"profile/".$id, "feed_data"=>$projects, "profile_data"=>$profile ));
+        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("profile_id"=> $id, "feed_data"=>$projects, "profile_data"=>$profile ));
        
     }
     
     public function dashboardAction()
     {      
         $user = $this->get("security.context")->getToken()->getUser();
-        $userId = $this->get("security.context")->getToken()->getUser()->getId();
+        $username = $user->getUsername();
 
         if ( $user->getRequestExtraInfo() ) {
             return $this->redirect($this->generateUrl("fos_user_registration_extra", array(), true), 301);  
         }
 
-        // this should go - it's here mainly for demos
-        $projectsCount = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findProjectsCountByUser( $userId );
-
-        if( $projectsCount == 0 ){
-            return $this->redirect($this->generateUrl("ZeegaEditorBundle_new", array(), true), 301);  
-        } else {
-           return $this->redirect($this->generateUrl("ZeegaCommunityBundle_user",array("id"=>$userId),true), 301);   
-        }        
+        return $this->redirect($this->generateUrl("ZeegaCommunityBundle_profile",array("username"=>$username),true), 301);        
     }
     
     public function privacyAction()
