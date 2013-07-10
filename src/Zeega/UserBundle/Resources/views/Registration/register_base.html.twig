@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7 page-register"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8 page-register"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9 page-register"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js page-register"> <!--<![endif]-->
     <head>
 
 
@@ -22,8 +22,21 @@
             user-scalable=0"
         />
 
+        <meta name="zeega" content="zeega-home"
+             data-directory="{{directory}}"
+            data-hostname="{{hostname}}"
+            data-api= "http:{{hostname}}{{directory}}api/"
+            data-root= "{{directory}}"
+            data-path="{{directory}}"
+        />
+
         <link rel="shortcut icon" type="image/x-icon" href="/images/zeega.ico"> 
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.register.css')}}">
+        
+        {% if app.environment == 'prod' %}
+            <link rel="stylesheet" type="text/css" href="{{ asset('js/app/settings/dist/release/index.css') }}">
+        {% else %}
+            <link rel="stylesheet" type="text/css" href="{{ asset('js/app/settings/dist/debug/index.css') }}">
+        {% endif %}
 
         {% block style %}
         {% endblock %}
@@ -31,13 +44,7 @@
         {% include "FOSUserBundle:Shared:facebook.html.twig" %}
         
         {% include "::analytics.html.twig" %}
-        <script>
-            document.body.addEventListener("keydown", function(event){
-                if(event.keyCode == 13 ){
-                    document.getElementById('register').submit(); 
-                }
-            });
-        </script>
+       
     </head>
     <body>
 
@@ -75,11 +82,11 @@
                                 
                                 {{ form_widget(form.displayName, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Name'} }) }}
                                 {{ form_widget(form.username, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Username'} }) }}
-                                
+                                 <span class="help-block"><span class="username-validation"></span>http://zeega.com/@<span class="username-preview">jbergen</span> - Letters and numbers only! </span>
                                 {{ form_widget(form.email, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Email'} }) }}
-                                
-                                
+
                                 {{ form_widget(form.plainPassword, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Create a Password'} }) }}
+                                
                                 <br>
                                 <a href="#" onclick="document.getElementById('register').submit();" class="btnz btnz-submit">Do it!</a>
                                 <p class="fine-print">by creating an account, you are agreeing to abide by our <a href="http://blog.zeega.com/terms">terms of service</a></p>
@@ -95,6 +102,11 @@
             </div>
         </div>
 
+       {% if app.environment == 'prod' %}
+        <script src="{{ asset('js/app/settings/dist/release/require.js') }}" ></script>
+        {% else %}
+        <script src="{{ asset('js/app/settings/dist/debug/require.js') }}" ></script>
+        {% endif %}
         
     </body>
 </html>

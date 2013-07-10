@@ -11,8 +11,6 @@
         data-hostname="{{hostname}}"
         data-api= "http:{{hostname}}{{directory}}api/"
         data-root= "{{directory}}"
-
-        data-media-server= "http://dev.zeega.com/kinok/"
         data-path="{{directory}}"
     />
     <link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
@@ -29,7 +27,7 @@
          <header class="ZEEGA-HEAD">
             <ul class="head-nav nav-left">
                 <li class="tab">
-                    <a href="http://www.zeega.com" class="ZEEGA-tab">
+                    <a href="http:{{hostname}}{{directory}}" class="ZEEGA-tab">
                         <span class="ZTab-logo"></span>
                     </a>
                 </li>
@@ -48,7 +46,7 @@
                 <div>
                     {{ form_label(form.username, 'Username', { 'attr': {'class': 'required'}}) }}
                     {{ form_widget(form.username, {'attr': {'class': 'required'}}) }}
-                    <span class="help-block">http://zeega.com/@<span class="username-preview">jbergen</span> — Letters and numbers only!</span>
+                    <span class="help-block">http://zeega.com/@<span class="username-preview"></span> — Letters and numbers only!</span>
                 </div>
 
                 <input type="submit" class="submit" />
