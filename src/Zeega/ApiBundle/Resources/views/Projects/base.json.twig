@@ -55,7 +55,7 @@
 ,"frames" : [
     {% for frame in project.getFrames %}
     {   
-        "id" : {{ frame.id | json_encode | raw}},
+        "id" : {{ frame.getId | json_encode | raw}},
         "attr" : {{ frame.attr | default({}) | json_encode | raw}},
         "thumbnail_url" : {{ frame.thumbnailUrl | default("") | json_encode | raw}},
         "controllable": {{frame.controllable | default(true) | json_encode | raw}},

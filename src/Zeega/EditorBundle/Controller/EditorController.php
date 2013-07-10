@@ -10,19 +10,22 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EditorController extends BaseController
 {    
-    public function newProjectAction()
+    public function newProjectAction( $newUser = false )
     {  
         
         $this->getRequest()->request->set('version', 1.2);
 
         $projectId = $this->forward('ZeegaApiBundle:Projects:postProject')->getContent();
-
-        return $this->redirect($this->generateUrl('ZeegaEditorBundle_editor',array('id'=>$projectId)), 301);          
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm->clear();
+        
+        return $this->forward('ZeegaEditorBundle:Editor:editor',array('id'=>$projectId, 'newUser' => $newUser ));
     }
     
-    public function editorAction($id)
+    public function editorAction( $id, $newUser = false )
     {   
 
+        //return new Response ( $id . " -- " . $new . " -- " . $newUser);
         $user = $this->get('security.context')->getToken()->getUser();
         
         $dm = $this->get('doctrine_mongodb')->getManager();
@@ -36,14 +39,7 @@ class EditorController extends BaseController
              422 );
         }
 
-        $this->authorize( $project->getUser()->getId() );       
-        $userProjectsCount = $this->getDoctrine()->getRepository("ZeegaDataBundle:Project")->findProjectsCountByUser( $user->getId() );
-        
-        if ( $userProjectsCount == 1  && !$project->getPublished() ) {
-            $newUser = true;
-        } else {
-            $newUser = false;
-        }
+        $this->authorize( $project->getUser()->getId() );
 
         $editable = $project->getEditable();
 
@@ -52,10 +48,10 @@ class EditorController extends BaseController
         if ( $editable === true ) {
             $projectOwners = $project->getUser();       
             $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
-        
             if( $project->getVersion() == 1.2 ) {
                 return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
                     'project'   =>$project,
+                    'user' => $user,
                     'project_data' => $projectData,
                     'new_user' => $newUser
                 ));

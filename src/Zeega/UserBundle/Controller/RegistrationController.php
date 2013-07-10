@@ -7,9 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\UserBundle\Controller\RegistrationController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Zeega\UserBundle\Form\Type\RegistrationSocialFormType;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RegistrationController extends BaseController
 {
+
     public function registerAction()
     {
         $form = $this->container->get('fos_user.registration.form');
@@ -63,8 +65,11 @@ class RegistrationController extends BaseController
             $user->setUsername($username);
             $user->setEmail($email);
             $this->container->get('fos_user.user_manager')->updateUser($user);
-            
-            return new RedirectResponse($this->container->get('router')->generate('ZeegaCommunityBundle_dashboard'));
+
+            $path = array('_controller'=> 'ZeegaEditorBundle:Editor:newProject', 'newUser' => true );
+            $subRequest = $this->container->get('request')->duplicate( null, null, $path);
+
+            return $this->container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
 
         $formView = $this->container->get('templating')->render('FOSUserBundle:Registration:register_complete.html.twig', array(

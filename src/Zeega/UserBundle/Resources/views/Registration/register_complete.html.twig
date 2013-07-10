@@ -41,8 +41,17 @@
 
             <div class="inner-wrapper">
             <form id="register-social" action="{{ path('fos_user_registration_extra',{id: id}) }}" method="POST" {{ form_enctype(form) }}>
-                {{ form_widget(form) }}
-                <a href="#" onclick="document.getElementById('register-social').submit();" class="btnz btnz-submit">Go!</a>
+                <div>
+                    {{ form_label(form.email,'Email', { 'attr': {'class': 'required'}}) }}
+                    {{ form_widget(form.email, { 'attr': {'class': 'required'}}) }}
+                </div>
+                <div>
+                    {{ form_label(form.username, 'Username', { 'attr': {'class': 'required'}}) }}
+                    {{ form_widget(form.username, {'attr': {'class': 'required'}}) }}
+                    <span class="help-block">http://zeega.com/@<span class="username-preview">jbergen</span> — Letters and numbers only!</span>
+                </div>
+
+                <input type="submit" class="submit" />
             </form>
 
         </div>
