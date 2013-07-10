@@ -74,7 +74,11 @@ class RegistrationController extends BaseController
             $path = array('_controller'=> 'ZeegaEditorBundle:Editor:newProject', 'newUser' => true );
             $subRequest = $this->container->get('request')->duplicate( null, null, $path);
 
-            return $this->container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+
+            //return $this->redirect($this->generateUrl('ZeegaEditorBundle_new', array( "firstTime"  => true ) ), 301);
+            return new RedirectResponse($this->container->get('router')->generate('ZeegaEditorBundle_new', array( "firstTime"  => true )));
+
+                // return $this->container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
         }
 
         $formView = $this->container->get('templating')->render('FOSUserBundle:Registration:register_complete.html.twig', array(

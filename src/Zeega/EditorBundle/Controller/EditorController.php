@@ -10,16 +10,24 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EditorController extends BaseController
 {    
-    public function newProjectAction( $newUser = false )
+    public function newProjectAction()
     {  
         
+        $firstTime = $this->getRequest()->query->get("firstTime");
+
+        if(!isset($firstTime)){
+            $firstTime = false;
+        } else {
+            $firstTime = true;
+        }
+
         $this->getRequest()->request->set('version', 1.2);
 
         $projectId = $this->forward('ZeegaApiBundle:Projects:postProject')->getContent();
         $dm = $this->get('doctrine_mongodb')->getManager();
         $dm->clear();
         
-        return $this->forward('ZeegaEditorBundle:Editor:editor',array('id'=>$projectId, 'newUser' => $newUser ));
+        return $this->forward('ZeegaEditorBundle:Editor:editor',array('id'=>$projectId, 'newUser' => $firstTime ));
     }
     
     public function editorAction( $id, $newUser = false )
