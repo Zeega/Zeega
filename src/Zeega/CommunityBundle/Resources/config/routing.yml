@@ -6,8 +6,12 @@ ZeegaCommunityBundle_tag:
     pattern:  /tag/{tag}
     defaults: { _controller: ZeegaCommunityBundle:Community:tag }
 
-ZeegaCommunityBundle_user:
+ZeegaCommunityBundle_user_id:
     pattern:  /profile/{id}
+    defaults: { _controller: ZeegaCommunityBundle:Community:user }
+
+ZeegaCommunityBundle_user:
+    pattern:  /@{id}
     defaults: { _controller: ZeegaCommunityBundle:Community:user }
 
 ZeegaCommunityBundle_dashboard:
