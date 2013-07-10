@@ -25,6 +25,7 @@ class UserAdmin extends Admin
 			->add('bio')
 			->add('thumbUrl')
 			->add('email')
+            ->add('enabled')
 			->add('email')
 			->add('roles', 'choice', array('choices' => $roles,'multiple' => true))
         ;
@@ -53,6 +54,7 @@ class UserAdmin extends Admin
             ->addIdentifier('username')
 			->add('displayName')
 			->add('email')
+            ->add('enabled')
             ->add('created_at','datetime')
 			->add('lastLogin')
 			->add('locked')
