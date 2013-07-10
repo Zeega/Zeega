@@ -131,20 +131,15 @@ class UsersController extends BaseController
         if(isset($locationLatitude)) $user->setLocationLatitude($locationLatitude);
         if(isset($locationLongitude)) $user->setLocationLongitude($locationLongitude);
         if(isset($backgroundImageUrl)) $user->setBackgroundImageUrl($backgroundImageUrl);
-        
         if($this->getRequest()->request->has('username')) {
             $user->setUsername($this->getRequest()->request->get('username'));
         }
-
         if($this->getRequest()->request->has('email')) {
             $user->setEmail($this->getRequest()->request->get('email'));
         }
 
-        if($this->getRequest()->request->has('password')) {
-            $user->setPlainPassword($this->getRequest()->request->get('password'));
-        }
-
-        $this->container->get('fos_user.user_manager')->updateUser($user);
+        $em->persist($user);
+        $em->flush();
         
         $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => 'true'));
         
@@ -219,12 +214,12 @@ class UsersController extends BaseController
         
     }
 
-    public function postUsersValidateAction() {
+    public function getUsersValidateAction($username) {
         $valid = false;
         $message = "";
 
-        if ( $this->getRequest()->request->has("username") ) {
-            $username = strtolower($this->getRequest()->request->get("username"));
+        if ( isset($username) ) {
+            $username = strtolower($username);
             $user =  $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findOneByUsername($username);
 
             if ( !isset($user) ) {

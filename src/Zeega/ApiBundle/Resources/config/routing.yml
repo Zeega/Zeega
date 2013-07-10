@@ -106,9 +106,9 @@ api_users_post_user_profileimage:
     methods: [POST]
 
 api_users_post_users_validate:
-    path: /api/users/validate.{_format}
-    defaults: { _controller:  ZeegaApiBundle:Users:postUsersValidate, _format: json }
-    methods: [POST]
+    path: /api/users/validate/{username}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Users:getUsersValidate, _format: json }
+    methods: [GET]
 
 api_users_put_users:
     path: /api/users/{id}.{_format}
