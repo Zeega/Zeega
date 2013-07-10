@@ -25,7 +25,7 @@ class UserAdmin extends Admin
 			->add('bio')
 			->add('thumbUrl')
 			->add('email')
-            ->add('enabled')
+            ->add('enabled', 'checkbox', array('required'=>false))
 			->add('email')
 			->add('roles', 'choice', array('choices' => $roles,'multiple' => true))
         ;
