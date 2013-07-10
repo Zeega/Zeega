@@ -1,35 +1,58 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
 
-{% block head %}
     <title>Zeega</title>
+    <meta name="zeega" content="zeega-home"
+             data-directory="{{directory}}"
+        data-hostname="{{hostname}}"
+        data-api= "http:{{hostname}}{{directory}}api/"
+        data-root= "{{directory}}"
+
+        data-media-server= "http://dev.zeega.com/kinok/"
+        data-path="{{directory}}"
+    />
     <link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
     
-    <style type="text/css">
-        html { 
-            background: url({{asset("images/graphpaper.png")}});
-
-        }    
-    </style>
-    
-
-    <!-- Less - LOAD variables.less FIRST and then other stuff and then style.less at the end -->
-    {% if app.environment == 'dev' %}
-        <link rel="stylesheet/less" type="text/css" href="{{ asset('css/less/community/bootstrap.less')}}">
-        <script type="text/javascript" src="{{ asset('js//lib/less-1.3.0.min.js')}}"></script>
-        <script> /* Provisory for dev environment: */ localStorage.clear(); </script>
+        <!-- Application styles. -->
+    {% if app.environment == 'prod' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/settings/dist/release/index.css') }}">
     {% else %}
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/zeega.community.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('js/app/settings/dist/debug/index.css') }}">
     {% endif %}
 
-    <link href='https://fonts.googleapis.com/css?family=Podkova:400,700' rel='stylesheet' type='text/css'> <!-- Including Google's Font -->
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
-    {% include 'ZeegaUserBundle:Shared:facebook.html.twig' %}
-{% endblock head%}
+    <body class="social-registration"> 
+        
+         <header class="ZEEGA-HEAD">
+            <ul class="head-nav nav-left">
+                <li class="tab">
+                    <a href="http://www.zeega.com" class="ZEEGA-tab">
+                        <span class="ZTab-logo"></span>
+                    </a>
+                </li>
+            </ul>
+        </header>
+        <div class="wrapper">
+
+            <h1>Almost there!</h1>
+
+            <div class="inner-wrapper">
+            <form id="register-social" action="{{ path('fos_user_registration_extra',{id: id}) }}" method="POST" {{ form_enctype(form) }}>
+                {{ form_widget(form) }}
+                <a href="#" onclick="document.getElementById('register-social').submit();" class="btnz btnz-submit">Go!</a>
+            </form>
+
+        </div>
 
 
-{% block body %}
-<form id="register-social" action="{{ path('fos_user_registration_extra',{id: id}) }}" method="POST" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <a href="#" onclick="document.getElementById('register-social').submit();" class="btnz btnz-submit">Do it!</a>
-</form>
-{% endblock body %}
+        
+       {% if app.environment == 'prod' %}
+        <script src="{{ asset('js/app/settings/dist/release/require.js') }}" ></script>
+        {% else %}
+        <script src="{{ asset('js/app/settings/dist/debug/require.js') }}" ></script>
+        {% endif %}
+    </body>
+</html>
