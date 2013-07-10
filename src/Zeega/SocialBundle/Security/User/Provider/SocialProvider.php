@@ -66,7 +66,6 @@ class SocialProvider extends BaseClass
             $user = $this->userManager->createUser();
             $user->$setter_id($username);
             $user->$setter_token($accessToken);            
-            $user->setUsername($username);
             $user->setPassword('');
             $user->setEnabled(true);
             $user->setDisplayName($realName);
