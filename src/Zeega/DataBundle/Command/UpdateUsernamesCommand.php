@@ -69,7 +69,7 @@ class UpdateUsernamesCommand extends ContainerAwareCommand
                 }
             }
             
-            if ( !isset($username) || empty($username) || $duplicate) {
+            if ( !isset($username) || empty($username) || $duplicate || strlen($username) < 4) {
                 if (isset($rdbmsId)) {
                     $username = "user$rdbmsId";
                 } else {
