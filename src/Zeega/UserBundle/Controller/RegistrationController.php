@@ -28,11 +28,7 @@ class RegistrationController extends BaseController
             $this->container->get('fos_user.user_manager')->updateUser($user);
             $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
             
-            $path = array('_controller'=> 'ZeegaEditorBundle:Editor:newProject', 'newUser' => true );
-            $subRequest = $this->container->get('request')->duplicate( null, null, $path);
-
-            $response = $this->container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
-
+            $response = new RedirectResponse($this->container->get('router')->generate('ZeegaCommunityBundle_dashboard', array("firstTime"=>true)));
             $this->authenticateUser($user, $response);
 
             return $response;
@@ -71,14 +67,8 @@ class RegistrationController extends BaseController
             $user->setEmail($email);
             $this->container->get('fos_user.user_manager')->updateUser($user);
 
-            $path = array('_controller'=> 'ZeegaEditorBundle:Editor:newProject', 'newUser' => true );
-            $subRequest = $this->container->get('request')->duplicate( null, null, $path);
-
-
-            //return $this->redirect($this->generateUrl('ZeegaEditorBundle_new', array( "firstTime"  => true ) ), 301);
-            return new RedirectResponse($this->container->get('router')->generate('ZeegaEditorBundle_new', array( "firstTime"  => true )));
-
-                // return $this->container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+            return new RedirectResponse($this->container->get('router')->generate('ZeegaCommunityBundle_dashboard', array("firstTime"=>true)));
+           
         }
 
         $formView = $this->container->get('templating')->render('FOSUserBundle:Registration:register_complete.html.twig', array(

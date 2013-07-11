@@ -80,12 +80,17 @@ class CommunityController extends BaseController
     }
     
     public function dashboardAction()
-    {      
+    {    
+
+        $firstTime = $this->getRequest()->query->get("firstTime");
+
         $user = $this->get("security.context")->getToken()->getUser();
         $username = $user->getUsername();
 
         if ( $user->getRequestExtraInfo() ) {
             return $this->redirect($this->generateUrl("fos_user_registration_extra", array(), true), 301);  
+        } else if ( isset($firstTime) ){
+            return $this->redirect($this->generateUrl("ZeegaEditorBundle_new", array("firstTime"=>true), true), 301); 
         }
 
         return $this->redirect($this->generateUrl("ZeegaCommunityBundle_profile",array("username"=>$username),true), 301);        

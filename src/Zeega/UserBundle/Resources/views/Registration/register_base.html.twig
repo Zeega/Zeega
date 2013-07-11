@@ -79,10 +79,10 @@
                             {% endif %}
                             
                                 <fieldset>
-                                
-                                {{ form_widget(form.displayName, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Name'} }) }}
+                                  <span class="help-block"><span class="username-validation"></span>http://zeega.com/@<span class="username-preview">jbergen</span> - Letters and numbers only! </span>
+                               
                                 {{ form_widget(form.username, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Username'} }) }}
-                                 <span class="help-block"><span class="username-validation"></span>http://zeega.com/@<span class="username-preview">jbergen</span> - Letters and numbers only! </span>
+                                {{ form_widget(form.displayName, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Name'} }) }}
                                 {{ form_widget(form.email, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Your Email'} }) }}
 
                                 {{ form_widget(form.plainPassword, { 'attr': {'class': 'input-xlarge-custom', 'placeholder':'Create a Password'} }) }}
