@@ -13,7 +13,7 @@
         data-root= "{{directory}}"
         data-path="{{directory}}"
     />
-    <link rel="shortcut icon" type="image/x-icon" href="http://zeega.org/images/zeega.ico"> 
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/zeega.ico') }}"> 
     
         <!-- Application styles. -->
     {% if app.environment == 'prod' %}
@@ -40,16 +40,15 @@
             <div class="inner-wrapper">
             <form id="register-social" action="{{ path('fos_user_registration_extra',{id: id}) }}" method="POST" {{ form_enctype(form) }}>
                 <div>
+                    {{ form_label(form.username, 'Choose a username', { 'attr': {'class': 'required'}}) }}
+                    {{ form_widget(form.username, {'attr': {'class': 'required'}}) }}
+                    <span class="help-block">Your new Zeega home: http://zeega.com/@<span class="username-preview"></span></span>
+                </div>
+                <div>
                     {{ form_label(form.email,'Email', { 'attr': {'class': 'required'}}) }}
                     {{ form_widget(form.email, { 'attr': {'class': 'required'}}) }}
                 </div>
-                <div>
-                    {{ form_label(form.username, 'Username', { 'attr': {'class': 'required'}}) }}
-                    {{ form_widget(form.username, {'attr': {'class': 'required'}}) }}
-                    <span class="help-block">http://zeega.com/@<span class="username-preview"></span> — Letters and numbers only!</span>
-                </div>
-
-                <input type="submit" class="submit" />
+                <input type="submit" class="submit" value="Do it!" />
             </form>
 
         </div>

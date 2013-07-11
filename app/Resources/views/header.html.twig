@@ -4,12 +4,12 @@
         <!-- logged in nav -->
         <ul class="head-nav nav-left">
             <li class="tab">
-                <a href="http://{{hostname}}{{directory}}" class="ZEEGA-tab">
+                <a href="{{ path('ZeegaCommunityBundle_home') }}" class="ZEEGA-tab">
                     <span class="ZTab-logo"></span>
                 </a>
             </li>
             <li>
-                <a  href="http://{{hostname}}{{directory}}profile/{{user_id}}" class="logged-in-user" data-bypass="true" >
+                <a  href="{{ path('ZeegaCommunityBundle_dashboard') }}" class="logged-in-user" data-bypass="true" >
                     <span class="profile-token" style="
                         background-image:url({{profile_thumb}});
                         background-size: cover;
@@ -17,17 +17,17 @@
                 </a>
             </li>
             <li>
-                <a class="btnz login" href="http://dev.zeega.com/jmongo/web/logout">Logout</a>
+                <a class="btnz login" href="{{ path('_security_logout') }}">Logout</a>
             </li>
         </ul>
 
         <ul class="head-nav nav-right">
             <li>
-                <a class="btnz create-a-zeega" href="http://www.zeega.com/project/new" > Create A New Zeega</a>
+                <a class="btnz create-a-zeega" href="{{ path('ZeegaEditorBundle_new') }}" > Create A New Zeega</a>
             </li>
         </ul>
         <!--end logged in nav -->
         {% else %}
-        	<!-- <a class="btnz login" href="http://dev.zeega.com/jmongo/web/login">Login</a> -->
+        	<!-- <a class="btnz login" href="{{ path('fos_user_security_login') }}">Login</a> -->
         {% endif %}
     </header>
