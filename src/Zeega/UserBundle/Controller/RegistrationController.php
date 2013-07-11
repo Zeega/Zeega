@@ -54,6 +54,10 @@ class RegistrationController extends BaseController
 
     public function registerSocialAction(Request $request)
     {
+        if ( !$user->getRequestExtraInfo() ) {
+            return new RedirectResponse($this->container->get('router')->generate('ZeegaCommunityBundle_home'));
+        }
+
         $user = $this->container->get("security.context")->getToken()->getUser();
         $form = $this->container->get('form.factory')->create(new RegistrationSocialFormType(), $user);
         
@@ -68,7 +72,6 @@ class RegistrationController extends BaseController
             $this->container->get('fos_user.user_manager')->updateUser($user);
 
             return new RedirectResponse($this->container->get('router')->generate('ZeegaCommunityBundle_dashboard', array("firstTime"=>true)));
-           
         }
 
         $formView = $this->container->get('templating')->render('FOSUserBundle:Registration:register_complete.html.twig', array(

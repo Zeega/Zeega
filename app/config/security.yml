@@ -40,6 +40,8 @@ security:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
         - { path: ^/register$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
+        - { path: ^/register/social$,role: ROLE_USER, requires_channel: https}
+        - { path: ^/settings$, role: ROLE_USER, requires_channel: https}
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/dashboard, role: ROLE_USER }
         - { path: ^/settings, role: ROLE_USER }
