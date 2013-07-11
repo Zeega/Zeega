@@ -131,16 +131,21 @@ class UsersController extends BaseController
         if(isset($locationLatitude)) $user->setLocationLatitude($locationLatitude);
         if(isset($locationLongitude)) $user->setLocationLongitude($locationLongitude);
         if(isset($backgroundImageUrl)) $user->setBackgroundImageUrl($backgroundImageUrl);
+        
         if($this->getRequest()->request->has('username')) {
             $user->setUsername($this->getRequest()->request->get('username'));
         }
+
         if($this->getRequest()->request->has('email')) {
             $user->setEmail($this->getRequest()->request->get('email'));
         }
 
-        $em->persist($user);
-        $em->flush();
-        
+        if($this->getRequest()->request->has('password')) {
+            $user->setPlainPassword($this->getRequest()->request->get('password'));
+        }
+
+        $this->container->get('fos_user.user_manager')->updateUser($user);
+
         $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => 'true'));
         
         return ResponseHelper::compressTwigAndGetJsonResponse($userView);
