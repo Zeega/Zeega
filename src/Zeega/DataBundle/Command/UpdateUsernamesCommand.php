@@ -61,7 +61,7 @@ class UpdateUsernamesCommand extends ContainerAwareCommand
             $username = strtolower($username);
             $username = preg_replace("/[^A-Za-z0-9]/", '', $username);
 
-            if ( isset($username) && empty($username) ) {
+            if ( isset($username) && !empty($username) ) {
                 $dbUser = $dm->getRepository('ZeegaDataBundle:User')->findOneByUsername($username);
 
                 if (isset($dbUser)) {
