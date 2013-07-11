@@ -3,7 +3,9 @@
 	"id" : {{ user.getId | json_encode | raw }},
 	"bio" : {{ user.getBio | default("") | json_encode | raw}},
 	"display_name" : {{ user.getDisplayName | json_encode | raw}},
+	{% if app.user and app.user.getId == user.getId %}
 	"email" : {{ user.email | default("") | json_encode | raw}},
+	{% endif %}
 	"username" : {{ user.username | default("") | json_encode | raw}},
 	"thumbnail_url" : {{ user.getThumbUrl | default("https://s3.amazonaws.com/zeegastatic/default_profile.jpeg") | json_encode | raw}},
 	"location" : {{ user.getLocation | json_encode | raw}},

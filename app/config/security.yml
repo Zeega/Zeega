@@ -5,6 +5,7 @@ security:
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN]
+        ANY_ROLE: [IS_AUTHENTICATED_ANONYMOUSLY]
 
     providers:
         fos_userbundle:
@@ -37,7 +38,7 @@ security:
             anonymous: true     # default is to allow anonymous access to everything
 
     access_control:
-        - { path: ^/api/users/, role: ROLE_USER, requires_channel: https }
+        - { path: ^/api/users/, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
         - { path: ^/register$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https}
