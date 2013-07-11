@@ -49,6 +49,7 @@ class UpdateUsernamesCommand extends ContainerAwareCommand
         $users = $dm->getRepository('ZeegaDataBundle:User')->findAll();
         $count = 10000;
         foreach($users as $user) {
+            $displayName = $user->getDisplayName();
             $username = $user->getDisplayName();
             $rdbmsId = $user->getRdbmsId();
             $duplicate = false;
@@ -60,11 +61,11 @@ class UpdateUsernamesCommand extends ContainerAwareCommand
             $username = $this->toASCII($username);
             $username = strtolower($username);
             $username = preg_replace("/[^A-Za-z0-9]/", '', $username);
+            
 
             if ( isset($username) && !empty($username) ) {
                 $dbUser = $dm->getRepository('ZeegaDataBundle:User')->findOneByUsername($username);
-
-                if (isset($dbUser)) {
+                if (isset($dbUser) && $dbUser->getId() != $user->getId()) {
                     $duplicate = true;
                 }
             }
@@ -81,7 +82,7 @@ class UpdateUsernamesCommand extends ContainerAwareCommand
             $dm->persist($user);
             $dm->flush(); 
             $dm->clear(); 
-            $output->writeln($username);
+            $output->writeln("$displayName - $username");
         }
     }
 
