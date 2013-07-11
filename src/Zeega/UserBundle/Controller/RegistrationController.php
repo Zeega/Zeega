@@ -24,7 +24,7 @@ class RegistrationController extends BaseController
             $user = $form->getData();
             $user->setConfirmationToken(null);
             $user->setEnabled(true);
-            $user->setRequestExtraInfo(true);
+            $user->setRequestExtraInfo(false);
             $this->container->get('fos_user.user_manager')->updateUser($user);
             $this->container->get('session')->set('fos_user_send_confirmation_email/email', $user->getEmail());
             
