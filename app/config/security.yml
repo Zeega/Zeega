@@ -50,4 +50,3 @@ security:
         - { path: ^/editor/, role: ROLE_USER }
         - { path: ^/[a-zA-Z0-9]+/remix, role: ROLE_USER }
         - { path: ^/[a-zA-Z0-9]+$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }    # force http for project playback
-        - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }

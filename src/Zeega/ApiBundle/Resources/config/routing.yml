@@ -94,6 +94,7 @@ api_users_get_user:
     path: /api/users/{id}.{_format}
     defaults: { _controller:  ZeegaApiBundle:Users:getUser, _format: json }
     methods: [GET]
+    schemes:  [HTTPS]
 
 api_users_get_user_projects:
     path: /api/users/{id}/projects.{_format}
