@@ -54,11 +54,11 @@ class RegistrationController extends BaseController
 
     public function registerSocialAction(Request $request)
     {
+        $user = $this->container->get("security.context")->getToken()->getUser();
         if ( !$user->getRequestExtraInfo() ) {
             return new RedirectResponse($this->container->get('router')->generate('ZeegaCommunityBundle_home'));
         }
-
-        $user = $this->container->get("security.context")->getToken()->getUser();
+        
         $form = $this->container->get('form.factory')->create(new RegistrationSocialFormType(), $user);
         
         if ($request->isMethod('POST')) {
