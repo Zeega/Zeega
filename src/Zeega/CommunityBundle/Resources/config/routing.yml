@@ -13,6 +13,7 @@ ZeegaCommunityBundle_user_id:
 ZeegaCommunityBundle_profile:
     pattern:  /@{username}
     defaults: { _controller: ZeegaCommunityBundle:Community:profile }
+    schemes:  [https]
 
 ZeegaCommunityBundle_dashboard:
     pattern:  /dashboard
