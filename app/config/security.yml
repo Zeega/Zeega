@@ -47,6 +47,6 @@ security:
         - { path: ^/dashboard, role: ROLE_USER }
         - { path: ^/settings, role: ROLE_USER }
         - { path: ^/library, role: ROLE_ADMIN }
-        - { path: ^/editor/, role: ROLE_USER, requires_channel: http }
+        - { path: ^/editor, role: ROLE_USER, requires_channel: http }
         - { path: ^/[a-zA-Z0-9]+/remix, role: ROLE_USER }
         - { path: ^/[a-zA-Z0-9]+$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: http }    # force http for project playback
