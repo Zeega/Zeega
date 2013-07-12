@@ -114,6 +114,7 @@ api_users_put_users:
     path: /api/users/{id}.{_format}
     defaults: { _controller:  ZeegaApiBundle:Users:putUsers, _format: json }
     methods: [PUT]
+    schemes:  [https]
 
 # Items API
 api_items_get_items_parser:
