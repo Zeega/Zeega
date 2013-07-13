@@ -45,7 +45,15 @@ class SocialProvider extends BaseClass
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
         $username = $response->getUsername();
-        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
+        $service = ucfirst($response->getResourceOwner()->getName());
+        if( $service == "Facebook" ) {
+            $user = $this->userManager->findUserBy(array("facebook_id" => $username));
+        } else if( $service == "Twitter" ) {
+            $user = $this->userManager->findUserBy(array("twitter_id" => $username));
+        } else {
+            $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));    
+        }
+        
         //when the user is registrating
         if (null === $user) {
             $data = $response->getResponse();
