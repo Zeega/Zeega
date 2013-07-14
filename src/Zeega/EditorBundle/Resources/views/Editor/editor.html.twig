@@ -41,16 +41,13 @@
 
             data-media-root="{{media_host}}"
             data-project-id="{{project.getId}}"
-
-            {% if new_user == 'true' %}
-            
             data-user-email="{{ project.user.getEmail}}"
-
-            {% endif %}
 
             data-fav-id="51afedf18d34d4d711000000"
             data-new-user="{{new_user | json_encode}}"
-            data-new-zeega="true"
+            data-new-zeega="{{new_zeega | json_encode}}"
+
+
         />
 
         <!-- STYLESHEETS -->

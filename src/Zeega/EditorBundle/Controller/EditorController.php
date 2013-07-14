@@ -27,10 +27,10 @@ class EditorController extends BaseController
         $dm = $this->get('doctrine_mongodb')->getManager();
         $dm->clear();
         
-        return $this->forward('ZeegaEditorBundle:Editor:editor',array('id'=>$projectId, 'newUser' => $firstTime ));
+        return $this->forward('ZeegaEditorBundle:Editor:editor',array('id'=>$projectId, 'newUser' => $firstTime, "newZeega"=>true ));
     }
     
-    public function editorAction( $id, $newUser = false )
+    public function editorAction( $id, $newUser = false, $newZeega = false )
     {   
 
         //return new Response ( $id . " -- " . $new . " -- " . $newUser);
@@ -61,7 +61,8 @@ class EditorController extends BaseController
                     'project'   =>$project,
                     'user' => $user,
                     'project_data' => $projectData,
-                    'new_user' => $newUser
+                    'new_user' => $newUser,
+                    'new_zeega' => $newZeega
                 ));
             }
             else if($project->getVersion() == 1.1 ){
