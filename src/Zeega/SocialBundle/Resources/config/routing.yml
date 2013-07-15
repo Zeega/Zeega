@@ -13,4 +13,3 @@ ZeegaSocialBundle_twitter_check:
 
 ZeegaSocialBundle_facebook_check:
     pattern:  /login/check-facebook
-    defaults: { _controller: ZeegaSocialBundle:Facebook:securityCheck }
