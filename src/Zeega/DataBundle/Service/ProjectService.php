@@ -9,9 +9,8 @@ use Zeega\DataBundle\Document\Layer;
 
 class ProjectService
 {
-    public function __construct($itemService) 
-    {
-        $this->thumbnailService = $itemService;
+    public function __construct($doctrine) {
+        $this->doctrine = $doctrine;
     }
     
     public function createEmptyProject( $title, $version ) {
@@ -43,41 +42,64 @@ class ProjectService
             $project->setVersion($version);
         }
 
-        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm = $this->doctrine->getManager();
         $dm->persist($project);
         $dm->clear();
 
         return $project;
     }
 
-    public function createRemixProject( $pageNumber = 5, $parentProject, $user ) {
+    public function createRemixProject( $pagesNumber = 5, $parentProject, $user ) {
         // copy the project
         $newProject = clone $parentProject;
         $newProject->setUser($user);
 
         // clear the original project layers, frames, sequences
-        $newProject->layers->clear();
-        $newProject->frames->clear();
-        $newProject->sequences->clear();
+        $newProject->setLayers(new \Doctrine\Common\Collections\ArrayCollection());
+        $newProject->setFrames(new \Doctrine\Common\Collections\ArrayCollection());
+        $newProject->setSequences(new \Doctrine\Common\Collections\ArrayCollection());
         
         // create a new sequence and frames
         $sequence = new Sequence();
         $sequence->setEnabled(true);
         
-        while($pageNumber-- > 0) {
+        while($pageNumber > 0) {
             $frame = new Frame();
             $frame->setId(new \MongoId());
             $frame->setEnabled(true);
             $frame->setLayers(array());
 
+            $newProject->addFrame($frame);
             $sequence->setFrames(array((string)$frame->getId()));
+            --$pageNumber;
         }
         
+        // get the soundtrack from the original project
+        $parentProjectSequences = $parentProject->getSequences();
+        if ( isset($parentProjectSequences) && $parentProjectSequences->count() > 0 ) {
+            $soundtrackSequence = $parentProjectSequences[0];
+            $soundtrackSequenceAttributes = $soundtrackSequence->getAttr();
+
+            if( isset($soundtrackSequenceAttributes) && isset($soundtrackSequenceAttributes["soundtrack"]) ) {
+                $soundtrackLayerId = $soundtrackSequenceAttributes["soundtrack"];
+                $sequence->setAttr(array("soundtrack" => $soundtrackLayerId));
+
+                $soundtrackLayer = $parentProject->getLayers()->filter(
+                    function($layr) use ($soundtrackLayerId){
+                        return $layr->getId() == $soundtrackLayerId;
+                    }
+                )->first();
+                
+                $newProject->addLayer($soundtrackLayer);
+            }
+        }
+
         $newProject->addSequence($sequence);
         
         // persist the project
-        $dm = $this->get('doctrine_mongodb')->getManager();
+        $dm = $this->doctrine->getManager();
         $dm->persist($newProject);
+        $dm->flush();
         $dm->clear();
 
         return $newProject;
