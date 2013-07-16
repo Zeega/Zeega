@@ -12,7 +12,7 @@ class ProjectService
     public function __construct($doctrine) {
         $this->doctrine = $doctrine;
     }
-    
+    // not in use yet    
     public function createEmptyProject( $title, $version ) {
         $frame = new Frame();
         $frame->setId(new \MongoId());
@@ -63,6 +63,7 @@ class ProjectService
         $sequence = new Sequence();
         $sequence->setEnabled(true);
         
+        $frames = array();
         while($pagesNumber > 0) {
             $frame = new Frame();
             $frame->setId(new \MongoId());
@@ -70,10 +71,12 @@ class ProjectService
             $frame->setLayers(array());
 
             $newProject->addFrame($frame);
-            $sequence->setFrames(array((string)$frame->getId()));
+            $frames[] = (string)$frame->getId();
             --$pagesNumber;
         }
         
+        $sequence->setFrames($frames);
+
         // get the soundtrack from the original project
         $parentProjectSequences = $parentProject->getSequences();
         if ( isset($parentProjectSequences) && $parentProjectSequences->count() > 0 ) {
