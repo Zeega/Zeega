@@ -21,7 +21,7 @@ class CommunityController extends BaseController
         $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array(
             "tags"=>"homepage", 
             "limit"=>10, 
-            "sort"=>"date-updated-desc"
+            "sort"=>"date-tags-updated-desc"
         ))->getContent();
         
         return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=>"homepage", "feed_data"=>$projects));
