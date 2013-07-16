@@ -32,12 +32,17 @@ class DateUpdateListener
 
         // perhaps you only want to act on some "Product" document
         if ($document instanceof Project) {
-            if ( !$args->hasChangedField("views") ) {
+            $dm = $args->getDocumentManager();
+            $document->setDateUpdated(new \DateTime("now"));
+            $class = $dm->getClassMetadata("Zeega\DataBundle\Document\Project");
+
+            if ( $args->hasChangedField("tags") ) {
                 $dm = $args->getDocumentManager();
-                $document->setDateUpdated(new \DateTime("now"));
+                $document->setDateTagsUpdated(new \DateTime("now"));
                 $class = $dm->getClassMetadata("Zeega\DataBundle\Document\Project");
-                $dm->getUnitOfWork()->recomputeSingleDocumentChangeSet($class, $document);
             }
+
+            $dm->getUnitOfWork()->recomputeSingleDocumentChangeSet($class, $document);
         }
     }
 }

@@ -18,7 +18,7 @@ class Project
      * @MongoDB\Field(type="string", name="public_id")
      */
     protected $publicId;
-    
+
     /**
      * @MongoDB\Field(type="int",name="rdbms_id")
      */
@@ -75,6 +75,11 @@ class Project
     protected $dateUpdated;
 
     /**
+     * @MongoDB\Field(type="date",name="date_tags_updated")
+     */
+    protected $dateTagsUpdated;
+
+    /**
      * @MongoDB\Field(type="int",name="item_id")
      */
     protected $itemId;
@@ -98,7 +103,7 @@ class Project
      * @MongoDB\Float
      */
     protected $version;
-    
+
     /**
      * @MongoDB\Int
      */
@@ -111,8 +116,8 @@ class Project
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="User")
-     */    
-    protected $user;   
+     */
+    protected $user;
 
     /**
      * @MongoDB\EmbedMany(targetDocument="Sequence")
@@ -167,7 +172,7 @@ class Project
             $this->views = 0;
         }
     }
-    
+
     /**
      * Get id
      *
@@ -176,6 +181,7 @@ class Project
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -192,12 +198,13 @@ class Project
     /**
      * Set title
      *
-     * @param string $title
+     * @param  string   $title
      * @return \Project
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -214,12 +221,13 @@ class Project
     /**
      * Set published
      *
-     * @param boolean $published
+     * @param  boolean  $published
      * @return \Project
      */
     public function setPublished($published)
     {
         $this->published = $published;
+
         return $this;
     }
 
@@ -236,12 +244,13 @@ class Project
     /**
      * Set mobile
      *
-     * @param boolean $mobile
+     * @param  boolean  $mobile
      * @return \Project
      */
     public function setMobile($mobile)
     {
         $this->mobile = $mobile;
+
         return $this;
     }
 
@@ -258,12 +267,13 @@ class Project
     /**
      * Set dateCreated
      *
-     * @param string $dateCreated
+     * @param  string   $dateCreated
      * @return \Project
      */
     public function setDateCreated($dateCreated)
     {
         $this->dateCreated = $dateCreated;
+
         return $this;
     }
 
@@ -280,12 +290,13 @@ class Project
     /**
      * Set enabled
      *
-     * @param boolean $enabled
+     * @param  boolean  $enabled
      * @return \Project
      */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+
         return $this;
     }
 
@@ -302,12 +313,13 @@ class Project
     /**
      * Set authors
      *
-     * @param string $authors
+     * @param  string   $authors
      * @return \Project
      */
     public function setAuthors($authors)
     {
         $this->authors = $authors;
+
         return $this;
     }
 
@@ -324,12 +336,13 @@ class Project
     /**
      * Set coverImage
      *
-     * @param string $coverImage
+     * @param  string   $coverImage
      * @return \Project
      */
     public function setCoverImage($coverImage)
     {
         $this->coverImage = $coverImage;
+
         return $this;
     }
 
@@ -346,12 +359,13 @@ class Project
     /**
      * Set estimatedTime
      *
-     * @param string $estimatedTime
+     * @param  string   $estimatedTime
      * @return \Project
      */
     public function setEstimatedTime($estimatedTime)
     {
         $this->estimatedTime = $estimatedTime;
+
         return $this;
     }
 
@@ -368,12 +382,13 @@ class Project
     /**
      * Set dateUpdated
      *
-     * @param string $dateUpdated
+     * @param  string   $dateUpdated
      * @return \Project
      */
     public function setDateUpdated($dateUpdated)
     {
         $this->dateUpdated = $dateUpdated;
+
         return $this;
     }
 
@@ -390,12 +405,13 @@ class Project
     /**
      * Set itemId
      *
-     * @param string $itemId
+     * @param  string   $itemId
      * @return \Project
      */
     public function setItemId($itemId)
     {
         $this->itemId = $itemId;
+
         return $this;
     }
 
@@ -412,12 +428,13 @@ class Project
     /**
      * Set description
      *
-     * @param string $description
+     * @param  string   $description
      * @return \Project
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -434,12 +451,13 @@ class Project
     /**
      * Set location
      *
-     * @param string $location
+     * @param  string   $location
      * @return \Project
      */
     public function setLocation($location)
     {
         $this->location = $location;
+
         return $this;
     }
 
@@ -456,12 +474,13 @@ class Project
     /**
      * Set datePublished
      *
-     * @param string $datePublished
+     * @param  string   $datePublished
      * @return \Project
      */
     public function setDatePublished($datePublished)
     {
         $this->datePublished = $datePublished;
+
         return $this;
     }
 
@@ -478,12 +497,13 @@ class Project
     /**
      * Set version
      *
-     * @param float $version
+     * @param  float    $version
      * @return \Project
      */
     public function setVersion($version)
     {
         $this->version = $version;
+
         return $this;
     }
 
@@ -500,12 +520,13 @@ class Project
     /**
      * Set views
      *
-     * @param int $views
+     * @param  int      $views
      * @return \Project
      */
     public function setViews($views)
     {
         $this->views = $views;
+
         return $this;
     }
 
@@ -522,12 +543,13 @@ class Project
     /**
      * Set user
      *
-     * @param Zeega\DataBundle\Document\User $user
+     * @param  Zeega\DataBundle\Document\User $user
      * @return \Project
      */
     public function setUser(\Zeega\DataBundle\Document\User $user)
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -634,12 +656,13 @@ class Project
     /**
      * Set idInteger
      *
-     * @param int $idInteger
+     * @param  int  $idInteger
      * @return self
      */
     public function setIdInteger($idInteger)
     {
         $this->idInteger = $idInteger;
+
         return $this;
     }
 
@@ -656,12 +679,13 @@ class Project
     /**
      * Set idPublishedInteger
      *
-     * @param int $idPublishedInteger
+     * @param  int  $idPublishedInteger
      * @return self
      */
     public function setIdPublishedInteger($idPublishedInteger)
     {
         $this->idPublishedInteger = $idPublishedInteger;
+
         return $this;
     }
 
@@ -678,12 +702,13 @@ class Project
     /**
      * Set rdbmsId
      *
-     * @param int $rdbmsId
+     * @param  int  $rdbmsId
      * @return self
      */
     public function setRdbmsId($rdbmsId)
     {
         $this->rdbmsId = $rdbmsId;
+
         return $this;
     }
 
@@ -700,12 +725,13 @@ class Project
     /**
      * Set rdbmsIdPublished
      *
-     * @param int $rdbmsIdPublished
+     * @param  int  $rdbmsIdPublished
      * @return self
      */
     public function setRdbmsIdPublished($rdbmsIdPublished)
     {
         $this->rdbmsIdPublished = $rdbmsIdPublished;
+
         return $this;
     }
 
@@ -752,12 +778,13 @@ class Project
     /**
      * Set editable
      *
-     * @param boolean $editable
+     * @param  boolean $editable
      * @return self
      */
     public function setEditable($editable)
     {
         $this->editable = $editable;
+
         return $this;
     }
 
@@ -804,12 +831,13 @@ class Project
     /**
      * Set publicId
      *
-     * @param string $publicId
+     * @param  string $publicId
      * @return self
      */
     public function setPublicId($publicId)
     {
         $this->publicId = $publicId;
+
         return $this;
     }
 
@@ -821,5 +849,27 @@ class Project
     public function getPublicId()
     {
         return $this->publicId;
+    }
+
+    /**
+     * Set dateTagsUpdated
+     *
+     * @param date $dateTagsUpdated
+     * @return self
+     */
+    public function setDateTagsUpdated($dateTagsUpdated)
+    {
+        $this->dateTagsUpdated = $dateTagsUpdated;
+        return $this;
+    }
+
+    /**
+     * Get dateTagsUpdated
+     *
+     * @return date $dateTagsUpdated
+     */
+    public function getDateTagsUpdated()
+    {
+        return $this->dateTagsUpdated;
     }
 }
