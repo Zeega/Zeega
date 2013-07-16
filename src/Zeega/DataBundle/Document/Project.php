@@ -173,7 +173,6 @@ class Project
                 $this->layers->toArray()
             );
 
-            $this->title = null;
             $this->authors = null;
             $this->views = 0;
         }
