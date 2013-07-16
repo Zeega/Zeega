@@ -110,6 +110,16 @@ class Project
     protected $editable = true;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Project", name="root_project")
+     */    
+    protected $rootProject;   
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Project", name="parent_project")
+     */    
+    protected $parentProject;   
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="User")
      */    
     protected $user;   
@@ -849,5 +859,49 @@ class Project
     public function getPublicId()
     {
         return $this->publicId;
+    }
+
+    /**
+     * Set rootProject
+     *
+     * @param Zeega\DataBundle\Document\Project $rootProject
+     * @return self
+     */
+    public function setRootProject(\Zeega\DataBundle\Document\Project $rootProject)
+    {
+        $this->rootProject = $rootProject;
+        return $this;
+    }
+
+    /**
+     * Get rootProject
+     *
+     * @return Zeega\DataBundle\Document\Project $rootProject
+     */
+    public function getRootProject()
+    {
+        return $this->rootProject;
+    }
+
+    /**
+     * Set parentProject
+     *
+     * @param Zeega\DataBundle\Document\Project $parentProject
+     * @return self
+     */
+    public function setParentProject(\Zeega\DataBundle\Document\Project $parentProject)
+    {
+        $this->parentProject = $parentProject;
+        return $this;
+    }
+
+    /**
+     * Get parentProject
+     *
+     * @return Zeega\DataBundle\Document\Project $parentProject
+     */
+    public function getParentProject()
+    {
+        return $this->parentProject;
     }
 }

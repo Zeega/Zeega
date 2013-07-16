@@ -63,7 +63,7 @@ class ProjectService
         $sequence = new Sequence();
         $sequence->setEnabled(true);
         
-        while($pageNumber > 0) {
+        while($pagesNumber > 0) {
             $frame = new Frame();
             $frame->setId(new \MongoId());
             $frame->setEnabled(true);
@@ -71,7 +71,7 @@ class ProjectService
 
             $newProject->addFrame($frame);
             $sequence->setFrames(array((string)$frame->getId()));
-            --$pageNumber;
+            --$pagesNumber;
         }
         
         // get the soundtrack from the original project
@@ -92,6 +92,15 @@ class ProjectService
                 
                 $newProject->addLayer($soundtrackLayer);
             }
+        }
+
+        $newProject->setParentProject($parentProject);
+        $rootProject = $parentProject->getRootProject();
+        
+        if ( isset($rootProject) ) {            
+            $newProject->setRootProject($parentProject->getRootProject());
+        } else {
+            $newProject->setRootProject($parentProject);
         }
 
         $newProject->addSequence($sequence);
