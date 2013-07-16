@@ -164,6 +164,7 @@ class Project
             );
 
             $this->title = null;
+            $this->authors = null;
             $this->views = 0;
         }
     }
@@ -572,6 +573,15 @@ class Project
     }
 
     /**
+     * Set sequences
+     *
+     */
+    public function setSequences(\Doctrine\Common\Collections\ArrayCollection $sequences)
+    {
+        $this->sequences = $sequences;
+    }
+
+    /**
      * Add frames
      *
      * @param Zeega\DataBundle\Document\Frame $frames
@@ -602,6 +612,15 @@ class Project
     }
 
     /**
+     * Set layers
+     *
+     */
+    public function setFrames(\Doctrine\Common\Collections\ArrayCollection $frames)
+    {
+        $this->frames = $frames;
+    }
+
+    /**
      * Add layers
      *
      * @param Zeega\DataBundle\Document\Layer $layers
@@ -629,6 +648,15 @@ class Project
     public function getLayers()
     {
         return $this->layers;
+    }
+
+    /**
+     * Set layers
+     *
+     */
+    public function setLayers(\Doctrine\Common\Collections\ArrayCollection $layers)
+    {
+        $this->layers = $layers;
     }
 
     /**
