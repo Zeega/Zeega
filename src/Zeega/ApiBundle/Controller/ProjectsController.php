@@ -524,6 +524,31 @@ class ProjectsController extends BaseController
 
             $dm->persist($favorite);
             $dm->flush();
+
+            
+            $projectUserEmail = $project->getUser()->getEmail();
+            $projectUsername = $project->getUser()->getUsername();
+            $projectUserNotificationsEnabled = $project->getUser()->getEmailNotificationsOnFavorite();
+            $favoriteUsername = $user->getUsername();
+
+            if ( isset($projectUserEmail) && $projectUserNotificationsEnabled === true ) {
+                $host = $this->container->getParameter('hostname');
+                $hostDirectory = $this->container->getParameter('directory');
+                $emailData = array(
+                    "to" => $projectUserEmail,
+                    "from" => "info@zeega.com",
+                    "subject" => "$favoriteUsername likes your Zeega",
+                    "template_data" => array(
+                        "project_username" => $projectUsername, 
+                        "username" => $favoriteUsername,
+                        "zeega" => "http:".$host.$hostDirectory.$project->getPublicId(),
+                        "host" => $host
+                    )
+                );
+
+                $mailer = $this->get('zeega_email');
+                $mailer->sendEmail("favorites", $emailData);
+            }
         }
         
         $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));
