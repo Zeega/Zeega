@@ -144,6 +144,10 @@ class UsersController extends BaseController
             $user->setPlainPassword($this->getRequest()->request->get('password'));
         }
 
+        if($this->getRequest()->request->has('email_on_favorite')) {
+            $user->setEmailNotificationsOnFavorite($this->getRequest()->request->get('email_on_favorite'));
+        }
+
         $this->container->get('fos_user.user_manager')->updateUser($user);
 
         $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => 'true'));

@@ -76,6 +76,11 @@ class User extends BaseUser
     protected $idea;
 
     /**     
+     * @MongoDB\Field(type="boolean",name="email_notifications_favorites")
+     */
+    protected $emailNotificationsOnFavorite = true;
+
+    /**     
      * @MongoDB\Field(type="string",name="api_key")
      */
     protected $apiKey;
@@ -622,5 +627,27 @@ class User extends BaseUser
     public function getRequestExtraInfo()
     {
         return $this->requestExtraInfo;
+    }
+
+    /**
+     * Set emailNotificationsFavorites
+     *
+     * @param boolean $emailNotificationsOnFavorite
+     * @return self
+     */
+    public function setEmailNotificationsOnFavorite($emailNotificationsOnFavorite)
+    {
+        $this->emailNotificationsOnFavorite = $emailNotificationsOnFavorite;
+        return $this;
+    }
+
+    /**
+     * Get emailNotificationsFavorites
+     *
+     * @return boolean $emailNotificationsOnFavorite
+     */
+    public function getEmailNotificationsOnFavorite()
+    {
+        return $this->emailNotificationsOnFavorite;
     }
 }
