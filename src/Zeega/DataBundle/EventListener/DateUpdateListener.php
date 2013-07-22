@@ -37,9 +37,14 @@ class DateUpdateListener
             $class = $dm->getClassMetadata("Zeega\DataBundle\Document\Project");
 
             if ( $args->hasChangedField("tags") ) {
-                $dm = $args->getDocumentManager();
-                $document->setDateTagsUpdated(new \DateTime("now"));
-                $class = $dm->getClassMetadata("Zeega\DataBundle\Document\Project");
+                $newTags = $args->getNewValue('tags');
+                foreach( $newTags as $newTag ) {
+                    $name = $newTag->getName();
+                    if ($name == 'homepage') {
+                        $document->setDateTagsUpdated(new \DateTime("now"));
+                        break;    
+                    }
+                }
             }
 
             $dm->getUnitOfWork()->recomputeSingleDocumentChangeSet($class, $document);
