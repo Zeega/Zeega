@@ -166,11 +166,12 @@ this.zeega.discovery = {
     parseSearchUI : function(){
         
        
-        var facets = VisualSearch.searchQuery.models;
-            
-        var obj={};
-        var tagQuery = "tags:";
-        var textQuery = "";
+        var facets = VisualSearch.searchQuery.models,
+            obj={},
+            tagQuery = "tags:",
+            textQuery = "",
+            idQuery = null;
+
 
         _.each(facets, function(facet){
             switch ( facet.get("category") )
@@ -182,6 +183,10 @@ this.zeega.discovery = {
                 case "tag":
                     tagQuery = (tagQuery.length > 5) ? tagQuery + ", " + facet.get("value") : tagQuery + facet.get("value");
                     tagQuery=tagQuery.replace(/^#/, "");
+                    break;
+                case "id":
+                    console.log("id search!!!", facet.get("value") )
+                    idQuery = facet.get("value");
                     break;
             }
         });
@@ -195,6 +200,9 @@ this.zeega.discovery = {
             obj.collection_title=this.currentCollection.get("title");
         }
         
+        if(!_.isNull(idQuery)){
+            obj.idQuery = idQuery;
+        }
 
         obj.universe=$(".universe-toggle").find(".selected").data("universe");
         

@@ -17,23 +17,33 @@
         url : function()
         {
 
+            console.log(this.query)
             var url;
             
-            if( !_.isUndefined(this.query.content) && this.query.content == "project"){
-                url = this.base+"projects/search?limit=20&";
-            } else if( !_.isUndefined(this.query.content) && this.query.content !== "all"){
-                url = this.base+"items/search?limit=20&type=" + this.query.content;
-            } else {
-                url = this.base+"items/search?limit=20&";
-            }
-           
-            
-            if( !_.isUndefined(this.query.q) && this.query.q.length > 0){
-                url += "&q=" + this.query.q.toString();
-            }
 
-            url += "&sort=date-updated-desc&enabled=true";
-            if( !_.isUndefined(this.query.page) ) url += "&page=" + this.query.page;
+            if( !_.isUndefined(this.query.idQuery)){
+
+                url = this.base + "projects/" + this.query.idQuery;
+
+            } else {
+                if( !_.isUndefined(this.query.content) && this.query.content == "project"){
+                    url = this.base+"projects/search?limit=20&";
+                } else if( !_.isUndefined(this.query.content) && this.query.content !== "all"){
+                    url = this.base+"items/search?limit=20&type=" + this.query.content;
+                } else {
+                    url = this.base+"items/search?limit=20&";
+                }
+               
+                
+                if( !_.isUndefined(this.query.q) && this.query.q.length > 0){
+                    url += "&q=" + this.query.q.toString();
+                }
+
+                url += "&sort=date-created-desc&enabled=true";
+                if( !_.isUndefined(this.query.page) ) url += "&page=" + this.query.page;
+
+            }
+            
 
             return url;
         },
@@ -62,6 +72,13 @@
             
            if(!_.isUndefined(this.query.content) && this.query.content == "project"){
                 
+                if( !_.isUndefined(response.project)){
+
+                    response.projects = [];
+                    response.projects[0] = response.project;
+                }
+
+
                 if( response.projects.length == 20 ){
                     this.more = true;
                 } else {
