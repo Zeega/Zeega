@@ -81,6 +81,18 @@ class User extends BaseUser
     protected $emailNotificationsOnFavorite = true;
 
     /**     
+     * @MongoDB\Field(type="boolean",name="email_notifications_favorites")
+     */
+    protected $emailNotificationsOnPopular = true;
+
+
+    /**     
+     * @MongoDB\Field(type="boolean",name="email_notifications_favorites")
+     */
+    protected $emailNotificationsOnFeature = true;
+
+
+    /**     
      * @MongoDB\Field(type="string",name="api_key")
      */
     protected $apiKey;
@@ -630,7 +642,7 @@ class User extends BaseUser
     }
 
     /**
-     * Set emailNotificationsFavorites
+     * Set emailNotificationsOnFavorite
      *
      * @param boolean $emailNotificationsOnFavorite
      * @return self
@@ -642,7 +654,7 @@ class User extends BaseUser
     }
 
     /**
-     * Get emailNotificationsFavorites
+     * Get emailNotificationsOnFavorite
      *
      * @return boolean $emailNotificationsOnFavorite
      */
@@ -650,4 +662,49 @@ class User extends BaseUser
     {
         return $this->emailNotificationsOnFavorite;
     }
+        /**
+     * Set emailNotificationsOnPopular
+     *
+     * @param boolean $emailNotificationsOnPopular
+     * @return self
+     */
+    public function setEmailNotificationsOnPopular($emailNotificationsOnPopular)
+    {
+        $this->emailNotificationsOnPopular = $emailNotificationsOnPopular;
+        return $this;
+    }
+
+    /**
+     * Get emailNotificationsPopular
+     *
+     * @return boolean $emailNotificationsOnPopular
+     */
+    public function getEmailNotificationsOnPopular()
+    {
+        return $this->emailNotificationsOnPopular;
+    }
+
+        /**
+     * Set emailNotificationsOnFeature
+     *
+     * @param boolean $emailNotificationsOnFeature
+     * @return self
+     */
+    public function setEmailNotificationsOnFeature($emailNotificationsOnFeature)
+    {
+        $this->emailNotificationsOnFeature = $emailNotificationsOnFeature;
+        return $this;
+    }
+
+    /**
+     * Get emailNotificationsOnFeature
+     *
+     * @return boolean $emailNotificationsOnFeature
+     */
+    public function getEmailNotificationsOnFeature()
+    {
+        return $this->emailNotificationsOnFeature;
+    }
+
+
 }

@@ -148,6 +148,14 @@ class UsersController extends BaseController
             $user->setEmailNotificationsOnFavorite($this->getRequest()->request->get('email_on_favorite'));
         }
 
+        if($this->getRequest()->request->has('email_on_popular')) {
+            $user->setEmailNotificationsOnPopular($this->getRequest()->request->get('email_on_popular'));
+        }
+
+        if($this->getRequest()->request->has('email_on_feature')) {
+            $user->setEmailNotificationsOnPopular($this->getRequest()->request->get('email_on_feature'));
+        }
+
         $this->container->get('fos_user.user_manager')->updateUser($user);
 
         $userView = $this->renderView('ZeegaApiBundle:Users:show.json.twig', array('user' => $user, 'editable' => 'true'));

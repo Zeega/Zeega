@@ -13,9 +13,11 @@
 	"locationLatitude" : {{ user.getLocationLatitude | json_encode | raw}},
 	"locationLongitude" : {{ user.getLocationLongitude | json_encode | raw}},
 	"editable" : {{ editable | json_encode | raw}},
-	"background_image_url" : {{ user.getBackgroundImageUrl | default("") | json_encode | raw}}
+	"background_image_url" : {{ user.getBackgroundImageUrl | default("") | json_encode | raw}},
 	"notifications" : {
-		"email_on_favorite" : {{user.getEmailNotificationsOnFavorite | default(true) | json_encode | raw}}
+		"email_on_favorite" : {{user.getEmailNotificationsOnFavorite | default(true) | json_encode | raw}},
+		"email_on_popular" : {{user.getEmailNotificationsOnPopular | default(true) | json_encode | raw}},
+		"email_on_feature" : {{user.getEmailNotificationsOnFeature | default(true) | json_encode | raw}}
 	}	
 	{% if projects is defined %}
 	,"projects":
