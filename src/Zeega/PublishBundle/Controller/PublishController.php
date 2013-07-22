@@ -145,7 +145,7 @@ class PublishController extends BaseController
         }
 
         if ( $this->isUserAdmin( $user ) || $this->isUserAdmin( $project->getUser() ) ) {
-            $newProject = $this->get('zeega.project')->createRemixProject(5, $project, $user);
+            $newProject = $this->get('zeega.project')->createRemixProject(1, $project, $user);
         
             return $this->redirect($this->generateUrl("ZeegaEditorBundle_editor", array("id"=>$newProject->getPublicId()), true), 301);  
         }

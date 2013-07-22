@@ -49,7 +49,7 @@ class ProjectService
         return $project;
     }
 
-    public function createRemixProject( $pagesNumber = 5, $parentProject, $user ) {
+    public function createRemixProject( $pagesNumber = 1, $parentProject, $user ) {
         // copy the project
         $newProject = clone $parentProject;
         $newProject->setUser($user);
