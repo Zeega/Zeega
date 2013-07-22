@@ -15,9 +15,9 @@
 	"editable" : {{ editable | json_encode | raw}},
 	"background_image_url" : {{ user.getBackgroundImageUrl | default("") | json_encode | raw}},
 	"notifications" : {
-		"email_on_favorite" : {{user.getEmailNotificationsOnFavorite | default(true) | json_encode | raw}},
-		"email_on_popular" : {{user.getEmailNotificationsOnPopular | default(true) | json_encode | raw}},
-		"email_on_feature" : {{user.getEmailNotificationsOnFeature | default(true) | json_encode | raw}}
+		"email_on_favorite" : {{user.getEmailNotificationsOnFavorite | json_encode | raw}},
+		"email_on_popular" : {{user.getEmailNotificationsOnPopular | json_encode | raw}},
+		"email_on_feature" : {{user.getEmailNotificationsOnFeature | json_encode | raw}}
 	}	
 	{% if projects is defined %}
 	,"projects":

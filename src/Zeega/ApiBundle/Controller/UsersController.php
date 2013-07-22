@@ -153,7 +153,7 @@ class UsersController extends BaseController
         }
 
         if($this->getRequest()->request->has('email_on_feature')) {
-            $user->setEmailNotificationsOnPopular($this->getRequest()->request->get('email_on_feature'));
+            $user->setEmailNotificationsOnFeature($this->getRequest()->request->get('email_on_feature'));
         }
 
         $this->container->get('fos_user.user_manager')->updateUser($user);

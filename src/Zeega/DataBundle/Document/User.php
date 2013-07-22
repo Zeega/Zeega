@@ -81,13 +81,13 @@ class User extends BaseUser
     protected $emailNotificationsOnFavorite = true;
 
     /**     
-     * @MongoDB\Field(type="boolean",name="email_notifications_favorites")
+     * @MongoDB\Field(type="boolean",name="email_notifications_popular")
      */
     protected $emailNotificationsOnPopular = true;
 
 
     /**     
-     * @MongoDB\Field(type="boolean",name="email_notifications_favorites")
+     * @MongoDB\Field(type="boolean",name="email_notifications_feature")
      */
     protected $emailNotificationsOnFeature = true;
 
