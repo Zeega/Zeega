@@ -114,6 +114,10 @@ hwi_oauth:
         properties:
             twitter: twitter_id
 
+neo4j_ogm:
+    host: %neo4j_host%
+    port: %neo4j_port%
+
 sonata_block:
     default_contexts: [cms]
     blocks:
