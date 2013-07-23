@@ -95,7 +95,7 @@ class CommunityController extends BaseController
 
             $emailData = array(
                 "to" => $user->getEmail(),
-                "from" => "noreply@zeega.com",
+                "from" => array("noreply@zeega.com" => "Zeega"),
                 "subject" => "Welcome to Zeega!",
                 "template_data" => array(
                     "displayname" => $user->getDisplayName(), 

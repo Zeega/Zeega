@@ -538,7 +538,7 @@ class ProjectsController extends BaseController
                 $hostDirectory = $this->container->getParameter('directory');
                 $emailData = array(
                     "to" => $projectUserEmail,
-                    "from" => "noreply@zeega.com",
+                    "from" => array("noreply@zeega.com" => "Zeega"),
                     "subject" => "$favoriteDisplayName ($favoriteUsername) favorited one of your Zeegas!",
                     "template_data" => array(
                         "displayname" => $favoriteDisplayName, 
