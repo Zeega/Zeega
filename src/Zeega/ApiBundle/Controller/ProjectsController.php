@@ -539,7 +539,7 @@ class ProjectsController extends BaseController
                 $emailData = array(
                     "to" => $projectUserEmail,
                     "from" => array("noreply@zeega.com" => "Zeega"),
-                    "subject" => "$favoriteDisplayName ($favoriteUsername) favorited one of your Zeegas!",
+                    "subject" => "$favoriteDisplayName (@$favoriteUsername) favorited one of your Zeegas!",
                     "template_data" => array(
                         "displayname" => $favoriteDisplayName, 
                         "username" => $favoriteUsername,
