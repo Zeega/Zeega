@@ -257,4 +257,27 @@ class UsersController extends BaseController
         }
         return new Response(json_encode(array("username"=>$username, "valid"=>$valid, "message"=>$message)));
     }
+ 
+    public function getFollowUserAction($id) {
+        $em = $this->getDoctrine();
+        $loggedUser = $this->getUser();
+        
+        if(!isset($loggedUser)) {
+            return new Response("Unauthorized", 401);
+        }
+        
+        $gem = $this->get('neo4j.manager');
+        $repo = $gem->getRepository('Zeega\\DataBundle\\Entity\\UserGraph');
+
+        $loggedGraphUser = $repo->findOneByMongoId($loggedUser->getId());
+        $followGraphUser = $repo->findOneByMongoId($loggedUser->getId());
+
+        $loggedGraphUser->addFollow($followGraphUser);
+
+        $gem->persist($loggedGraphUser);
+        $gem->flush(); // Stores both Jane and John, along with the new relation
+
+        return new Response("cool");    
+    }
+
  }
