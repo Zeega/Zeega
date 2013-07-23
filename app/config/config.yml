@@ -76,7 +76,7 @@ fos_user:
             type: zeega_user_registration
             validation_groups: [ZeegaRegistration]
         confirmation:
-            enabled:    true
+            enabled:    false
 
     resetting:
         form:

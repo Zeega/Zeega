@@ -21,6 +21,10 @@ class ItemsController extends ApiBaseController
 {
     public function getItemsSearchAction()
     {
+        $mailer = $this->get('zeega_email');
+        $mailer->sendEmail("", "luisbrandao@gmail.com", "info@zeega.com", "Testing", array());
+        return new Response();
+
         try {
             // TO-DO: Auth
             $queryParser = $this->get('zeega_query_parser');
