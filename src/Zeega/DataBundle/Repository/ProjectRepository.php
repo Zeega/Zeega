@@ -130,7 +130,6 @@ class ProjectRepository extends DocumentRepository
 
             if (isset($query["tags"])) {
                 $qb->field('tags.name')->equals($query["tags"]);
-                $qb->sort('date_updated','DESC');
             }
 
             if (isset($query["user"])) {
@@ -141,8 +140,12 @@ class ProjectRepository extends DocumentRepository
                 $sort = $query['sort'];
                 if($sort == 'date-updated-desc') {
                     $qb->sort('date_updated','DESC');
-                } else if($sort == 'date-updated-asc') {
+                } elseif ($sort == 'date-updated-asc') {
                     $qb->sort('date_updated','ASC');
+                } elseif ($sort == 'date-tags-updated-desc') {
+                    $qb->sort('date_tags_updated','DESC');
+                } elseif ($sort == 'date-tags-updated-asc') {
+                    $qb->sort('date_tags_updated','ASC');                
                 } else {
                     $qb->sort('date_created','DESC');
                 }

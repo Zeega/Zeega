@@ -23,7 +23,7 @@ assetic:
     use_controller: true
 
 swiftmailer:
-    delivery_address: admin@zeega.com
+    delivery_address: filipe@zeega.com
 
 snc_redis:
     clients:

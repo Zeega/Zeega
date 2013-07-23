@@ -35,3 +35,8 @@ services:
         class: Zeega\CoreBundle\Service\IdService
         arguments: 
             redis: "@snc_redis.default"
+
+    zeega_email:
+        class: Zeega\CoreBundle\Service\EmailService
+        arguments: 
+            mailer: "@mailer"

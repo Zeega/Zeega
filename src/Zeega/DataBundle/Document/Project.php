@@ -18,7 +18,7 @@ class Project
      * @MongoDB\Field(type="string", name="public_id")
      */
     protected $publicId;
-    
+
     /**
      * @MongoDB\Field(type="int",name="rdbms_id")
      */
@@ -75,6 +75,11 @@ class Project
     protected $dateUpdated;
 
     /**
+     * @MongoDB\Field(type="date",name="date_tags_updated")
+     */
+    protected $dateTagsUpdated;
+
+    /**
      * @MongoDB\Field(type="int",name="item_id")
      */
     protected $itemId;
@@ -98,7 +103,7 @@ class Project
      * @MongoDB\Float
      */
     protected $version;
-    
+
     /**
      * @MongoDB\Int
      */
@@ -121,8 +126,8 @@ class Project
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="User")
-     */    
-    protected $user;   
+     */
+    protected $user;
 
     /**
      * @MongoDB\EmbedMany(targetDocument="Sequence")
@@ -177,17 +182,7 @@ class Project
             $this->views = 0;
         }
     }
-    
-    /**
-     * Get id
-     *
-     * @return id $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
+
 
     /**
      * Get id
@@ -200,516 +195,25 @@ class Project
     }
 
     /**
-     * Set title
+     * Set publicId
      *
-     * @param string $title
-     * @return \Project
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string $title
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set published
-     *
-     * @param boolean $published
-     * @return \Project
-     */
-    public function setPublished($published)
-    {
-        $this->published = $published;
-        return $this;
-    }
-
-    /**
-     * Get published
-     *
-     * @return boolean $published
-     */
-    public function getPublished()
-    {
-        return $this->published;
-    }
-
-    /**
-     * Set mobile
-     *
-     * @param boolean $mobile
-     * @return \Project
-     */
-    public function setMobile($mobile)
-    {
-        $this->mobile = $mobile;
-        return $this;
-    }
-
-    /**
-     * Get mobile
-     *
-     * @return boolean $mobile
-     */
-    public function getMobile()
-    {
-        return $this->mobile;
-    }
-
-    /**
-     * Set dateCreated
-     *
-     * @param string $dateCreated
-     * @return \Project
-     */
-    public function setDateCreated($dateCreated)
-    {
-        $this->dateCreated = $dateCreated;
-        return $this;
-    }
-
-    /**
-     * Get dateCreated
-     *
-     * @return string $dateCreated
-     */
-    public function getDateCreated()
-    {
-        return $this->dateCreated;
-    }
-
-    /**
-     * Set enabled
-     *
-     * @param boolean $enabled
-     * @return \Project
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-        return $this;
-    }
-
-    /**
-     * Get enabled
-     *
-     * @return boolean $enabled
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * Set authors
-     *
-     * @param string $authors
-     * @return \Project
-     */
-    public function setAuthors($authors)
-    {
-        $this->authors = $authors;
-        return $this;
-    }
-
-    /**
-     * Get authors
-     *
-     * @return string $authors
-     */
-    public function getAuthors()
-    {
-        return $this->authors;
-    }
-
-    /**
-     * Set coverImage
-     *
-     * @param string $coverImage
-     * @return \Project
-     */
-    public function setCoverImage($coverImage)
-    {
-        $this->coverImage = $coverImage;
-        return $this;
-    }
-
-    /**
-     * Get coverImage
-     *
-     * @return string $coverImage
-     */
-    public function getCoverImage()
-    {
-        return $this->coverImage;
-    }
-
-    /**
-     * Set estimatedTime
-     *
-     * @param string $estimatedTime
-     * @return \Project
-     */
-    public function setEstimatedTime($estimatedTime)
-    {
-        $this->estimatedTime = $estimatedTime;
-        return $this;
-    }
-
-    /**
-     * Get estimatedTime
-     *
-     * @return string $estimatedTime
-     */
-    public function getEstimatedTime()
-    {
-        return $this->estimatedTime;
-    }
-
-    /**
-     * Set dateUpdated
-     *
-     * @param string $dateUpdated
-     * @return \Project
-     */
-    public function setDateUpdated($dateUpdated)
-    {
-        $this->dateUpdated = $dateUpdated;
-        return $this;
-    }
-
-    /**
-     * Get dateUpdated
-     *
-     * @return string $dateUpdated
-     */
-    public function getDateUpdated()
-    {
-        return $this->dateUpdated;
-    }
-
-    /**
-     * Set itemId
-     *
-     * @param string $itemId
-     * @return \Project
-     */
-    public function setItemId($itemId)
-    {
-        $this->itemId = $itemId;
-        return $this;
-    }
-
-    /**
-     * Get itemId
-     *
-     * @return string $itemId
-     */
-    public function getItemId()
-    {
-        return $this->itemId;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return \Project
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string $description
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set location
-     *
-     * @param string $location
-     * @return \Project
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-        return $this;
-    }
-
-    /**
-     * Get location
-     *
-     * @return string $location
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    /**
-     * Set datePublished
-     *
-     * @param string $datePublished
-     * @return \Project
-     */
-    public function setDatePublished($datePublished)
-    {
-        $this->datePublished = $datePublished;
-        return $this;
-    }
-
-    /**
-     * Get datePublished
-     *
-     * @return string $datePublished
-     */
-    public function getDatePublished()
-    {
-        return $this->datePublished;
-    }
-
-    /**
-     * Set version
-     *
-     * @param float $version
-     * @return \Project
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-        return $this;
-    }
-
-    /**
-     * Get version
-     *
-     * @return float $version
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set views
-     *
-     * @param int $views
-     * @return \Project
-     */
-    public function setViews($views)
-    {
-        $this->views = $views;
-        return $this;
-    }
-
-    /**
-     * Get views
-     *
-     * @return int $views
-     */
-    public function getViews()
-    {
-        return $this->views;
-    }
-
-    /**
-     * Set user
-     *
-     * @param Zeega\DataBundle\Document\User $user
-     * @return \Project
-     */
-    public function setUser(\Zeega\DataBundle\Document\User $user)
-    {
-        $this->user = $user;
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return Zeega\DataBundle\Document\User $user
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Add sequences
-     *
-     * @param Zeega\DataBundle\Document\Sequence $sequences
-     */
-    public function addSequence(\Zeega\DataBundle\Document\Sequence $sequences)
-    {
-        $this->sequences[] = $sequences;
-    }
-
-    /**
-    * Remove sequences
-    *
-    * @param <variableType$sequences
-    */
-    public function removeSequence(\Zeega\DataBundle\Document\Sequence $sequences)
-    {
-        $this->sequences->removeElement($sequences);
-    }
-
-    /**
-     * Get sequences
-     *
-     * @return Doctrine\Common\Collections\Collection $sequences
-     */
-    public function getSequences()
-    {
-        return $this->sequences;
-    }
-
-    /**
-     * Set sequences
-     *
-     */
-    public function setSequences(\Doctrine\Common\Collections\ArrayCollection $sequences)
-    {
-        $this->sequences = $sequences;
-    }
-
-    /**
-     * Add frames
-     *
-     * @param Zeega\DataBundle\Document\Frame $frames
-     */
-    public function addFrame(\Zeega\DataBundle\Document\Frame $frames)
-    {
-        $this->frames[] = $frames;
-    }
-
-    /**
-    * Remove frames
-    *
-    * @param <variableType$frames
-    */
-    public function removeFrame(\Zeega\DataBundle\Document\Frame $frames)
-    {
-        $this->frames->removeElement($frames);
-    }
-
-    /**
-     * Get frames
-     *
-     * @return Doctrine\Common\Collections\Collection $frames
-     */
-    public function getFrames()
-    {
-        return $this->frames;
-    }
-
-    /**
-     * Set layers
-     *
-     */
-    public function setFrames(\Doctrine\Common\Collections\ArrayCollection $frames)
-    {
-        $this->frames = $frames;
-    }
-
-    /**
-     * Add layers
-     *
-     * @param Zeega\DataBundle\Document\Layer $layers
-     */
-    public function addLayer(\Zeega\DataBundle\Document\Layer $layers)
-    {
-        $this->layers[] = $layers;
-    }
-
-    /**
-    * Remove layers
-    *
-    * @param <variableType$layers
-    */
-    public function removeLayer(\Zeega\DataBundle\Document\Layer $layers)
-    {
-        $this->layers->removeElement($layers);
-    }
-
-    /**
-     * Get layers
-     *
-     * @return Doctrine\Common\Collections\Collection $layers
-     */
-    public function getLayers()
-    {
-        return $this->layers;
-    }
-
-    /**
-     * Set layers
-     *
-     */
-    public function setLayers(\Doctrine\Common\Collections\ArrayCollection $layers)
-    {
-        $this->layers = $layers;
-    }
-
-    /**
-     * Set idInteger
-     *
-     * @param int $idInteger
+     * @param string $publicId
      * @return self
      */
-    public function setIdInteger($idInteger)
+    public function setPublicId($publicId)
     {
-        $this->idInteger = $idInteger;
+        $this->publicId = $publicId;
         return $this;
     }
 
     /**
-     * Get idInteger
+     * Get publicId
      *
-     * @return int $idInteger
+     * @return string $publicId
      */
-    public function getIdInteger()
+    public function getPublicId()
     {
-        return $this->idInteger;
-    }
-
-    /**
-     * Set idPublishedInteger
-     *
-     * @param int $idPublishedInteger
-     * @return self
-     */
-    public function setIdPublishedInteger($idPublishedInteger)
-    {
-        $this->idPublishedInteger = $idPublishedInteger;
-        return $this;
-    }
-
-    /**
-     * Get idPublishedInteger
-     *
-     * @return int $idPublishedInteger
-     */
-    public function getIdPublishedInteger()
-    {
-        return $this->idPublishedInteger;
+        return $this->publicId;
     }
 
     /**
@@ -757,33 +261,355 @@ class Project
     }
 
     /**
-     * Add tags
+     * Set title
      *
-     * @param Zeega\DataBundle\Document\Tag $tags
+     * @param string $title
+     * @return self
      */
-    public function addTag(\Zeega\DataBundle\Document\Tag $tags)
+    public function setTitle($title)
     {
-        $this->tags[] = $tags;
+        $this->title = $title;
+        return $this;
     }
 
     /**
-    * Remove tags
-    *
-    * @param <variableType$tags
-    */
-    public function removeTag(\Zeega\DataBundle\Document\Tag $tags)
+     * Get title
+     *
+     * @return string $title
+     */
+    public function getTitle()
     {
-        $this->tags->removeElement($tags);
+        return $this->title;
     }
 
     /**
-     * Get tags
+     * Set published
      *
-     * @return Doctrine\Common\Collections\Collection $tags
+     * @param boolean $published
+     * @return self
      */
-    public function getTags()
+    public function setPublished($published)
     {
-        return $this->tags;
+        $this->published = $published;
+        return $this;
+    }
+
+    /**
+     * Get published
+     *
+     * @return boolean $published
+     */
+    public function getPublished()
+    {
+        return $this->published;
+    }
+
+    /**
+     * Set mobile
+     *
+     * @param boolean $mobile
+     * @return self
+     */
+    public function setMobile($mobile)
+    {
+        $this->mobile = $mobile;
+        return $this;
+    }
+
+    /**
+     * Get mobile
+     *
+     * @return boolean $mobile
+     */
+    public function getMobile()
+    {
+        return $this->mobile;
+    }
+
+    /**
+     * Set dateCreated
+     *
+     * @param date $dateCreated
+     * @return self
+     */
+    public function setDateCreated($dateCreated)
+    {
+        $this->dateCreated = $dateCreated;
+        return $this;
+    }
+
+    /**
+     * Get dateCreated
+     *
+     * @return date $dateCreated
+     */
+    public function getDateCreated()
+    {
+        return $this->dateCreated;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return self
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean $enabled
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Set authors
+     *
+     * @param string $authors
+     * @return self
+     */
+    public function setAuthors($authors)
+    {
+        $this->authors = $authors;
+        return $this;
+    }
+
+    /**
+     * Get authors
+     *
+     * @return string $authors
+     */
+    public function getAuthors()
+    {
+        return $this->authors;
+    }
+
+    /**
+     * Set coverImage
+     *
+     * @param string $coverImage
+     * @return self
+     */
+    public function setCoverImage($coverImage)
+    {
+        $this->coverImage = $coverImage;
+        return $this;
+    }
+
+    /**
+     * Get coverImage
+     *
+     * @return string $coverImage
+     */
+    public function getCoverImage()
+    {
+        return $this->coverImage;
+    }
+
+    /**
+     * Set estimatedTime
+     *
+     * @param string $estimatedTime
+     * @return self
+     */
+    public function setEstimatedTime($estimatedTime)
+    {
+        $this->estimatedTime = $estimatedTime;
+        return $this;
+    }
+
+    /**
+     * Get estimatedTime
+     *
+     * @return string $estimatedTime
+     */
+    public function getEstimatedTime()
+    {
+        return $this->estimatedTime;
+    }
+
+    /**
+     * Set dateUpdated
+     *
+     * @param date $dateUpdated
+     * @return self
+     */
+    public function setDateUpdated($dateUpdated)
+    {
+        $this->dateUpdated = $dateUpdated;
+        return $this;
+    }
+
+    /**
+     * Get dateUpdated
+     *
+     * @return date $dateUpdated
+     */
+    public function getDateUpdated()
+    {
+        return $this->dateUpdated;
+    }
+
+    /**
+     * Set dateTagsUpdated
+     *
+     * @param date $dateTagsUpdated
+     * @return self
+     */
+    public function setDateTagsUpdated($dateTagsUpdated)
+    {
+        $this->dateTagsUpdated = $dateTagsUpdated;
+        return $this;
+    }
+
+    /**
+     * Get dateTagsUpdated
+     *
+     * @return date $dateTagsUpdated
+     */
+    public function getDateTagsUpdated()
+    {
+        return $this->dateTagsUpdated;
+    }
+
+    /**
+     * Set itemId
+     *
+     * @param int $itemId
+     * @return self
+     */
+    public function setItemId($itemId)
+    {
+        $this->itemId = $itemId;
+        return $this;
+    }
+
+    /**
+     * Get itemId
+     *
+     * @return int $itemId
+     */
+    public function getItemId()
+    {
+        return $this->itemId;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return self
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string $description
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     * @return self
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string $location
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * Set datePublished
+     *
+     * @param date $datePublished
+     * @return self
+     */
+    public function setDatePublished($datePublished)
+    {
+        $this->datePublished = $datePublished;
+        return $this;
+    }
+
+    /**
+     * Get datePublished
+     *
+     * @return date $datePublished
+     */
+    public function getDatePublished()
+    {
+        return $this->datePublished;
+    }
+
+    /**
+     * Set version
+     *
+     * @param float $version
+     * @return self
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return float $version
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set views
+     *
+     * @param int $views
+     * @return self
+     */
+    public function setViews($views)
+    {
+        $this->views = $views;
+        return $this;
+    }
+
+    /**
+     * Get views
+     *
+     * @return int $views
+     */
+    public function getViews()
+    {
+        return $this->views;
     }
 
     /**
@@ -806,58 +632,6 @@ class Project
     public function getEditable()
     {
         return $this->editable;
-    }
-
-    /**
-     * Add favorites
-     *
-     * @param Zeega\DataBundle\Document\Favorite $favorites
-     */
-    public function addFavorite(\Zeega\DataBundle\Document\Favorite $favorites)
-    {
-        $this->favorites[] = $favorites;
-    }
-
-    /**
-    * Remove favorites
-    *
-    * @param <variableType$favorites
-    */
-    public function removeFavorite(\Zeega\DataBundle\Document\Favorite $favorites)
-    {
-        $this->favorites->removeElement($favorites);
-    }
-
-    /**
-     * Get favorites
-     *
-     * @return Doctrine\Common\Collections\Collection $favorites
-     */
-    public function getFavorites()
-    {
-        return $this->favorites;
-    }
-
-    /**
-     * Set publicId
-     *
-     * @param string $publicId
-     * @return self
-     */
-    public function setPublicId($publicId)
-    {
-        $this->publicId = $publicId;
-        return $this;
-    }
-
-    /**
-     * Get publicId
-     *
-     * @return string $publicId
-     */
-    public function getPublicId()
-    {
-        return $this->publicId;
     }
 
     /**
@@ -902,5 +676,177 @@ class Project
     public function getParentProject()
     {
         return $this->parentProject;
+    }
+
+    /**
+     * Set user
+     *
+     * @param Zeega\DataBundle\Document\User $user
+     * @return self
+     */
+    public function setUser(\Zeega\DataBundle\Document\User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return Zeega\DataBundle\Document\User $user
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Add sequences
+     *
+     * @param Zeega\DataBundle\Document\Sequence $sequences
+     */
+    public function addSequence(\Zeega\DataBundle\Document\Sequence $sequences)
+    {
+        $this->sequences[] = $sequences;
+    }
+
+    /**
+     * Remove sequences
+     *
+     * @param Zeega\DataBundle\Document\Sequence $sequences
+     */
+    public function removeSequence(\Zeega\DataBundle\Document\Sequence $sequences)
+    {
+        $this->sequences->removeElement($sequences);
+    }
+
+    /**
+     * Get sequences
+     *
+     * @return Doctrine\Common\Collections\Collection $sequences
+     */
+    public function getSequences()
+    {
+        return $this->sequences;
+    }
+
+    /**
+     * Add frames
+     *
+     * @param Zeega\DataBundle\Document\Frame $frames
+     */
+    public function addFrame(\Zeega\DataBundle\Document\Frame $frames)
+    {
+        $this->frames[] = $frames;
+    }
+
+    /**
+     * Remove frames
+     *
+     * @param Zeega\DataBundle\Document\Frame $frames
+     */
+    public function removeFrame(\Zeega\DataBundle\Document\Frame $frames)
+    {
+        $this->frames->removeElement($frames);
+    }
+
+    /**
+     * Get frames
+     *
+     * @return Doctrine\Common\Collections\Collection $frames
+     */
+    public function getFrames()
+    {
+        return $this->frames;
+    }
+
+    /**
+     * Add layers
+     *
+     * @param Zeega\DataBundle\Document\Layer $layers
+     */
+    public function addLayer(\Zeega\DataBundle\Document\Layer $layers)
+    {
+        $this->layers[] = $layers;
+    }
+
+    /**
+     * Remove layers
+     *
+     * @param Zeega\DataBundle\Document\Layer $layers
+     */
+    public function removeLayer(\Zeega\DataBundle\Document\Layer $layers)
+    {
+        $this->layers->removeElement($layers);
+    }
+
+    /**
+     * Get layers
+     *
+     * @return Doctrine\Common\Collections\Collection $layers
+     */
+    public function getLayers()
+    {
+        return $this->layers;
+    }
+
+    /**
+     * Add tags
+     *
+     * @param Zeega\DataBundle\Document\Tag $tags
+     */
+    public function addTag(\Zeega\DataBundle\Document\Tag $tags)
+    {
+        $this->tags[] = $tags;
+    }
+
+    /**
+     * Remove tags
+     *
+     * @param Zeega\DataBundle\Document\Tag $tags
+     */
+    public function removeTag(\Zeega\DataBundle\Document\Tag $tags)
+    {
+        $this->tags->removeElement($tags);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return Doctrine\Common\Collections\Collection $tags
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Add favorites
+     *
+     * @param Zeega\DataBundle\Document\Favorite $favorites
+     */
+    public function addFavorite(\Zeega\DataBundle\Document\Favorite $favorites)
+    {
+        $this->favorites[] = $favorites;
+    }
+
+    /**
+     * Remove favorites
+     *
+     * @param Zeega\DataBundle\Document\Favorite $favorites
+     */
+    public function removeFavorite(\Zeega\DataBundle\Document\Favorite $favorites)
+    {
+        $this->favorites->removeElement($favorites);
+    }
+
+    /**
+     * Get favorites
+     *
+     * @return Doctrine\Common\Collections\Collection $favorites
+     */
+    public function getFavorites()
+    {
+        return $this->favorites;
     }
 }

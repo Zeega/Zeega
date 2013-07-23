@@ -21,7 +21,7 @@ class CommunityController extends BaseController
         $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array(
             "tags"=>"homepage", 
             "limit"=>10, 
-            "sort"=>"date-updated-desc"
+            "sort"=>"date-tags-updated-desc"
         ))->getContent();
         
         return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=>"homepage", "feed_data"=>$projects));
@@ -90,6 +90,23 @@ class CommunityController extends BaseController
         if ( $user->getRequestExtraInfo() ) {
             return $this->redirect($this->generateUrl("fos_user_registration_extra", array(), true), 301);  
         } else if ( isset($firstTime) ){
+            $host = $this->container->getParameter('hostname');
+            $hostDirectory = $this->container->getParameter('directory');
+
+            $emailData = array(
+                "to" => $user->getEmail(),
+                "from" => array("noreply@zeega.com" => "Zeega"),
+                "subject" => "Welcome to Zeega!",
+                "template_data" => array(
+                    "displayname" => $user->getDisplayName(), 
+                    "username" => $user->getUsername(),
+                    "host" => "http:".$host.$hostDirectory
+                )
+            );
+            
+            $mailer = $this->container->get('zeega_email');
+            $mailer->sendEmail("zeega-user-email-template", $emailData);
+
             return $this->redirect($this->generateUrl("ZeegaEditorBundle_new", array("firstTime"=>true), true), 301); 
         }
 

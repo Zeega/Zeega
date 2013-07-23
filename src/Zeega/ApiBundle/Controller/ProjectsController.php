@@ -57,6 +57,21 @@ class ProjectsController extends BaseController
         return new Response($projectView);
     }  
 
+    public function getProjectsItemsAction($projectId)
+    {   
+        $dm = $this->get('doctrine_mongodb')->getManager();        
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        if ( !$project ) {
+            throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
+        }
+
+        $projectLayers = $project->getLayers();
+        $projectView = $this->renderView('ZeegaApiBundle:Items:index_layers.json.twig', array('layers' => $projectLayers));
+        
+        return new Response($projectView);
+    }  
+
     /**
      * Get a project
      * Route: GET api/projects/:id
@@ -73,7 +88,7 @@ class ProjectsController extends BaseController
         if ( isset($user) ) {
             $favorite = $dm->getRepository('ZeegaDataBundle:Favorite')->findOneBy(array(
                 "user.id" => $user->getId(),
-                "project.id" => $id));
+                "project.id" => $project->getId()));
             $favorite = isset($favorite);
         }
         // favorites end
@@ -524,6 +539,34 @@ class ProjectsController extends BaseController
 
             $dm->persist($favorite);
             $dm->flush();
+
+            
+            $projectUserEmail = $project->getUser()->getEmail();
+            $projectUsername = $project->getUser()->getUsername();
+            $projectCoverImage = $project->getCoverImage();
+            $projectUserNotificationsEnabled = $project->getUser()->getEmailNotificationsOnFavorite();
+            $favoriteUsername = $user->getUsername();
+            $favoriteDisplayName = $user->getDisplayName();
+
+            if ( isset($projectUserEmail) && $projectUserNotificationsEnabled === true ) {
+                $host = $this->container->getParameter('hostname');
+                $hostDirectory = $this->container->getParameter('directory');
+                $emailData = array(
+                    "to" => $projectUserEmail,
+                    "from" => array("noreply@zeega.com" => "Zeega"),
+                    "subject" => "$favoriteDisplayName (@$favoriteUsername) favorited one of your Zeegas!",
+                    "template_data" => array(
+                        "displayname" => $favoriteDisplayName, 
+                        "username" => $favoriteUsername,
+                        "coverimage" => $projectCoverImage,
+                        "zeega" => "http:".$host.$hostDirectory.$project->getPublicId(),
+                        "host" => "http:".$host.$hostDirectory
+                    )
+                );
+                $templateNumber = rand(1, 5);
+                $mailer = $this->get('zeega_email');
+                $mailer->sendEmail("favorite-email-$templateNumber", $emailData);
+            }
         }
         
         $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));

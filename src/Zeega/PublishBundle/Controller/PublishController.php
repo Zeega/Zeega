@@ -46,7 +46,7 @@ class PublishController extends BaseController
         if ( isset($user) ) {
             $favorite = $this->getDoctrine()->getRepository('ZeegaDataBundle:Favorite')->findOneBy(array(
                 'user.id' => $user->getId(),
-                'project.id' => $id));
+                'project.id' => $project->getId()));
             $favorite = isset($favorite);
         }
         // favorites end
