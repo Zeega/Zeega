@@ -528,8 +528,10 @@ class ProjectsController extends BaseController
             
             $projectUserEmail = $project->getUser()->getEmail();
             $projectUsername = $project->getUser()->getUsername();
+            $projectCoverImage = $project->getCoverImage();
             $projectUserNotificationsEnabled = $project->getUser()->getEmailNotificationsOnFavorite();
             $favoriteUsername = $user->getUsername();
+            $favoriteDisplayName = $user->getDisplayName();
 
             if ( isset($projectUserEmail) && $projectUserNotificationsEnabled === true ) {
                 $host = $this->container->getParameter('hostname');
@@ -537,17 +539,18 @@ class ProjectsController extends BaseController
                 $emailData = array(
                     "to" => $projectUserEmail,
                     "from" => "info@zeega.com",
-                    "subject" => "$favoriteUsername likes your Zeega",
+                    "subject" => "$favoriteDisplayName ($favoriteUsername) favorited one of your Zeegas!",
                     "template_data" => array(
-                        "project_username" => $projectUsername, 
+                        "displayname" => $favoriteDisplayName, 
                         "username" => $favoriteUsername,
+                        "coverimage" => $projectCoverImage,
                         "zeega" => "http:".$host.$hostDirectory.$project->getPublicId(),
-                        "host" => $host
+                        "host" => "http:".$host.$hostDirectory
                     )
                 );
 
                 $mailer = $this->get('zeega_email');
-                $mailer->sendEmail("favorites", $emailData);
+                $mailer->sendEmail("favorite-email-1", $emailData);
             }
         }
         
