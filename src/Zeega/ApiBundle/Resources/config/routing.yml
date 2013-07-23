@@ -10,8 +10,8 @@ api_projects_get_projects_favorites:
     methods: [GET]
 
 api_projects_get_projects_layers:
-    path: /api/projects/{projectId}/media.{_format}
-    defaults: { _controller:  ZeegaApiBundle:Projects:getProjectsMedia, _format: json }
+    path: /api/projects/{projectId}/items.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:getProjectsItems, _format: json }
     methods: [GET]
 
 api_projects_get_project:

@@ -57,7 +57,7 @@ class ProjectsController extends BaseController
         return new Response($projectView);
     }  
 
-    public function getProjectsMediaAction($projectId)
+    public function getProjectsItemsAction($projectId)
     {   
         $dm = $this->get('doctrine_mongodb')->getManager();        
         $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
