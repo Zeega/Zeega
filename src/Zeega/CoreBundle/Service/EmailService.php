@@ -24,16 +24,17 @@ class EmailService
 
     public function sendEmail($template, $data)
     {
-        $message = \Swift_Message::newInstance()
-            ->setSubject($data["subject"])
-            ->setFrom($data["from"])
-            ->setTo($data["to"]);
+        if ( isset($data["to"]) ) {
+            $message = \Swift_Message::newInstance()
+                ->setSubject($data["subject"])
+                ->setFrom($data["from"])
+                ->setTo($data["to"]);
 
-        $headers = $message->getHeaders();
-        $headers->addTextHeader('X-MC-MergeVars', json_encode($data["template_data"]));
-        $headers->addTextHeader('X-MC-Template', $template);
-        
-        // return value?
-        $this->mailer->send($message);
+            $headers = $message->getHeaders();
+            $headers->addTextHeader('X-MC-MergeVars', json_encode($data["template_data"]));
+            $headers->addTextHeader('X-MC-Template', $template);
+            
+            $this->mailer->send($message);
+        }
     }
 }
