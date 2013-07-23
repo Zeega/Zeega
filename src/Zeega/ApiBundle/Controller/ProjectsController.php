@@ -548,9 +548,9 @@ class ProjectsController extends BaseController
                         "host" => "http:".$host.$hostDirectory
                     )
                 );
-
+                $templateNumber = rand(1, 5);
                 $mailer = $this->get('zeega_email');
-                $mailer->sendEmail("favorite-email-1", $emailData);
+                $mailer->sendEmail("favorite-email-$templateNumber", $emailData);
             }
         }
         
