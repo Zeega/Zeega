@@ -156,3 +156,8 @@ api_items_delete_item_tags:
     path: /api/items/{itemId}/tags/{tagName}.{_format}
     defaults: { _controller:  ZeegaApiBundle:Items:deleteItem, _format: json }
     methods: [DELETE]
+
+api_users_follow:
+    path: /api/users/{id}/follow
+    defaults: { _controller:  ZeegaApiBundle:Users:getFollowUser, _format: json }
+    methods: [GET]
