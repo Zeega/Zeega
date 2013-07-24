@@ -79,6 +79,8 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
                 $redis->del("views-copy:$projectId");
                 unset($projectsToUpdateIds[$projectId]);
 
+                $this->emailOnPopular($project);
+                
                 $output->writeln("Updated $projectId");
             }
 
@@ -100,6 +102,53 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
             }
 
             $dm->flush();
+        }
+    }
+
+    private function emailOnPopular($project) {
+        if ( isset($project) ) {
+            $user = $project->getUser();
+            $userEmail = $user->getEmail();
+            $userNotificationsEnabled = $user->getEmailNotificationsOnPopular();
+            $projectNotificationsEnabled = $project->getEmailNotificationsOnPopular();
+            $views = $project->getViews();
+
+            if ($views > 100) {
+                var_dump("YO");
+                if ( isset($userEmail) && $userNotificationsEnabled === true && $projectNotificationsEnabled === true) {
+                    var_dump("YO2");
+                    $host = $this->getContainer()->getParameter('hostname');
+                    $hostDirectory = $this->getContainer()->getParameter('directory');
+                    $emailData = array(
+                        "to" => $userEmail,
+                        "from" => array("noreply@zeega.com" => "Zeega"),
+                        "subject" => "One of your Zeegas is getting hot!",
+                        "template_data" => array(
+                            "displayname" => $user->getDisplayName(), 
+                            "username" => $user->getUsername(),
+                            "coverimage" => $project->getCoverImage(),
+                            "zeega" => "http:".$host.$hostDirectory.$project->getPublicId(),
+                            "host" => "http:".$host.$hostDirectory
+                        )
+                    );
+                    $mailer = $this->getContainer()->get('zeega_email');
+                    $mailer->sendEmail("popular-email-1", $emailData);
+
+                    // disable future notifications
+                    $project->setEmailNotificationsOnPopular(false);
+                    $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
+                    $dm->persist($project);
+                    $dm->flush();
+
+                    $container = $this->getContainer();
+                    
+                    // flush the email spool queue - http://symfony.com/doc/2.2/cookbook/console/sending_emails.html
+                    $mailer = $container->get('mailer');
+                    $spool = $mailer->getTransport()->getSpool();
+                    $transport = $container->get('swiftmailer.transport.real');
+                    $spool->flushQueue($transport);
+                }
+            }
         }
     }
 }
