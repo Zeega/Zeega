@@ -112,7 +112,7 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
             $notificationsEnabled = $user->getEmailNotificationsOnPopular();
             $views = $project->getViews();
 
-            if ($views > 100) {
+            if ($views > 0) {
                 if ( isset($userEmail) && $notificationsEnabled === true ) {
                     $host = $this->getContainer()->getParameter('hostname');
                     $hostDirectory = $this->getContainer()->getParameter('directory');
@@ -128,7 +128,7 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
                             "host" => "http:".$host.$hostDirectory
                         )
                     );
-                    $mailer = $this->get('zeega_email');
+                    $mailer = $this->getContainer()->get('zeega_email');
                     $mailer->sendEmail("popular-email-1", $emailData);
 
                     // disable future notifications
@@ -136,6 +136,14 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
                     $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
                     $dm->persist($user);
                     $dm->flush();
+
+                    $container = $this->getContainer();
+                    
+                    // flush the email spool queue - http://symfony.com/doc/2.2/cookbook/console/sending_emails.html
+                    $mailer = $container->get('mailer');
+                    $spool = $mailer->getTransport()->getSpool();
+                    $transport = $container->get('swiftmailer.transport.real');
+                    $spool->flushQueue($transport);
                 }
             }
         }
