@@ -144,6 +144,11 @@ class Project
      */
     protected $favorites;
 
+    /**     
+     * @MongoDB\Field(type="boolean",name="email_notifications_popular")
+     */
+    protected $emailNotificationsOnPopular = true;
+
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
@@ -871,5 +876,27 @@ class Project
     public function getDateTagsUpdated()
     {
         return $this->dateTagsUpdated;
+    }
+
+    /**
+     * Set emailNotificationsOnPopular
+     *
+     * @param boolean $emailNotificationsOnPopular
+     * @return self
+     */
+    public function setEmailNotificationsOnPopular($emailNotificationsOnPopular)
+    {
+        $this->emailNotificationsOnPopular = $emailNotificationsOnPopular;
+        return $this;
+    }
+
+    /**
+     * Get emailNotificationsOnPopular
+     *
+     * @return boolean $emailNotificationsOnPopular
+     */
+    public function getEmailNotificationsOnPopular()
+    {
+        return $this->emailNotificationsOnPopular;
     }
 }

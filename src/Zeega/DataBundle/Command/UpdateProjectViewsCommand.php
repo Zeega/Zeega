@@ -109,11 +109,14 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
         if ( isset($project) ) {
             $user = $project->getUser();
             $userEmail = $user->getEmail();
-            $notificationsEnabled = $user->getEmailNotificationsOnPopular();
+            $userNotificationsEnabled = $user->getEmailNotificationsOnPopular();
+            $projectNotificationsEnabled = $project->getEmailNotificationsOnPopular();
             $views = $project->getViews();
 
-            if ($views > 0) {
-                if ( isset($userEmail) && $notificationsEnabled === true ) {
+            if ($views > 100) {
+                var_dump("YO");
+                if ( isset($userEmail) && $userNotificationsEnabled === true && $projectNotificationsEnabled === true) {
+                    var_dump("YO2");
                     $host = $this->getContainer()->getParameter('hostname');
                     $hostDirectory = $this->getContainer()->getParameter('directory');
                     $emailData = array(
@@ -132,9 +135,9 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
                     $mailer->sendEmail("popular-email-1", $emailData);
 
                     // disable future notifications
-                    $user->setEmailNotificationsOnPopular(false);
+                    $project->setEmailNotificationsOnPopular(false);
                     $dm = $this->getContainer()->get('doctrine_mongodb')->getManager();
-                    $dm->persist($user);
+                    $dm->persist($project);
                     $dm->flush();
 
                     $container = $this->getContainer();
