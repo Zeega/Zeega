@@ -49,6 +49,11 @@ api_projects_post_project_sequences_frames:
     defaults: { _controller:  ZeegaApiBundle:Projects:postProjectSequencesFrames, _format: json }
     methods: [POST]
 
+api_projects_post_project_sequences_frames:
+    path: /api/projects/{projectId}/sequences/{sequenceId}/itemframes.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:postProjectSequencesItemframes, _format: json }
+    methods: [POST]
+
 api_projects_post_projects_favorite:
     path: /api/projects/{projectId}/favorite.{_format}
     defaults: { _controller:  ZeegaApiBundle:Projects:postProjectsFavorite, _format: json }

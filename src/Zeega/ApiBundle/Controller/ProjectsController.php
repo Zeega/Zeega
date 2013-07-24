@@ -469,6 +469,63 @@ class ProjectsController extends BaseController
     }
 
     /**
+     * Create a global layer
+     * Route: POST api/projects/:id/layers
+     *
+     * @return Layer|response
+     */  
+    public function postProjectSequencesItemframesAction($sequenceId, $projectId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project= $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+        
+        // create ids for the frame and the layer
+        $layerId = new \MongoId();
+        $frameId = new \MongoId();
+        
+        // create the frame, set the id and add the layer
+        $frame = new MongoFrame();
+        $frame->setId($frameId);
+        $frame->setLayers(array((string)$layerId));
+        
+        // create the layer and set the id
+        $layer = new MongoLayer();
+        $layer->setId($layerId);
+        $layer->setEnabled(true);
+
+        $request = $this->getRequest();
+        /*
+        READ THE REQUEST / ITEM DATA HERE
+        
+        if( $request->request->get("type") ) {
+            $layer->setType($request->request->get("type"));  
+        } 
+        */
+
+        // get the sequence and update the frames
+        $sequence = $project->getSequences()->filter(
+            function($seq) use ($sequenceId){
+                return $seq->getId() == $sequenceId;
+            }
+        )->first();
+        $sequenceFrames = $sequence->getFrames();
+        array_push($sequenceFrames, (string)$frameId);
+        $sequence->setFrames($sequenceFrames);
+
+        // add the frame and the layer to the project; publish the project
+        $project->addLayer($layer);
+        $project->addFrame($frame);
+        $project->setPublished(true);
+
+        $dm->persist($project);
+        $dm->flush();
+
+        $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
+
+        return new Response($frameView);
+    }
+
+    /**
      * Update a layer
      * Route: PUT api/projects/:id/frames/:frame_id/layers/:layer_id
      *
