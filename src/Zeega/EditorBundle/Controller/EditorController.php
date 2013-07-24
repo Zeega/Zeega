@@ -56,13 +56,28 @@ class EditorController extends BaseController
         if ( $editable === true ) {
             $projectOwners = $project->getUser();       
             $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
+            
+            $parentProject = $project->getParentProject();
+
+            if(!isset($parentProject)){
+                $mediaData = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array("type"=>"Image", "user"=>"51afedf18d34d4d711000000", "limit"=> 48))->getContent();
+            } else {
+                $parentId = $parentProject->getId();
+        
+                $mediaData = $this->forward('ZeegaApiBundle:Projects:getProjectsItems', array("projectId" => $parentId))->getContent();
+            }
+
+            
+
+
             if( $project->getVersion() == 1.2 ) {
                 return $this->render('ZeegaEditorBundle:Editor:editor.html.twig', array(
                     'project'   =>$project,
                     'user' => $user,
                     'project_data' => $projectData,
                     'new_user' => $newUser,
-                    'new_zeega' => $newZeega
+                    'new_zeega' => $newZeega,
+                    'media_data' => $mediaData
                 ));
             }
             else if($project->getVersion() == 1.1 ){

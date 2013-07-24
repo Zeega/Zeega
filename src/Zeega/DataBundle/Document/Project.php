@@ -731,6 +731,16 @@ class Project
     }
 
     /**
+     * Set sequences
+     *
+     */
+    public function setSequences(\Doctrine\Common\Collections\ArrayCollection $sequences)
+    {
+        $this->sequences = $sequences;
+    }
+
+
+    /**
      * Add frames
      *
      * @param Zeega\DataBundle\Document\Frame $frames
@@ -759,6 +769,16 @@ class Project
     {
         return $this->frames;
     }
+    
+    /**
+     * Set frames
+     *
+     */
+    public function setFrames(\Doctrine\Common\Collections\ArrayCollection $frames)
+    {
+        $this->frames = $frames;
+    }
+
 
     /**
      * Add layers
@@ -789,6 +809,16 @@ class Project
     {
         return $this->layers;
     }
+
+    /**
+     * Set layers
+     *
+     */
+    public function setLayers(\Doctrine\Common\Collections\ArrayCollection $layers)
+    {
+        $this->layers = $layers;
+    }
+
 
     /**
      * Add tags
