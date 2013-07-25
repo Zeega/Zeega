@@ -58,6 +58,12 @@ class ProjectService
         $newProject->setLayers(new \Doctrine\Common\Collections\ArrayCollection());
         $newProject->setFrames(new \Doctrine\Common\Collections\ArrayCollection());
         $newProject->setSequences(new \Doctrine\Common\Collections\ArrayCollection());
+
+
+        // clear cover image and title
+
+        $newProject->setTitle("");
+        $newProject->setCoverImage("");
         
         // create a new sequence and frames
         $sequence = new Sequence();
