@@ -57,9 +57,11 @@ class EditorController extends BaseController
             $projectOwners = $project->getUser();       
             $projectData = $this->forward('ZeegaApiBundle:Projects:getProject', array("id" => $id))->getContent();
             
- $parentProject = $project->getParentProject();
+            //$parentProject = $project->getParentProject();
 
-            if(!isset($parentProject)){
+            $parentProject = null;
+
+            if(!isset($parentProject) || true ){
                 $mediaData = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), array("type"=>"Image", "user"=>"51afedf18d34d4d711000000", "limit"=> 48))->getContent();
             } else {
                 $parentId = $parentProject->getId();
