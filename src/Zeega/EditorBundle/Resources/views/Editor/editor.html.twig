@@ -67,8 +67,13 @@
                 console = {log: function() {}};
             }
 
+  // Media data
+            var mediaJSON = "{{ media_data|e('js') }}";
             // Project data
             var projectJSON = "{{ project_data|e('js') }}";
+             // Audio data
+            var audioJSON = "{{ audio_data|e('js') }}";
+
         </script>
       {% include '::analytics.html.twig' %}
     
