@@ -219,6 +219,31 @@ class ProjectsController extends BaseController
     }
 
     /**
+     * Delete a frame
+     * Route: Delete api/projects/:id
+     *
+     * @return Project|response
+     */   
+    public function deleteFrameAction($projectId, $frameId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        $frames = $project->getFrames();
+        foreach($frames as $frame) {
+            $currFrameId = $frame->getId();
+            if ($currFrameId === $frameId){
+                $frames->removeElement($frame);
+                break;
+            }
+        }
+
+        $dm->flush();
+        
+        return new Response('SUCCESS',200);
+    }
+
+    /**
      * Add a tag to a project
      * Route: POST api/projects/:id/tags/:tag
      *
