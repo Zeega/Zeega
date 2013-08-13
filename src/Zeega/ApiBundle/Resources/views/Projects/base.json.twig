@@ -84,14 +84,14 @@
     "remix": {{ (project.getParentProject is not null) | json_encode | raw}}
     {% if project.getRootProject is not null %}
         ,"root": {
-            "id": {{project.getRootProject.getId | json_encode | raw }},
+            "id": {{project.getRootProject.publicId | default(project.getRootProject.id) | json_encode | raw }},
             "cover_image": {{project.getRootProject.getCoverImage | json_encode | raw }},
             "user": {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': project.getRootProject.user} %}
         }
     {% endif %}
     {% if project.getParentProject is not null %}        
         ,"parent": {
-            "id": {{project.getParentProject.getId | json_encode | raw }},
+            "id": {{project.getParentProject.publicId | default(project.getParentProject.id) | json_encode | raw }},
             "cover_image": {{project.getParentProject.getCoverImage | json_encode | raw }},
             "user": {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': project.parentProject.user} %}
         }
