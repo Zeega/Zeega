@@ -270,14 +270,14 @@ class UsersController extends BaseController
         $repo = $gem->getRepository('Zeega\\DataBundle\\Entity\\UserGraph');
 
         $loggedGraphUser = $repo->findOneByMongoId($loggedUser->getId());
-        $followGraphUser = $repo->findOneByMongoId($loggedUser->getId());
+        $followGraphUser = $repo->findOneByMongoId($id);
 
-        $loggedGraphUser->addFollow($followGraphUser);
+        $followGraphUser->addFollower($loggedGraphUser);
 
         $gem->persist($loggedGraphUser);
-        $gem->flush(); // Stores both Jane and John, along with the new relation
+        $gem->flush();
 
-        return new Response("cool");    
+        return new Response(json_encode(array("success" => true)));    
     }
 
  }

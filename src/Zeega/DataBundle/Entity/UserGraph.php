@@ -35,13 +35,14 @@ class UserGraph
     
     /**
      * @OGM\ManyToMany
-     
+     */     
     protected $follows;
 
     public function __construct()
     {
+         $this->follows = new \Doctrine\Common\Collections\ArrayCollection();
     }
-*/
+
     /* Add your accessors here */
 
     /**
@@ -89,9 +90,13 @@ class UserGraph
         $this->mongoId = $mongoId;
     }
 
-    public function addFollow($user)
+    public function addFollower($user)
     {
-        $this->folows[] = $user;
+        if ( !$this->follows->contains($user) ) {
+            $this->follows->add($user);
+        }
+        
+        return $this;
     }
 
 }
