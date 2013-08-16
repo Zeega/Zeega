@@ -144,11 +144,8 @@ class PublishController extends BaseController
             throw new \Exception('You need to be logged in to remix a project.');
         }
 
-        if ( $this->isUserAdmin( $user ) || $this->isUserAdmin( $project->getUser() ) ) {
-            $newProject = clone $project;
-            $newProject->setUser($user);
-            $dm->persist($newProject);
-            $dm->flush();
+        if ( true || $this->isUserAdmin( $user ) || $this->isUserAdmin( $project->getUser() ) ) {
+            $newProject = $this->get('zeega.project')->createRemixProject(1, $project, $user);
         
             return $this->redirect($this->generateUrl("ZeegaEditorBundle_editor", array("id"=>$newProject->getPublicId()), true), 301);  
         }

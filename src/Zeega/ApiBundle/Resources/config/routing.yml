@@ -9,6 +9,11 @@ api_projects_get_projects_favorites:
     defaults: { _controller:  ZeegaApiBundle:Projects:getProjectsFavorites, _format: json }
     methods: [GET]
 
+api_projects_get_projects_layers:
+    path: /api/projects/{projectId}/items.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:getProjectsItems, _format: json }
+    methods: [GET]
+
 api_projects_get_project:
     path: /api/projects/{id}.{_format}
     defaults: { _controller:  ZeegaApiBundle:Projects:getProject, _format: json }

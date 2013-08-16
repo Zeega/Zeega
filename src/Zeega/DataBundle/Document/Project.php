@@ -115,6 +115,16 @@ class Project
     protected $editable = true;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument="Project", name="root_project")
+     */    
+    protected $rootProject;   
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="Project", name="parent_project")
+     */    
+    protected $parentProject;   
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="User")
      */
     protected $user;
@@ -173,22 +183,11 @@ class Project
                 $this->layers->toArray()
             );
 
-            $this->title = null;
+            $this->authors = null;
             $this->views = 0;
         }
     }
 
-    /**
-     * Get id
-     *
-     * @return id $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * Get id
@@ -201,15 +200,80 @@ class Project
     }
 
     /**
+     * Set publicId
+     *
+     * @param string $publicId
+     * @return self
+     */
+    public function setPublicId($publicId)
+    {
+        $this->publicId = $publicId;
+        return $this;
+    }
+
+    /**
+     * Get publicId
+     *
+     * @return string $publicId
+     */
+    public function getPublicId()
+    {
+        return $this->publicId;
+    }
+
+    /**
+     * Set rdbmsId
+     *
+     * @param int $rdbmsId
+     * @return self
+     */
+    public function setRdbmsId($rdbmsId)
+    {
+        $this->rdbmsId = $rdbmsId;
+        return $this;
+    }
+
+    /**
+     * Get rdbmsId
+     *
+     * @return int $rdbmsId
+     */
+    public function getRdbmsId()
+    {
+        return $this->rdbmsId;
+    }
+
+    /**
+     * Set rdbmsIdPublished
+     *
+     * @param int $rdbmsIdPublished
+     * @return self
+     */
+    public function setRdbmsIdPublished($rdbmsIdPublished)
+    {
+        $this->rdbmsIdPublished = $rdbmsIdPublished;
+        return $this;
+    }
+
+    /**
+     * Get rdbmsIdPublished
+     *
+     * @return int $rdbmsIdPublished
+     */
+    public function getRdbmsIdPublished()
+    {
+        return $this->rdbmsIdPublished;
+    }
+
+    /**
      * Set title
      *
-     * @param  string   $title
-     * @return \Project
+     * @param string $title
+     * @return self
      */
     public function setTitle($title)
     {
         $this->title = $title;
-
         return $this;
     }
 
@@ -226,13 +290,12 @@ class Project
     /**
      * Set published
      *
-     * @param  boolean  $published
-     * @return \Project
+     * @param boolean $published
+     * @return self
      */
     public function setPublished($published)
     {
         $this->published = $published;
-
         return $this;
     }
 
@@ -249,13 +312,12 @@ class Project
     /**
      * Set mobile
      *
-     * @param  boolean  $mobile
-     * @return \Project
+     * @param boolean $mobile
+     * @return self
      */
     public function setMobile($mobile)
     {
         $this->mobile = $mobile;
-
         return $this;
     }
 
@@ -272,20 +334,19 @@ class Project
     /**
      * Set dateCreated
      *
-     * @param  string   $dateCreated
-     * @return \Project
+     * @param date $dateCreated
+     * @return self
      */
     public function setDateCreated($dateCreated)
     {
         $this->dateCreated = $dateCreated;
-
         return $this;
     }
 
     /**
      * Get dateCreated
      *
-     * @return string $dateCreated
+     * @return date $dateCreated
      */
     public function getDateCreated()
     {
@@ -295,13 +356,12 @@ class Project
     /**
      * Set enabled
      *
-     * @param  boolean  $enabled
-     * @return \Project
+     * @param boolean $enabled
+     * @return self
      */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
-
         return $this;
     }
 
@@ -318,13 +378,12 @@ class Project
     /**
      * Set authors
      *
-     * @param  string   $authors
-     * @return \Project
+     * @param string $authors
+     * @return self
      */
     public function setAuthors($authors)
     {
         $this->authors = $authors;
-
         return $this;
     }
 
@@ -341,13 +400,12 @@ class Project
     /**
      * Set coverImage
      *
-     * @param  string   $coverImage
-     * @return \Project
+     * @param string $coverImage
+     * @return self
      */
     public function setCoverImage($coverImage)
     {
         $this->coverImage = $coverImage;
-
         return $this;
     }
 
@@ -364,13 +422,12 @@ class Project
     /**
      * Set estimatedTime
      *
-     * @param  string   $estimatedTime
-     * @return \Project
+     * @param string $estimatedTime
+     * @return self
      */
     public function setEstimatedTime($estimatedTime)
     {
         $this->estimatedTime = $estimatedTime;
-
         return $this;
     }
 
@@ -387,20 +444,19 @@ class Project
     /**
      * Set dateUpdated
      *
-     * @param  string   $dateUpdated
-     * @return \Project
+     * @param date $dateUpdated
+     * @return self
      */
     public function setDateUpdated($dateUpdated)
     {
         $this->dateUpdated = $dateUpdated;
-
         return $this;
     }
 
     /**
      * Get dateUpdated
      *
-     * @return string $dateUpdated
+     * @return date $dateUpdated
      */
     public function getDateUpdated()
     {
@@ -408,22 +464,43 @@ class Project
     }
 
     /**
+     * Set dateTagsUpdated
+     *
+     * @param date $dateTagsUpdated
+     * @return self
+     */
+    public function setDateTagsUpdated($dateTagsUpdated)
+    {
+        $this->dateTagsUpdated = $dateTagsUpdated;
+        return $this;
+    }
+
+    /**
+     * Get dateTagsUpdated
+     *
+     * @return date $dateTagsUpdated
+     */
+    public function getDateTagsUpdated()
+    {
+        return $this->dateTagsUpdated;
+    }
+
+    /**
      * Set itemId
      *
-     * @param  string   $itemId
-     * @return \Project
+     * @param int $itemId
+     * @return self
      */
     public function setItemId($itemId)
     {
         $this->itemId = $itemId;
-
         return $this;
     }
 
     /**
      * Get itemId
      *
-     * @return string $itemId
+     * @return int $itemId
      */
     public function getItemId()
     {
@@ -433,13 +510,12 @@ class Project
     /**
      * Set description
      *
-     * @param  string   $description
-     * @return \Project
+     * @param string $description
+     * @return self
      */
     public function setDescription($description)
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -456,13 +532,12 @@ class Project
     /**
      * Set location
      *
-     * @param  string   $location
-     * @return \Project
+     * @param string $location
+     * @return self
      */
     public function setLocation($location)
     {
         $this->location = $location;
-
         return $this;
     }
 
@@ -479,20 +554,19 @@ class Project
     /**
      * Set datePublished
      *
-     * @param  string   $datePublished
-     * @return \Project
+     * @param date $datePublished
+     * @return self
      */
     public function setDatePublished($datePublished)
     {
         $this->datePublished = $datePublished;
-
         return $this;
     }
 
     /**
      * Get datePublished
      *
-     * @return string $datePublished
+     * @return date $datePublished
      */
     public function getDatePublished()
     {
@@ -502,13 +576,12 @@ class Project
     /**
      * Set version
      *
-     * @param  float    $version
-     * @return \Project
+     * @param float $version
+     * @return self
      */
     public function setVersion($version)
     {
         $this->version = $version;
-
         return $this;
     }
 
@@ -525,13 +598,12 @@ class Project
     /**
      * Set views
      *
-     * @param  int      $views
-     * @return \Project
+     * @param int $views
+     * @return self
      */
     public function setViews($views)
     {
         $this->views = $views;
-
         return $this;
     }
 
@@ -546,15 +618,80 @@ class Project
     }
 
     /**
+     * Set editable
+     *
+     * @param boolean $editable
+     * @return self
+     */
+    public function setEditable($editable)
+    {
+        $this->editable = $editable;
+        return $this;
+    }
+
+    /**
+     * Get editable
+     *
+     * @return boolean $editable
+     */
+    public function getEditable()
+    {
+        return $this->editable;
+    }
+
+    /**
+     * Set rootProject
+     *
+     * @param Zeega\DataBundle\Document\Project $rootProject
+     * @return self
+     */
+    public function setRootProject(\Zeega\DataBundle\Document\Project $rootProject)
+    {
+        $this->rootProject = $rootProject;
+        return $this;
+    }
+
+    /**
+     * Get rootProject
+     *
+     * @return Zeega\DataBundle\Document\Project $rootProject
+     */
+    public function getRootProject()
+    {
+        return $this->rootProject;
+    }
+
+    /**
+     * Set parentProject
+     *
+     * @param Zeega\DataBundle\Document\Project $parentProject
+     * @return self
+     */
+    public function setParentProject(\Zeega\DataBundle\Document\Project $parentProject)
+    {
+        $this->parentProject = $parentProject;
+        return $this;
+    }
+
+    /**
+     * Get parentProject
+     *
+     * @return Zeega\DataBundle\Document\Project $parentProject
+     */
+    public function getParentProject()
+    {
+        return $this->parentProject;
+    }
+
+    /**
      * Set user
      *
-     * @param  Zeega\DataBundle\Document\User $user
-     * @return \Project
+     * @param Zeega\DataBundle\Document\User $user
+     * @return self
      */
     public function setUser(\Zeega\DataBundle\Document\User $user)
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -579,10 +716,10 @@ class Project
     }
 
     /**
-    * Remove sequences
-    *
-    * @param <variableType$sequences
-    */
+     * Remove sequences
+     *
+     * @param Zeega\DataBundle\Document\Sequence $sequences
+     */
     public function removeSequence(\Zeega\DataBundle\Document\Sequence $sequences)
     {
         $this->sequences->removeElement($sequences);
@@ -599,6 +736,16 @@ class Project
     }
 
     /**
+     * Set sequences
+     *
+     */
+    public function setSequences(\Doctrine\Common\Collections\ArrayCollection $sequences)
+    {
+        $this->sequences = $sequences;
+    }
+
+
+    /**
      * Add frames
      *
      * @param Zeega\DataBundle\Document\Frame $frames
@@ -609,10 +756,10 @@ class Project
     }
 
     /**
-    * Remove frames
-    *
-    * @param <variableType$frames
-    */
+     * Remove frames
+     *
+     * @param Zeega\DataBundle\Document\Frame $frames
+     */
     public function removeFrame(\Zeega\DataBundle\Document\Frame $frames)
     {
         $this->frames->removeElement($frames);
@@ -627,6 +774,16 @@ class Project
     {
         return $this->frames;
     }
+    
+    /**
+     * Set frames
+     *
+     */
+    public function setFrames(\Doctrine\Common\Collections\ArrayCollection $frames)
+    {
+        $this->frames = $frames;
+    }
+
 
     /**
      * Add layers
@@ -639,10 +796,10 @@ class Project
     }
 
     /**
-    * Remove layers
-    *
-    * @param <variableType$layers
-    */
+     * Remove layers
+     *
+     * @param Zeega\DataBundle\Document\Layer $layers
+     */
     public function removeLayer(\Zeega\DataBundle\Document\Layer $layers)
     {
         $this->layers->removeElement($layers);
@@ -659,96 +816,14 @@ class Project
     }
 
     /**
-     * Set idInteger
+     * Set layers
      *
-     * @param  int  $idInteger
-     * @return self
      */
-    public function setIdInteger($idInteger)
+    public function setLayers(\Doctrine\Common\Collections\ArrayCollection $layers)
     {
-        $this->idInteger = $idInteger;
-
-        return $this;
+        $this->layers = $layers;
     }
 
-    /**
-     * Get idInteger
-     *
-     * @return int $idInteger
-     */
-    public function getIdInteger()
-    {
-        return $this->idInteger;
-    }
-
-    /**
-     * Set idPublishedInteger
-     *
-     * @param  int  $idPublishedInteger
-     * @return self
-     */
-    public function setIdPublishedInteger($idPublishedInteger)
-    {
-        $this->idPublishedInteger = $idPublishedInteger;
-
-        return $this;
-    }
-
-    /**
-     * Get idPublishedInteger
-     *
-     * @return int $idPublishedInteger
-     */
-    public function getIdPublishedInteger()
-    {
-        return $this->idPublishedInteger;
-    }
-
-    /**
-     * Set rdbmsId
-     *
-     * @param  int  $rdbmsId
-     * @return self
-     */
-    public function setRdbmsId($rdbmsId)
-    {
-        $this->rdbmsId = $rdbmsId;
-
-        return $this;
-    }
-
-    /**
-     * Get rdbmsId
-     *
-     * @return int $rdbmsId
-     */
-    public function getRdbmsId()
-    {
-        return $this->rdbmsId;
-    }
-
-    /**
-     * Set rdbmsIdPublished
-     *
-     * @param  int  $rdbmsIdPublished
-     * @return self
-     */
-    public function setRdbmsIdPublished($rdbmsIdPublished)
-    {
-        $this->rdbmsIdPublished = $rdbmsIdPublished;
-
-        return $this;
-    }
-
-    /**
-     * Get rdbmsIdPublished
-     *
-     * @return int $rdbmsIdPublished
-     */
-    public function getRdbmsIdPublished()
-    {
-        return $this->rdbmsIdPublished;
-    }
 
     /**
      * Add tags
@@ -761,10 +836,10 @@ class Project
     }
 
     /**
-    * Remove tags
-    *
-    * @param <variableType$tags
-    */
+     * Remove tags
+     *
+     * @param Zeega\DataBundle\Document\Tag $tags
+     */
     public function removeTag(\Zeega\DataBundle\Document\Tag $tags)
     {
         $this->tags->removeElement($tags);
@@ -781,29 +856,6 @@ class Project
     }
 
     /**
-     * Set editable
-     *
-     * @param  boolean $editable
-     * @return self
-     */
-    public function setEditable($editable)
-    {
-        $this->editable = $editable;
-
-        return $this;
-    }
-
-    /**
-     * Get editable
-     *
-     * @return boolean $editable
-     */
-    public function getEditable()
-    {
-        return $this->editable;
-    }
-
-    /**
      * Add favorites
      *
      * @param Zeega\DataBundle\Document\Favorite $favorites
@@ -814,10 +866,10 @@ class Project
     }
 
     /**
-    * Remove favorites
-    *
-    * @param <variableType$favorites
-    */
+     * Remove favorites
+     *
+     * @param Zeega\DataBundle\Document\Favorite $favorites
+     */
     public function removeFavorite(\Zeega\DataBundle\Document\Favorite $favorites)
     {
         $this->favorites->removeElement($favorites);

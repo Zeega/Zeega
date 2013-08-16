@@ -1,0 +1,34 @@
+{% if editable is not defined %}
+    {% set editable = false %}
+{% endif %}
+{% set started = false %}
+{    
+    "items":[
+	{% for layer in layers %}
+    {% if layer.getAttr.media_type is defined and layer.getAttr.media_type  != 'Audio' and layer.enabled %}
+        {%- if started -%}
+        ,
+        {%- endif -%}
+        {% set started = true %}
+        {
+        "title":{{ layer.getAttr.title | default("") | json_encode | raw}},
+        "description":{{ layer.getAttr.description | default("") | json_encode | raw}},
+        "uri":{{ layer.getAttr.uri | default("") | json_encode | raw}},
+        "attribution_uri":{{ layer.getAttr.attribution_uri | default("") | json_encode | raw}},
+        "date_created":"{{ layer.getAttr.date_created | default(null) | date("Y-m-d H:i:s") }}",
+        "media_type":{{ layer.getAttr.media_type | default(null) | json_encode | raw }},
+        "layer_type":{{ layer.getAttr.layer_type | default(null) | json_encode | raw }},
+        "archive":{{ layer.getAttr.archive | default(null) | json_encode | raw }},
+        "thumbnail_url":{{ layer.getAttr.thumbnail_url | default(null) | json_encode | raw}},
+        "media_date_created":{{ layer.getAttr.mediaDateCreated | default(null) | date("Y-m-d H:i:s") | json_encode | raw }},
+        "media_creator_username":{{ layer.getAttr.media_creator_username | default(null) | json_encode | raw }},
+        "media_creator_realname":{{ layer.getAttr.media_creator_realname | default(null) | json_encode | raw }},
+        "attributes":{{ layer.getAttr.attributes | default([ ]) | json_encode | raw}},
+        "tags":{{ layer.getAttr.tags | default([ ]) | json_encode | raw}},
+        "views":{{ layer.getAttr.views | default(0) | json_encode | raw}}
+    }
+   
+    {% endif %}
+    {% endfor %}
+]
+}
