@@ -24,6 +24,11 @@ api_projects_delete_project:
     defaults: { _controller:  ZeegaApiBundle:Projects:deleteProject, _format: json }
     methods: [DELETE]
 
+api_projects_delete_frame:
+    path: /api/projects/{projectId}/frames/{frameId}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:deleteFrame, _format: json }
+    methods: [DELETE]
+
 api_projects_delete_projects_tags:
     path: /api/projects/{projectId}/tags/{tag}.{_format}
     defaults: { _controller:  ZeegaApiBundle:Projects:deleteProjectsTags, _format: json }
@@ -52,6 +57,11 @@ api_projects_post_project_layers:
 api_projects_post_project_sequences_frames:
     path: /api/projects/{projectId}/sequences/{sequenceId}/frames.{_format}
     defaults: { _controller:  ZeegaApiBundle:Projects:postProjectSequencesFrames, _format: json }
+    methods: [POST]
+
+api_projects_post_project_sequences_frames:
+    path: /api/projects/{projectId}/sequences/{sequenceId}/itemframes.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:postProjectSequencesItemframes, _format: json }
     methods: [POST]
 
 api_projects_post_projects_favorite:

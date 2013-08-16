@@ -57,21 +57,6 @@ class ProjectsController extends BaseController
         return new Response($projectView);
     }  
 
-    public function getProjectsItemsAction($projectId)
-    {   
-        $dm = $this->get('doctrine_mongodb')->getManager();        
-        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
-
-        if ( !$project ) {
-            throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
-        }
-
-        $projectLayers = $project->getLayers();
-        $projectView = $this->renderView('ZeegaApiBundle:Items:index_layers.json.twig', array('layers' => $projectLayers));
-        
-        return new Response($projectView);
-    }  
-
     /**
      * Get a project
      * Route: GET api/projects/:id
@@ -230,6 +215,31 @@ class ProjectsController extends BaseController
         $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
         $project->setEnabled(false);
         $dm->flush();
+        return new Response('SUCCESS',200);
+    }
+
+    /**
+     * Delete a frame
+     * Route: Delete api/projects/:id
+     *
+     * @return Project|response
+     */   
+    public function deleteFrameAction($projectId, $frameId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        $frames = $project->getFrames();
+        foreach($frames as $frame) {
+            $currFrameId = $frame->getId();
+            if ($currFrameId === $frameId){
+                $frames->removeElement($frame);
+                break;
+            }
+        }
+
+        $dm->flush();
+        
         return new Response('SUCCESS',200);
     }
 
@@ -484,6 +494,63 @@ class ProjectsController extends BaseController
     }
 
     /**
+     * Create a global layer
+     * Route: POST api/projects/:id/layers
+     *
+     * @return Layer|response
+     */  
+    public function postProjectSequencesItemframesAction($sequenceId, $projectId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project= $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+        
+        // create ids for the frame and the layer
+        $layerId = new \MongoId();
+        $frameId = new \MongoId();
+        
+        // create the frame, set the id and add the layer
+        $frame = new MongoFrame();
+        $frame->setId($frameId);
+        $frame->setLayers(array((string)$layerId));
+        
+        // create the layer and set the id
+        $layer = new MongoLayer();
+        $layer->setId($layerId);
+        $layer->setEnabled(true);
+
+        $request = $this->getRequest();
+
+        if ($request->request->has("layer_type")) {
+            $layer->setAttr($request->request->all());
+            $layer->setType($request->request->get("layer_type"));
+            $project->addLayer($layer);    
+        }
+
+        // get the sequence and update the frames
+        $sequence = $project->getSequences()->filter(
+            function($seq) use ($sequenceId){
+                return $seq->getId() == $sequenceId;
+            }
+        )->first();
+        $sequenceFrames = $sequence->getFrames();
+        array_push($sequenceFrames, (string)$frameId);
+        $sequence->setFrames($sequenceFrames);
+
+        // add the frame and the layer to the project; publish the project
+        $project->addFrame($frame);
+        $project->setPublished(true);
+
+        $dm->persist($project);
+        $dm->flush();
+        
+        $frame->setId((string)$frameId); // hack to properly display ids on the view; don't flush after this
+
+        $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
+
+        return new Response($frameView);
+    }
+
+    /**
      * Update a layer
      * Route: PUT api/projects/:id/frames/:frame_id/layers/:layer_id
      *
@@ -554,7 +621,7 @@ class ProjectsController extends BaseController
                 $emailData = array(
                     "to" => $projectUserEmail,
                     "from" => array("noreply@zeega.com" => "Zeega"),
-                    "subject" => "$favoriteDisplayName (@$favoriteUsername) favorited one of your Zeegas!",
+                    "subject" => "$favoriteDisplayName favorited one of your Zeegas!",
                     "template_data" => array(
                         "displayname" => $favoriteDisplayName, 
                         "username" => $favoriteUsername,

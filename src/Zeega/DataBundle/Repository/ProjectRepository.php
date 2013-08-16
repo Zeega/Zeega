@@ -123,6 +123,7 @@ class ProjectRepository extends DocumentRepository
             $qb = $this->createQueryBuilder('Project')
                         ->select('user','id','public_id', 'title','uri', 'cover_image', 'authors', 'date_created', 'tags')
                         ->field('user')->prime(true)
+                        ->field('enabled')->equals(true)
                         ->eagerCursor(true)
                         ->limit($query['limit'])
                         ->skip($query['limit'] * $query['page']);
@@ -305,7 +306,6 @@ class ProjectRepository extends DocumentRepository
             ->getQuery()
             ->execute();
     }
-
     
     // analytics experiments - to be removed
     public function findProjectsCountByDates($dateBegin, $dateEnd )

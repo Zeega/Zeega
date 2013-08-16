@@ -31,7 +31,7 @@ class ParserGiphyItem extends ParserAbstract
                     $item->setMediaType('Image');
                     $item->setLayerType('Image');
                     $item->setArchive('Giphy');
-                    $item->setUri("http://media.giphy.com/media/$id/original.gif");
+                    $item->setUri($mediaDetails['image_url']);
                     $item->setAttributionUri($mediaDetails['bitly_gif_url']);
                     
                     if ( isset($mediaDetails['date']) ) {
