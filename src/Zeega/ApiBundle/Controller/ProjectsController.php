@@ -57,21 +57,6 @@ class ProjectsController extends BaseController
         return new Response($projectView);
     }  
 
-    public function getProjectsItemsAction($projectId)
-    {   
-        $dm = $this->get('doctrine_mongodb')->getManager();        
-        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
-
-        if ( !$project ) {
-            throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
-        }
-
-        $projectLayers = $project->getLayers();
-        $projectView = $this->renderView('ZeegaApiBundle:Items:index_layers.json.twig', array('layers' => $projectLayers));
-        
-        return new Response($projectView);
-    }  
-
     /**
      * Get a project
      * Route: GET api/projects/:id
@@ -534,13 +519,12 @@ class ProjectsController extends BaseController
         $layer->setEnabled(true);
 
         $request = $this->getRequest();
-        /*
-        READ THE REQUEST / ITEM DATA HERE
-        
-        if( $request->request->get("type") ) {
-            $layer->setType($request->request->get("type"));  
-        } 
-        */
+
+        if ($request->request->has("layer_type")) {
+            $layer->setAttr($request->request->all());
+            $layer->setType($request->request->get("layer_type"));
+            $project->addLayer($layer);    
+        }
 
         // get the sequence and update the frames
         $sequence = $project->getSequences()->filter(
@@ -553,7 +537,6 @@ class ProjectsController extends BaseController
         $sequence->setFrames($sequenceFrames);
 
         // add the frame and the layer to the project; publish the project
-        $project->addLayer($layer);
         $project->addFrame($frame);
         $project->setPublished(true);
 
