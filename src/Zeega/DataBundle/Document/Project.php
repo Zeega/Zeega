@@ -886,51 +886,6 @@ class Project
     }
 
     /**
-     * Set publicId
-     *
-     * @param  string $publicId
-     * @return self
-     */
-    public function setPublicId($publicId)
-    {
-        $this->publicId = $publicId;
-
-        return $this;
-    }
-
-    /**
-     * Get publicId
-     *
-     * @return string $publicId
-     */
-    public function getPublicId()
-    {
-        return $this->publicId;
-    }
-
-    /**
-     * Set dateTagsUpdated
-     *
-     * @param date $dateTagsUpdated
-     * @return self
-     */
-    public function setDateTagsUpdated($dateTagsUpdated)
-    {
-        $this->dateTagsUpdated = $dateTagsUpdated;
-        return $this;
-    }
-
-    /**
-     * Get dateTagsUpdated
-     *
-     * @return date $dateTagsUpdated
-     */
-    public function getDateTagsUpdated()
-    {
-        return $this->dateTagsUpdated;
-    }
-
-    /**
      * Set emailNotificationsOnPopular
      *
      * @param boolean $emailNotificationsOnPopular
