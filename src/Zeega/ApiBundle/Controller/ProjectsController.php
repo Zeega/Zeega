@@ -542,6 +542,8 @@ class ProjectsController extends BaseController
 
         $dm->persist($project);
         $dm->flush();
+        
+        $frame->setId((string)$frameId); // hack to properly display ids on the view; don't flush after this
 
         $frameView = $this->renderView('ZeegaApiBundle:Frames:show.json.twig', array('frame' => $frame));
 
