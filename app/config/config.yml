@@ -16,7 +16,6 @@ framework:
         engines: ['twig']
     default_locale: %locale%
     trusted_proxies:  ~
-    trusted_hosts: ['.*\.?zeega.com$','.*\.?amazon.com$','.*\.?amazonaws.com$']
     session:          ~
     fragments:        ~
     translator: { fallback: en }
