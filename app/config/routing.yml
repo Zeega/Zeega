@@ -11,6 +11,7 @@ ZeegaAdminBundle:
     prefix:   /
 
 api:
+    type: rest
     resource: "@ZeegaApiBundle/Resources/config/routing.yml"
 
 #admin:

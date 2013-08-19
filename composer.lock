@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "ae606c069025d24baf4f2f907d4b2216",
+    "hash": "ff7dc56ddb789f860484a82fda7b2279",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -61,7 +61,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -785,7 +785,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/"
                 },
@@ -864,31 +864,36 @@
         },
         {
             "name": "friendsofsymfony/rest-bundle",
-            "version": "0.12.0",
+            "version": "0.13.1",
             "target-dir": "FOS/RestBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSRestBundle.git",
-                "reference": "0.12.0"
+                "reference": "0.13.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/0.12.0",
-                "reference": "0.12.0",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/0.13.1",
+                "reference": "0.13.1",
                 "shasum": ""
             },
             "require": {
                 "doctrine/inflector": "1.0.*",
                 "friendsofsymfony/rest": ">=0.7.0,<0.9.0-dev",
                 "php": ">=5.3.2",
-                "symfony/framework-bundle": ">=2.1,<3.0"
+                "symfony/framework-bundle": "~2.1",
+                "willdurand/negotiation": "1.0.*"
+            },
+            "conflict": {
+                "jms/serializer": "<0.12",
+                "jms/serializer-bundle": "<0.11"
             },
             "require-dev": {
                 "jms/serializer-bundle": "0.12.*",
-                "sensio/framework-extra-bundle": ">=2.1,<3.0",
-                "symfony/form": ">=2.1,<3.0",
-                "symfony/security": ">=2.1,<3.0",
-                "symfony/yaml": ">=2.1,<3.0"
+                "sensio/framework-extra-bundle": "~2.1",
+                "symfony/form": "~2.1",
+                "symfony/security": "~2.1",
+                "symfony/yaml": "~2.1"
             },
             "suggest": {
                 "jms/serializer-bundle": "Add support for advanced serialization capabilities, recommended, requires 0.12.*",
@@ -898,7 +903,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.12.x-dev"
+                    "dev-master": "1.0-dev"
                 }
             },
             "autoload": {
@@ -930,7 +935,7 @@
             "keywords": [
                 "rest"
             ],
-            "time": "2013-05-06 10:33:17"
+            "time": "2013-08-15 13:30:47"
         },
         {
             "name": "friendsofsymfony/user-bundle",
@@ -971,7 +976,6 @@
                     "FOS\\UserBundle": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -995,7 +999,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2012-12-22 15:09:34"
+            "time": "2012-12-22 20:09:34"
         },
         {
             "name": "hwi/oauth-bundle",
@@ -1170,6 +1174,7 @@
                     "JMS\\AopBundle": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache"
             ],
@@ -1177,7 +1182,7 @@
                 {
                     "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -1186,7 +1191,7 @@
                 "annotations",
                 "aop"
             ],
-            "time": "2012-01-02 12:50:26"
+            "time": "2012-01-02 20:50:26"
         },
         {
             "name": "jms/cg",
@@ -1211,6 +1216,7 @@
                     "CG\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache"
             ],
@@ -1218,7 +1224,7 @@
                 {
                     "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -1226,7 +1232,7 @@
             "keywords": [
                 "code generation"
             ],
-            "time": "2012-01-02 12:40:52"
+            "time": "2012-01-02 20:40:52"
         },
         {
             "name": "jms/di-extra-bundle",
@@ -1626,6 +1632,7 @@
                     "Knp\\Menu\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1649,7 +1656,7 @@
                 "menu",
                 "tree"
             ],
-            "time": "2012-06-10 13:20:40"
+            "time": "2012-06-10 09:20:40"
         },
         {
             "name": "knplabs/knp-menu-bundle",
@@ -3085,6 +3092,56 @@
                 "templating"
             ],
             "time": "2013-06-06 06:06:01"
+        },
+        {
+            "name": "willdurand/negotiation",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/willdurand/Negotiation.git",
+                "reference": "1.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/willdurand/Negotiation/zipball/1.0.1",
+                "reference": "1.0.1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Negotiation": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "william.durand1@gmail.com",
+                    "homepage": "http://www.willdurand.fr"
+                }
+            ],
+            "description": "Content Negotiation tools for PHP provided as a standalone library.",
+            "homepage": "http://williamdurand.fr/Negotiation/",
+            "keywords": [
+                "accept",
+                "content",
+                "format",
+                "header",
+                "negotiation"
+            ],
+            "time": "2013-08-01 14:42:09"
         }
     ],
     "packages-dev": [
@@ -3462,7 +3519,8 @@
         "sonata-project/doctrine-mongodb-admin-bundle": 20,
         "kunstmaan/sentry-bundle": 20,
         "raven/raven": 20,
-        "jms/serializer-bundle": 20
+        "jms/serializer-bundle": 20,
+        "friendsofsymfony/rest-bundle": 20
     },
     "platform": {
         "php": ">=5.3.3"

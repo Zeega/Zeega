@@ -64,29 +64,6 @@ class ApiListener
                 }
             }
         }
-
-        $request = $event->getRequest();
-
-        if (!count($request->request->all())
-            && in_array($request->getMethod(), array('POST', 'PUT', 'PATCH', 'DELETE'))
-        ) {
-            $contentType = $request->headers->get('Content-Type');
-
-            $format = null === $contentType
-                ? $request->getRequestFormat()
-                : $request->getFormat($contentType);
-
-            if (!$this->decoderProvider->supports($format)) {
-                return;
-            }
-
-            $decoder = $this->decoderProvider->getDecoder($format);
-
-            $data = $decoder->decode($request->getContent(), $format);
-            if (is_array($data)) {
-                $request->request = new ParameterBag($data);
-            }
-        }
     }
 
     public function onKernelResponse(FilterResponseEvent $event)

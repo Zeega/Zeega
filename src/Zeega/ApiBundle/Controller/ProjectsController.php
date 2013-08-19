@@ -499,7 +499,7 @@ class ProjectsController extends BaseController
      *
      * @return Layer|response
      */  
-    public function postProjectSequencesItemframesAction($sequenceId, $projectId)
+    public function postProjectSequencesItemframesAction($projectId, $sequenceId)
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
         $project= $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
