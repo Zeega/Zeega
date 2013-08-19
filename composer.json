@@ -35,7 +35,8 @@
         "jms/serializer-bundle": "0.12.*@dev",
         "friendsofsymfony/rest-bundle": "0.12.0",
         "hwi/oauth-bundle": "*",
-        "friendsofsymfony/rest-bundle" : "0.13.*@dev"
+        "friendsofsymfony/rest-bundle" : "0.13.*@dev",
+        "everyman/neo4jphp":"dev-master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
