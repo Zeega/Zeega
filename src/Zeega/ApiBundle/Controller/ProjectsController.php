@@ -39,6 +39,23 @@ class ProjectsController extends BaseController
         return new Response($projectView);
     } 
 
+    public function getProjectsItemsAction($projectId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        if ( !$project ) {
+            throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
+        }
+
+        $projectLayers = $project->getLayers();
+        $projectView = $this->renderView('ZeegaApiBundle:Items:index_layers.json.twig', array('layers' => $projectLayers));
+        
+        return new Response($projectView);
+    }
+
+
+
     public function getProjectsFavoritesAction($projectId)
     {   
         $dm = $this->get('doctrine_mongodb')->getManager();        
