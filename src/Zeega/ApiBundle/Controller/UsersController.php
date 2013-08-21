@@ -269,4 +269,129 @@ class UsersController extends BaseController
         }
         return new Response(json_encode(array("username"=>$username, "valid"=>$valid, "message"=>$message)));
     }
+
+    public function getUsersGraphImportAction($id) {
+        $em = $this->getDoctrine();
+        $loggedUser = $this->getUser();
+        
+        if(!isset($loggedUser)) {
+            return new Response("Unauthorized", 401);
+        }
+        
+        $client = new \Everyman\Neo4j\Client($this->container->getParameter('neo4j_host'), $this->container->getParameter('neo4j_port'));
+        
+        // create the user
+        $loggedGraphUser = $usernameIndex->findOne('username', $loggedUser->getUsername());
+        if ( !isset($loggedGraphUser) ) {
+            $this->createGraphUser($loggedUser);
+        }
+
+        return new Response(json_encode(array("success" => true)));
+    }
+
+    public function getUsersFollowAction($username) {
+        $em = $this->getDoctrine();
+        $loggedUser = $this->getUser();
+        
+        if(!isset($loggedUser)) {
+            return new Response("Unauthorized", 401);
+        }
+        
+        $client = new \Everyman\Neo4j\Client($this->container->getParameter('neo4j_host'), $this->container->getParameter('neo4j_port'));
+        
+        $usernameIndex = new \Everyman\Neo4j\Index\NodeIndex($client, 'username');
+        
+        $loggedGraphUser = $usernameIndex->findOne('username', $loggedUser->getUsername());
+        $followedGraphUser = $usernameIndex->findOne('username', $username);
+        
+        $loggedGraphUser = $usernameIndex->findOne('username', $loggedUser->getUsername());
+        if ( !isset($loggedGraphUser) ) {
+            $this->createGraphUser($loggedUser);
+        }
+        
+        $followedGraphUser = $usernameIndex->findOne('username', $username);
+        if ( !isset($followedGraphUser) ) {
+            $user = $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findOneByUsername($username);
+            $this->createGraphUser($user);
+        }
+
+        $queryString = "START n1=node(".$loggedGraphUser->getId()."), n2=node(".$followedGraphUser->getId().") ".
+            "MATCH n1-[:FOLLOW]->n2 ".
+            "RETURN n2";
+    
+        $query = new \Everyman\Neo4j\Cypher\Query($client, $queryString);
+        $result = count($query->getResultSet());
+
+        if ($result == 0) {
+            $loggedGraphUser->relateTo($followedGraphUser, 'FOLLOW')->save();    
+        }
+
+        return new Response(json_encode(array("success" => true)));
+    }
+
+    public function getUsersFollowingAction($username) {
+        $em = $this->getDoctrine();
+        
+        $client = new \Everyman\Neo4j\Client($this->container->getParameter('neo4j_host'), $this->container->getParameter('neo4j_port'));
+        $usernameIndex = new \Everyman\Neo4j\Index\NodeIndex($client, 'username');
+        $user = $usernameIndex->findOne('username', $username);
+        
+
+        $followedGraphUser = $usernameIndex->findOne('username', $username);
+
+        $queryString = "START n1=node(".$followedGraphUser->getId()."), n2=node(*) ".
+            "MATCH n1-[:FOLLOW]->n2 ".
+            "RETURN n2";
+    
+        $query = new \Everyman\Neo4j\Cypher\Query($client, $queryString);
+        $result = $query->getResultSet();
+
+        foreach($result as $res){
+            var_dump($res[0]->getProperty("username"));
+        }
+
+        return new Response(json_encode(array("success" => true)));
+    }
+
+    public function getUsersFollowersAction($username) {
+        $em = $this->getDoctrine();
+        
+        $client = new \Everyman\Neo4j\Client($this->container->getParameter('neo4j_host'), $this->container->getParameter('neo4j_port'));
+        $usernameIndex = new \Everyman\Neo4j\Index\NodeIndex($client, 'username');
+        $user = $usernameIndex->findOne('username', $username);
+        
+
+        $followedGraphUser = $usernameIndex->findOne('username', $username);
+
+        $queryString = "START n1=node(*), n2=node(".$followedGraphUser->getId().") ".
+            "MATCH n1-[:FOLLOW]->n2 ".
+            "RETURN n2";
+    
+        $query = new \Everyman\Neo4j\Cypher\Query($client, $queryString);
+        $result = $query->getResultSet();
+        echo "<pre>";
+        foreach($result as $res){
+            var_dump($res[0]->getProperties());
+        }
+        echo "</pre>";
+        return new Response(json_encode(array("success" => true)));
+    }
+
+
+    private function createGraphUser($user) {
+        $client = new \Everyman\Neo4j\Client($this->container->getParameter('neo4j_host'), $this->container->getParameter('neo4j_port'));
+        
+        // create the user
+        $newUser = $client->makeNode();
+        $newUser->setProperty('name', $user->getDisplayName())
+            ->setProperty('username', $user->getUsername())
+            ->setProperty('mongo_id', $user->getId())
+            ->save();
+        
+        // add to username index
+        $usernameIndex = new \Everyman\Neo4j\Index\NodeIndex($client, 'username');
+        $usernameIndex->add($newUser, 'username', $user->getUsername());
+        $usernameIndex->save();
+    }
+
  }
