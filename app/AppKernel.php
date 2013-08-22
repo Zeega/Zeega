@@ -34,7 +34,8 @@ class AppKernel extends Kernel
             new Snc\RedisBundle\SncRedisBundle(),
             new Kunstmaan\SentryBundle\KunstmaanSentryBundle(),   
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
-            
+            new SunCat\MobileDetectBundle\MobileDetectBundle(),
+ 
             new Zeega\ApiBundle\ZeegaApiBundle(),
             new Zeega\AdminBundle\ZeegaAdminBundle(),
             new Zeega\CoreBundle\ZeegaCoreBundle(),
