@@ -75,7 +75,7 @@ class ProjectRepository extends DocumentRepository
     public function findRelated( $id = null, $query = null ){
 
         $qb = $this->createQueryBuilder('Project')
-                        ->select('user','id','title','uri', 'cover_image', 'authors', 'date_created', 'tags','views')
+                        ->select('user', 'public_id', 'title','uri', 'cover_image', 'authors', 'date_created', 'tags','views')
                         ->field('user')->prime(true)
                         ->field('id')->notEqual( $id )
                         ->eagerCursor(true)
