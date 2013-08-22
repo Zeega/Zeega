@@ -44,13 +44,13 @@ class CommunityController extends BaseController
         if( $tag == "realtime" ){
             $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array(
                 "limit"=>10, 
-                "sort"=>"date-updated-desc"
+                "sort"=>"date-tags-updated-desc"
             ))->getContent();
         } else {
             $projects = $this->forward('ZeegaApiBundle:Projects:getProjectsSearch',array(), array(
                 "tags"=>$tag, 
                 "limit"=>10, 
-                "sort"=>"date-updated-desc"
+                "sort"=>"date-tags-updated-desc"
             ))->getContent();
         }
 
