@@ -34,7 +34,9 @@
         "raven/raven": "dev-master@dev",
         "jms/serializer-bundle": "0.12.*@dev",
         "friendsofsymfony/rest-bundle": "0.12.0",
-        "hwi/oauth-bundle": "*"
+        "hwi/oauth-bundle": "*",
+        "suncat/mobile-detect-bundle": "dev-master@dev",
+	"mobiledetect/mobiledetectlib": "dev-master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"

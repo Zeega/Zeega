@@ -32,6 +32,11 @@ class EditorController extends BaseController
     
     public function editorAction( $id, $newUser = false, $newZeega = false )
     {   
+        /* MOBILE CHECK
+        $mobileDetector = $this->get('mobile_detect.mobile_detector');
+        $mobileDetector->isMobile();
+        $mobileDetector->isTablet();
+        */
 
         //return new Response ( $id . " -- " . $new . " -- " . $newUser);
         $user = $this->get('security.context')->getToken()->getUser();
