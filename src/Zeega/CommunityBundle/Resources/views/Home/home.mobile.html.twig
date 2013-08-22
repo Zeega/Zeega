@@ -1,0 +1,106 @@
+{% set title = title | default('Unknown') %}
+{% set user_id = user_id | default(-1) %}
+{% set displayname = displayname | default('Unknown') %}
+{% set user_thumb = user_thumb | default('Unknown') %}
+{% set local_path = local_path | default('') %}
+{% set profile_id = profile_id | default( '' ) %}
+{% set tags = tags | default( '' ) %}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" style="height:100%" lang="en-US">
+    <head>
+        
+
+        {% include "::meta.html.twig" %}   
+         
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <!-- standard viewport tag to set the viewport to the device's width
+            , Android 2.3 devices need this so 100% width works properly and
+            doesn't allow children to blow up the viewport width-->
+        <meta name="viewport" id="vp" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" />
+        <!-- width=device-width causes the iPhone 5 to letterbox the app, so
+            we want to exclude it for iPhone 5 to allow full screen apps -->
+        <meta name="viewport" id="vp" content="initial-scale=1.0,user-scalable=no,maximum-scale=1" media="(device-height: 568px)" />
+
+
+        <link rel="apple-touch-icon" href="/images/favicon_114_114.png"/> 
+        <link rel="shortcut icon" type="image/x-icon" href="/images/zeega.ico">
+
+
+        <meta name="zeega" content="zeega-home"
+            data-directory="{{directory}}"
+            data-hostname="{{hostname}}"
+            data-api= "http:{{hostname}}{{directory}}api/"
+            data-root= "{{directory}}"
+            data-tags="{{ tags }}"
+            data-profile-id="{{ profile_id }}"
+            data-user-id="{{user_id}}"
+            data-media-server="https:{{hostname}}{{media_host}}"
+
+        />
+
+        {% block stylesheets %}         
+
+            {% if app.environment == 'prod' %}
+                <link rel="stylesheet" type="text/css" href="{{ asset('js/app/home.mobile/dist/debug/index.css') }}">
+            {% else %}
+                <link rel="stylesheet" type="text/css" href="{{ asset('js/app/home.mobile/dist/release/index.css') }}">
+
+            {% endif %}
+                
+            <!-- Including Google's Font -->
+            <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700' rel='stylesheet' type='text/css'>
+        
+        {% endblock stylesheets %}
+        
+        {% include '::analytics.html.twig' %}
+
+        <script type="text/javascript">
+
+        // Because IE sucks
+            if ( !window.console ) {
+                console = {log: function() {}};
+            }
+
+              var feedData = "{{ feed_data|e('js') }}";
+            {% if profile_data is defined  %}
+              var profileData ="{{ profile_data|e('js') }}";
+            {% endif %}
+        </script>
+        <script type="text/javascript">
+          // Facebook login hack
+          if (window.location.hash == '#_=_'){
+            window.location.hash = '';
+          }
+        </script>
+</head>
+
+  <body>
+
+
+ <header>
+    <a href="http://www.zeega.com" class="ZEEGA-tab">
+      <span class="ZTab-logo"></span>
+    </a>
+  </header>
+    
+  <div role="main" id="main"></div>
+  
+  
+{% block player_script %}
+
+
+    {% if app.environment == 'prod' %}
+        <script src="{{ asset('js/app/home.mobile/dist/release/require.js') }}" ></script>
+    {% else %}
+        <script src="{{ asset('js/app/home.mobile/dist/debug/require.js') }}" ></script>
+    {% endif %}
+
+{% endblock player_script %}
+
+
+
+</body>
+</html>

@@ -32,6 +32,13 @@ class PublishController extends BaseController
     public function projectAction($id, $mobile)
     {   
 
+
+        $mobileDetector = $this->get('mobile_detect.mobile_detector');
+
+        if( $mobileDetector->isMobile() || $mobileDetector->isTablet()){
+            $mobile = true;
+        }
+
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
         $relatedProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findRelated($id);
 

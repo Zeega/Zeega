@@ -24,7 +24,18 @@ class CommunityController extends BaseController
             "sort"=>"date-tags-updated-desc"
         ))->getContent();
         
-        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=>"homepage", "feed_data"=>$projects));
+
+        $mobileDetector = $this->get('mobile_detect.mobile_detector');
+
+        if( $mobileDetector->isMobile() || $mobileDetector->isTablet()){
+            return $this->render("ZeegaCommunityBundle:Home:home.mobile.html.twig",array("tags"=>"homepage", "feed_data"=>$projects));
+        } else {
+            return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=>"homepage", "feed_data"=>$projects));
+        }
+        
+    
+
+
     }
 
     public function tagAction( $tag )
@@ -43,8 +54,15 @@ class CommunityController extends BaseController
             ))->getContent();
         }
 
+        $mobileDetector = $this->get('mobile_detect.mobile_detector');
 
-        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=> $tag, "feed_data"=>$projects ));
+        if( $mobileDetector->isMobile() || $mobileDetector->isTablet()){
+            return $this->render("ZeegaCommunityBundle:Home:home.mobile.html.twig",array("tags"=> $tag, "feed_data"=>$projects ));
+        } else {
+            return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("tags"=> $tag, "feed_data"=>$projects ));
+        }
+
+        
     }
     
     public function userAction( $id )
@@ -75,7 +93,15 @@ class CommunityController extends BaseController
         $projects = $this->forward('ZeegaApiBundle:Users:getUserProjects', array("id" => $id, "limit"=>10))->getContent();
         $profile = $this->forward('ZeegaApiBundle:Users:getUser', array("id" => $id))->getContent();
         
-        return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("profile_id"=> $id, "feed_data"=>$projects, "profile_data"=>$profile ));
+
+        $mobileDetector = $this->get('mobile_detect.mobile_detector');
+
+        if( $mobileDetector->isMobile() || $mobileDetector->isTablet()){
+            return $this->render("ZeegaCommunityBundle:Home:home.mobile.html.twig",array("profile_id"=> $id, "feed_data"=>$projects, "profile_data"=>$profile ));
+        } else {
+            return $this->render("ZeegaCommunityBundle:Home:home.html.twig",array("profile_id"=> $id, "feed_data"=>$projects, "profile_data"=>$profile ));
+        }
+        
        
     }
     
