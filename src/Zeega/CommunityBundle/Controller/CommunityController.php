@@ -133,7 +133,14 @@ class CommunityController extends BaseController
             $mailer = $this->container->get('zeega_email');
             $mailer->sendEmail("zeega-user-email-template", $emailData);
 
-            return $this->redirect($this->generateUrl("ZeegaEditorBundle_new", array("firstTime"=>true), true), 301); 
+            if ( $this->container->get('session')->get('_security.main.target_path') ) {
+                $targetPath = $this->container->get('session')->get('_security.main.target_path');
+                
+                return $this->redirect($targetPath, 301);   
+            } else {
+                
+                return $this->redirect($this->generateUrl("ZeegaEditorBundle_new", array("firstTime"=>true), true), 301);   
+            }
         }
 
         return $this->redirect($this->generateUrl("ZeegaCommunityBundle_profile",array("username"=>$username),true), 301);        
