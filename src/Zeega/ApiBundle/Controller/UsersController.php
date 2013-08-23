@@ -270,128 +270,44 @@ class UsersController extends BaseController
         return new Response(json_encode(array("username"=>$username, "valid"=>$valid, "message"=>$message)));
     }
 
-    public function getUsersGraphImportAction($id) {
-        $em = $this->getDoctrine();
-        $loggedUser = $this->getUser();
-        
-        if(!isset($loggedUser)) {
-            return new Response("Unauthorized", 401);
-        }
-        
-        $client = new \Everyman\Neo4j\Client($this->container->getParameter('neo4j_host'), $this->container->getParameter('neo4j_port'));
-        
-        // create the user
-        $loggedGraphUser = $usernameIndex->findOne('username', $loggedUser->getUsername());
-        if ( !isset($loggedGraphUser) ) {
-            $this->createGraphUser($loggedUser);
-        }
-
-        return new Response(json_encode(array("success" => true)));
-    }
-
     public function getUsersFollowAction($username) {
-        $em = $this->getDoctrine();
+        $neo4j = $this->container->get("zeega.neo4j");
         $loggedUser = $this->getUser();
         
         if(!isset($loggedUser)) {
             return new Response("Unauthorized", 401);
         }
         
-        $client = new \Everyman\Neo4j\Client($this->container->getParameter('neo4j_host'), $this->container->getParameter('neo4j_port'));
-        
-        $usernameIndex = new \Everyman\Neo4j\Index\NodeIndex($client, 'username');
-        
-        $loggedGraphUser = $usernameIndex->findOne('username', $loggedUser->getUsername());
-        $followedGraphUser = $usernameIndex->findOne('username', $username);
-        
-        $loggedGraphUser = $usernameIndex->findOne('username', $loggedUser->getUsername());
-        if ( !isset($loggedGraphUser) ) {
-            $this->createGraphUser($loggedUser);
-        }
-        
-        $followedGraphUser = $usernameIndex->findOne('username', $username);
-        if ( !isset($followedGraphUser) ) {
-            $user = $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findOneByUsername($username);
-            $this->createGraphUser($user);
+        if(!isset($username)) {
+            return new Response("The username parameter is required", 422);
         }
 
-        $queryString = "START n1=node(".$loggedGraphUser->getId()."), n2=node(".$followedGraphUser->getId().") ".
-            "MATCH n1-[:FOLLOW]->n2 ".
-            "RETURN n2";
-    
-        $query = new \Everyman\Neo4j\Cypher\Query($client, $queryString);
-        $result = count($query->getResultSet());
-
-        if ($result == 0) {
-            $loggedGraphUser->relateTo($followedGraphUser, 'FOLLOW')->save();    
-        }
-
+        $response = $neo4j->followUser($loggedUser->getUsername(), $username);
+        
         return new Response(json_encode(array("success" => true)));
     }
 
     public function getUsersFollowingAction($username) {
-        $em = $this->getDoctrine();
+        $neo4j = $this->container->get("zeega.neo4j");
         
-        $client = new \Everyman\Neo4j\Client($this->container->getParameter('neo4j_host'), $this->container->getParameter('neo4j_port'));
-        $usernameIndex = new \Everyman\Neo4j\Index\NodeIndex($client, 'username');
-        $user = $usernameIndex->findOne('username', $username);
-        
-
-        $followedGraphUser = $usernameIndex->findOne('username', $username);
-
-        $queryString = "START n1=node(".$followedGraphUser->getId()."), n2=node(*) ".
-            "MATCH n1-[:FOLLOW]->n2 ".
-            "RETURN n2";
-    
-        $query = new \Everyman\Neo4j\Cypher\Query($client, $queryString);
-        $result = $query->getResultSet();
-
-        foreach($result as $res){
-            var_dump($res[0]->getProperty("username"));
+        if(!isset($username)) {
+            return new Response("The username parameter is required", 422);
         }
-
-        return new Response(json_encode(array("success" => true)));
+        $result = $neo4j->findUserFollowing($username);
+        $userView = $this->renderView('ZeegaApiBundle:Users:followers.json.twig', array('users' => $result));
+        
+        return new Response($userView);
     }
 
     public function getUsersFollowersAction($username) {
-        $em = $this->getDoctrine();
+       $neo4j = $this->container->get("zeega.neo4j");
         
-        $client = new \Everyman\Neo4j\Client($this->container->getParameter('neo4j_host'), $this->container->getParameter('neo4j_port'));
-        $usernameIndex = new \Everyman\Neo4j\Index\NodeIndex($client, 'username');
-        $user = $usernameIndex->findOne('username', $username);
-        
-
-        $followedGraphUser = $usernameIndex->findOne('username', $username);
-
-        $queryString = "START n1=node(*), n2=node(".$followedGraphUser->getId().") ".
-            "MATCH n1-[:FOLLOW]->n2 ".
-            "RETURN n2";
-    
-        $query = new \Everyman\Neo4j\Cypher\Query($client, $queryString);
-        $result = $query->getResultSet();
-        echo "<pre>";
-        foreach($result as $res){
-            var_dump($res[0]->getProperties());
+        if(!isset($username)) {
+            return new Response("The username parameter is required", 422);
         }
-        echo "</pre>";
-        return new Response(json_encode(array("success" => true)));
-    }
-
-
-    private function createGraphUser($user) {
-        $client = new \Everyman\Neo4j\Client($this->container->getParameter('neo4j_host'), $this->container->getParameter('neo4j_port'));
+        $result = $neo4j->findUserFollowers($username);        
+        $userView = $this->renderView('ZeegaApiBundle:Users:followers.json.twig', array('users' => $result));
         
-        // create the user
-        $newUser = $client->makeNode();
-        $newUser->setProperty('name', $user->getDisplayName())
-            ->setProperty('username', $user->getUsername())
-            ->setProperty('mongo_id', $user->getId())
-            ->save();
-        
-        // add to username index
-        $usernameIndex = new \Everyman\Neo4j\Index\NodeIndex($client, 'username');
-        $usernameIndex->add($newUser, 'username', $user->getUsername());
-        $usernameIndex->save();
+        return new Response($userView);
     }
-
  }

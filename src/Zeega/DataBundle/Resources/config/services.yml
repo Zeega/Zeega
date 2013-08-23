@@ -2,13 +2,9 @@ parameters:
     zeega_solr.class: Zeega\DataBundle\Service\SolrService
     zeega_item.class: Zeega\DataBundle\Service\ItemService
     zeega_project.class: Zeega\DataBundle\Service\ProjectService
+    zeega_neo4j.class: Zeega\DataBundle\Service\Neo4jService
 
 services:
-#    zeega_solr:
-#        class: %zeega_solr.class%
-#        arguments:
-#            solr: "@solarium.client"
-
     zeega.item:
         class: %zeega_item.class%
         arguments:
@@ -26,3 +22,8 @@ services:
         tags:
             - { name: doctrine_mongodb.odm.event_listener, event: prePersist }
             - { name: doctrine_mongodb.odm.event_listener, event: preUpdate }
+
+    zeega.neo4j:
+        class: %zeega_neo4j.class%
+        arguments:
+            container: '@service_container'

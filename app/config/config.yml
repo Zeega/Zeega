@@ -32,6 +32,8 @@ twig:
         event_logger_host: %event_logger_host%
         event_logger_host_web: %event_logger_host_web%
         facebook_appid: %facebook_appid%
+        neo4j_host: %neo4j_host%
+        neo4j_port: %neo4j_port% 
 doctrine:
     dbal:
         charset: UTF8

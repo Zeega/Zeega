@@ -1,0 +1,15 @@
+{
+    "users": [
+        {% for user in users %}
+        {
+            "id" : {{ user.mongo_id | json_encode | raw}},
+            "username" : {{ user.username | json_encode | raw}},
+            "display_name" : {{ user.name | json_encode | raw}} 
+        }            
+        {%- if loop.index0 < users|length - 1 -%}
+        ,
+        {%- endif -%}
+    {% endfor %}
+    ],
+    {% include 'ZeegaApiBundle:Shared:request.json.twig' %}
+}
