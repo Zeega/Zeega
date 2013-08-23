@@ -87,26 +87,23 @@
             }
    
 
-		    .play{
-		        width: 150px;
-		        height: 80px;
-		        display: block;
-		        top: 40%;
-		        position: absolute;
-		        left: 0;
-		        right: 0;
-		        margin: auto;
-		        background: rgba(0, 0, 0, 0.5);
-		        border-radius: 50px;
-		        padding: 5px 5px 3px 5px;
-		        background-image: url({{hostname}}{{directory}}images/start-button.png);
-		        background-position: center;
-		        background-size: 93%;
-		        background-repeat: no-repeat;
-		        opacity:0.8;
-		        cursor: pointer;
+		    .play-button{
+		        opacity: 0.5;
+				transition: opacity 0.5s;
+				-webkit-transition: opacity 0.5s;
+				width: 100px;
+				height: 100px;
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				margin: auto;
+				background-image: url({{ asset('js/app/home/dist/img/playbutton.png') }});
+				background-position: center;
+				background-repeat: no-repeat;
 		    }
-		    .play:hover{
+		    .play-button:hover{
 		    	opacity:1;
 		    }
 
@@ -136,7 +133,8 @@
                   
             
             </div>
-        <a id="zeega-play" href="{{hostname}}{{directory}}{{project.id}}" class="play"></a>
+        <a id="zeega-play" href="{{hostname}}{{directory}}{{project.id}}"><span class="play-button"></span></a>
+        
 
 
         <script>
