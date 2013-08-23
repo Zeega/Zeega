@@ -283,7 +283,29 @@ class UsersController extends BaseController
         }
 
         $response = $neo4j->followUser($loggedUser->getUsername(), $username);
-        
+
+        $user = $this->getDoctrine()->getRepository('ZeegaDataBundle:User')->findOneByUsername($username);
+
+        if ( isset($user) ) {
+            $username = $user->getUsername();    
+            $userEmail = $user->getEmail();
+
+            $host = $this->container->getParameter('hostname');
+            $hostDirectory = $this->container->getParameter('directory');
+            
+            $emailData = array(
+                "to" => $userEmail,
+                "from" => array("noreply@zeega.com" => "Zeega"),
+                "subject" => "$username is now following you on Zeega!",
+                "template_data" => array(
+                    "username" => $username,
+                    "host" => "http:".$host.$hostDirectory
+                )
+            );
+            $mailer = $this->get('zeega_email');
+            $mailer->sendEmail("new-follower", $emailData);    
+        }
+
         return new Response(json_encode(array("success" => true)));
     }
 
