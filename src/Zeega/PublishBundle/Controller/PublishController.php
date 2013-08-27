@@ -145,13 +145,18 @@ class PublishController extends BaseController
         $dm = $this->get('doctrine_mongodb')->getManager();
         $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($id);
         
-        $user = $this->getUser();
+        if ( !isset($project) ) {
+            throw new \Exception("The project with the id $id does not exist.");
+        }
 
+        $user = $this->getUser();
         if ( !isset($user) ) {
             throw new \Exception('You need to be logged in to remix a project.');
         }
 
-        if ( true || $this->isUserAdmin( $user ) || $this->isUserAdmin( $project->getUser() ) ) {
+        $isRemixable = $project->getRemixable();
+
+        if ( $isRemixable || $this->isUserAdmin( $user ) || $this->isUserAdmin( $project->getUser() ) ) {
             $newProject = $this->get('zeega.project')->createRemixProject(1, $project, $user);
         
             return $this->redirect($this->generateUrl("ZeegaEditorBundle_editor", array("id"=>$newProject->getPublicId()), true), 301);  
