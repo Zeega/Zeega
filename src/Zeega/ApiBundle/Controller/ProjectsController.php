@@ -143,8 +143,6 @@ class ProjectsController extends BaseController
         $project->addSequence($sequence);
         $project->addFrame($frame);
        
-	$project->setRemixable(true);
- 
         $dm = $this->get('doctrine_mongodb')->getManager();
         $dm->persist($project);
         $dm->flush();
