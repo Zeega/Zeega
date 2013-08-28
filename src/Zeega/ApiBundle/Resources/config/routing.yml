@@ -29,6 +29,11 @@ api_projects_delete_frame:
     defaults: { _controller:  ZeegaApiBundle:Projects:deleteFrame, _format: json }
     methods: [DELETE]
 
+api_projects_delete_layer:
+    path: /api/projects/{projectId}/layers/{layerId}.{_format}
+    defaults: { _controller:  ZeegaApiBundle:Projects:deleteLayer, _format: json }
+    methods: [DELETE]
+
 api_projects_delete_projects_tags:
     path: /api/projects/{projectId}/tags/{tag}.{_format}
     defaults: { _controller:  ZeegaApiBundle:Projects:deleteProjectsTags, _format: json }

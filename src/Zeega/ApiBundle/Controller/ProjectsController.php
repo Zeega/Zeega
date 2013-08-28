@@ -263,6 +263,31 @@ class ProjectsController extends BaseController
     }
 
     /**
+     * Delete a frame
+     * Route: Delete api/projects/:id
+     *
+     * @return Project|response
+     */   
+    public function deleteLayerAction($projectId, $layerId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        $layers = $project->getLayers();
+        foreach($layers as $layer) {
+            $currLayerId = $layer->getId();
+            if ($currLayerId === $layerId){
+                $layers->removeElement($layer);
+                break;
+            }
+        }
+
+        $dm->flush();
+        
+        return new Response('SUCCESS',200);
+    }
+
+    /**
      * Add a tag to a project
      * Route: POST api/projects/:id/tags/:tag
      *
