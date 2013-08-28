@@ -170,7 +170,7 @@ class Project
         $this->sequences = new \Doctrine\Common\Collections\ArrayCollection();
         $this->frames = new \Doctrine\Common\Collections\ArrayCollection();
         $this->layers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = array();
     }
 
     public function __clone()

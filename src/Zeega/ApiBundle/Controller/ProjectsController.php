@@ -258,9 +258,10 @@ class ProjectsController extends BaseController
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
 
-        $tags = $project->getTags()->toArray();
+        $tags = $project->getTags();
         array_push($tags, $tag);
-        
+        $project->setTags($tags);
+
         $dm->persist($project);
         $dm->flush();
 
