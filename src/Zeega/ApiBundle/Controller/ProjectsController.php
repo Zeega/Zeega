@@ -258,13 +258,12 @@ class ProjectsController extends BaseController
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
 
-        $newTag = new Tag();
-        $newTag->setName($tag);
-        $project->addTag($newTag);
+        $tags = $project->getTags()->toArray();
+        array_push($tags, $tag);
         
         $dm->persist($project);
         $dm->flush();
-        
+
         $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));        
         return new Response($projectView);    
     }

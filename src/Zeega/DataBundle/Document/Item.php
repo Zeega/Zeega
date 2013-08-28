@@ -842,4 +842,24 @@ class Item
     {
         return $this->rdbmsUserId;
     }
+
+    /**
+     * Add child
+     *
+     * @param Zeega\DataBundle\Document\Item $child
+     */
+    public function addChild(\Zeega\DataBundle\Document\Item $child)
+    {
+        $this->children[] = $child;
+    }
+
+    /**
+     * Remove child
+     *
+     * @param Zeega\DataBundle\Document\Item $child
+     */
+    public function removeChild(\Zeega\DataBundle\Document\Item $child)
+    {
+        $this->children->removeElement($child);
+    }
 }

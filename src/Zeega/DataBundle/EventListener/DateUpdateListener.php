@@ -29,7 +29,7 @@ class DateUpdateListener
     public function preUpdate(LifecycleEventArgs $args)
     {
         $document = $args->getDocument();
-
+        /*
         // perhaps you only want to act on some "Product" document
         if ($document instanceof Project) {
             $dm = $args->getDocumentManager();
@@ -56,5 +56,6 @@ class DateUpdateListener
 
             $dm->getUnitOfWork()->recomputeSingleDocumentChangeSet($class, $document);
         }
+        */
     }
 }

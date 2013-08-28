@@ -115,6 +115,11 @@ class Project
     protected $editable = true;
 
     /**
+     * @MongoDB\Boolean
+     */
+    protected $remixable = false;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Project", name="root_project")
      */    
     protected $rootProject;   
@@ -145,7 +150,7 @@ class Project
     protected $layers;
 
     /**
-     * @MongoDB\EmbedMany(targetDocument="Tag")
+     * @MongoDB\Collection(strategy="pushAll")
      */
     protected $tags;
 
@@ -824,37 +829,6 @@ class Project
         $this->layers = $layers;
     }
 
-
-    /**
-     * Add tags
-     *
-     * @param Zeega\DataBundle\Document\Tag $tags
-     */
-    public function addTag(\Zeega\DataBundle\Document\Tag $tags)
-    {
-        $this->tags[] = $tags;
-    }
-
-    /**
-     * Remove tags
-     *
-     * @param Zeega\DataBundle\Document\Tag $tags
-     */
-    public function removeTag(\Zeega\DataBundle\Document\Tag $tags)
-    {
-        $this->tags->removeElement($tags);
-    }
-
-    /**
-     * Get tags
-     *
-     * @return Doctrine\Common\Collections\Collection $tags
-     */
-    public function getTags()
-    {
-        return $this->tags;
-    }
-
     /**
      * Add favorites
      *
@@ -905,5 +879,52 @@ class Project
     public function getEmailNotificationsOnPopular()
     {
         return $this->emailNotificationsOnPopular;
+    }
+
+    /**
+     * Set remixable
+     *
+     * @param boolean $remixable
+     * @return self
+     */
+    public function setRemixable($remixable)
+    {
+        $this->remixable = $remixable;
+        return $this;
+    }
+
+    /**
+     * Get remixable
+     *
+     * @return boolean $remixable
+     */
+    public function getRemixable()
+    {
+        return $this->remixable;
+    }
+
+    /**
+     * Set tags
+     *
+     * @param collection $tags
+     * @return self
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+        return $this;
+    }
+
+    /**
+     * Get tags
+     *
+     * @return collection $tags
+     */
+    public function getTags()
+    {
+        if (!isset($this->tags)) {
+            $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        }
+        return $this->tags;
     }
 }
