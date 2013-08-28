@@ -285,17 +285,12 @@ class ProjectsController extends BaseController
         }
 
         $projectTags = $project->getTags();
-
-        if( $projectTags->count() > 0 ){
-            foreach($projectTags as $t){
-                if( $t->getName() == $tag ){
-                    $project->removeTag($t);
-                }
-            }
+        if(($key = array_search($tag, $projectTags)) !== false) {
+            unset($projectTags[$key]);
+            $project->setTags($projectTags);
+            $dm->persist($project);
+            $dm->flush();
         }
-
-        $dm->persist($project);
-        $dm->flush();
         
         $projectView = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project));        
         return new Response($projectView);    
