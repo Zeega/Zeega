@@ -16,7 +16,6 @@ use Zeega\DataBundle\Document\Project as MongoProject;
 use Zeega\DataBundle\Document\Sequence as MongoSequence;
 use Zeega\DataBundle\Document\Frame as MongoFrame;
 use Zeega\DataBundle\Document\Layer as MongoLayer;
-use Zeega\DataBundle\Document\Tag;
 use Zeega\DataBundle\Document\Favorite;
 
 use Zeega\CoreBundle\Controller\BaseController;
