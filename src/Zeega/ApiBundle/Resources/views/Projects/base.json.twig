@@ -6,7 +6,7 @@
 {% endif %}
 "user": {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': project.user} %},
 "title" : {{ project.title | default("") | json_encode | raw}},
-"date_created" : "{{ project.dateCreated is empty ? "" : project.getDateCreated()  | date("m/d/Y ") }}",
+"date_created" : "{{ project.dateCreated is empty ? "" : project.getDateCreated()  | date("m/d/Y h:m:s") }}",
 "date_updated" : "{{ project.dateUpdated is empty ? "" : project.getDateUpdated()  | date("m/d/Y h:m:s")}}",
 "date_published" : "{{ project.datePublished is empty ? "" : project.getDatePublished()  | date("m/d/Y h:m:s") }}",
 "tags" : {{ project.getTags | default([]) | json_encode | raw}},
@@ -59,12 +59,7 @@
 ]
 ,"layers":[
     {% for layer in project.getLayers() %}
-    {   
-        "id" : {{ layer.getId | json_encode | raw}},
-        "type" : {{layer.getType | default("") | json_encode | raw}},
-        "project_id" : {{ layer.getProjectId | default("") | json_encode | raw}},
-        "attr" : {{layer.attr | default([ ]) | json_encode | raw}}
-    }   
+        {% include 'ZeegaApiBundle:Layers:show.json.twig' with {'layer': layer} %} 
     {%- if loop.index0 < project.getLayers()|length - 1 -%}
     ,
     {%- endif -%}           
