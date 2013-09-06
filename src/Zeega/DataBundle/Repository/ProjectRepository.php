@@ -83,7 +83,7 @@ class ProjectRepository extends DocumentRepository
                         ->skip( rand(0, 50) )
                         ->sort('date_created','DESC');
 
-        $qb->field('tags.name')->equals("featured");
+        $qb->field('tags')->equals("featured");
         
         return $qb->getQuery()->execute();
     }
@@ -130,7 +130,7 @@ class ProjectRepository extends DocumentRepository
                         
 
             if (isset($query["tags"])) {
-                $qb->field('tags.name')->equals($query["tags"]);
+                $qb->field('tags')->equals($query["tags"]);
             }
 
             if (isset($query["user"])) {
