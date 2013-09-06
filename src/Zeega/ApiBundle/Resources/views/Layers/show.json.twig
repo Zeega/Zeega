@@ -1,6 +1,21 @@
 {
 "id":{{ layer.id | default(null) | json_encode | raw}},
 "type":{{layer.getType | default("") | json_encode | raw}},
-"attr":{{layer.attr | default([ ]) | json_encode | raw}},
-"enabled":{{layer.enabled | default(false) | json_encode | raw}}
+"enabled":{{layer.enabled | default(false) | json_encode | raw}},
+"attr":{
+    "title":{{layer.attr.title | default(null) | json_encode | raw}},
+    "media_type": {{layer.attr.media_type | default(null) | json_encode | raw}},
+    "layer_type": {{layer.attr.layer_type | default(null) | json_encode | raw}},
+    "opacity": {{layer.attr.opacity | default(null) | json_encode | raw}},
+    "page_background": {{layer.attr.page_background | default(false) | json_encode | raw}},
+    "allow_delete": {{layer.attr.allow_delete | default(false) | json_encode | raw}},
+    "left": {{layer.attr.left | default(0) | json_encode | raw}},
+    "top": {{layer.attr.top | default(0) | json_encode | raw}},
+    "width": {{layer.attr.width | default(0) | json_encode | raw}},
+    "height": {{layer.attr.height | default(0) | json_encode | raw}},
+    "dissolve": {{layer.attr.dissolve | default(false) | json_encode | raw}},
+    "uri": {{layer.attr.uri | default(null) | json_encode | raw}},
+    "attribution_uri": {{layer.attr.attribution_uri | default(null) | json_encode | raw}},
+    "thumbnail_url": {{layer.attr.thumbnail_url | default(null) | json_encode | raw}}
+}
 }
