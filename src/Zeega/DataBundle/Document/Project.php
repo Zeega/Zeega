@@ -923,7 +923,7 @@ class Project
     public function getTags()
     {
         if (!isset($this->tags)) {
-            $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->tags = array();
         }
         return $this->tags;
     }
