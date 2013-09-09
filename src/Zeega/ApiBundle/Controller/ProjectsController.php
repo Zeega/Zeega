@@ -415,7 +415,18 @@ class ProjectsController extends BaseController
         }
 
         if($request->request->has('attr')) {
-            $layer["attr"] = $request->request->get('attr');
+            $attributes = $request->request->get('attr');            
+            $layer["attr"] = $attributes;
+
+            if( isset($attributes["tags"]) ) {
+                $projectTags = $project->getTags();
+
+                if (is_string($attributes["tags"])) {
+                    array_push($projectTags, $attributes["tags"]);
+                } elseif (is_array($attributes["tags"])) {
+                    
+                }
+            }
         }
 
         $dm = $this->get('doctrine_mongodb')->getManager();
