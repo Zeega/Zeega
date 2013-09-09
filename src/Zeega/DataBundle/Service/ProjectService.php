@@ -53,6 +53,7 @@ class ProjectService
         // copy the project
         $newProject = clone $parentProject;
         $newProject->setUser($user);
+        $newProject->setRemixable(true);
 
         // clear the original project layers, frames, sequences
         $newProject->setLayers(new \Doctrine\Common\Collections\ArrayCollection());

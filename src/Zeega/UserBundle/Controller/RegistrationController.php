@@ -66,12 +66,14 @@ class RegistrationController extends BaseController
             $username = $data["username"];
             $email = $data["email"];
 
-            $user->setRequestExtraInfo(false); 
-            $user->setUsername($username);
-            $user->setEmail($email);
-            $this->container->get('fos_user.user_manager')->updateUser($user);
+            if (isset($email)) {
+                $user->setRequestExtraInfo(false); 
+                $user->setUsername($username);
+                $user->setEmail($email);
+                $this->container->get('fos_user.user_manager')->updateUser($user);
 
-            return new RedirectResponse($this->container->get('router')->generate('ZeegaCommunityBundle_dashboard', array("firstTime"=>true)));
+                return new RedirectResponse($this->container->get('router')->generate('ZeegaCommunityBundle_dashboard', array("firstTime"=>true)));
+            }
         }
 
         $formView = $this->container->get('templating')->render('FOSUserBundle:Registration:register_complete.html.twig', array(

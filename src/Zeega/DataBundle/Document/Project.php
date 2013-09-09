@@ -115,6 +115,11 @@ class Project
     protected $editable = true;
 
     /**
+     * @MongoDB\Boolean
+     */
+    protected $remixable;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="Project", name="root_project")
      */    
     protected $rootProject;   
@@ -905,5 +910,27 @@ class Project
     public function getEmailNotificationsOnPopular()
     {
         return $this->emailNotificationsOnPopular;
+    }
+
+    /**
+     * Set remixable
+     *
+     * @param boolean $remixable
+     * @return self
+     */
+    public function setRemixable($remixable)
+    {
+        $this->remixable = $remixable;
+        return $this;
+    }
+
+    /**
+     * Get remixable
+     *
+     * @return boolean $remixable
+     */
+    public function getRemixable()
+    {
+        return $this->remixable;
     }
 }
