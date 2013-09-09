@@ -130,6 +130,16 @@ class Project
     protected $parentProject;   
 
     /**
+     * @MongoDB\ReferenceMany(targetDocument="Project")
+     */
+    protected $ancestors;
+
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="Project")
+     */
+    protected $descendants;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument="User")
      */
     protected $user;
@@ -171,6 +181,8 @@ class Project
         $this->frames = new \Doctrine\Common\Collections\ArrayCollection();
         $this->layers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->descendants = array();
+        $this->ancestors = array();
     }
 
     public function __clone()
@@ -932,5 +944,85 @@ class Project
     public function getRemixable()
     {
         return $this->remixable;
+    }
+
+    /**
+     * Add ancestor
+     *
+     * @param Zeega\DataBundle\Document\Project $ancestor
+     */
+    public function addAncestor(\Zeega\DataBundle\Document\Project $ancestor)
+    {
+        $this->ancestors[] = $ancestor;
+    }
+
+    /**
+     * Remove ancestor
+     *
+     * @param Zeega\DataBundle\Document\Project $ancestor
+     */
+    public function removeAncestor(\Zeega\DataBundle\Document\Project $ancestor)
+    {
+        $this->ancestors->removeElement($ancestor);
+    }
+
+    /**
+     * Get ancestors
+     *
+     * @return Doctrine\Common\Collections\Collection $ancestors
+     */
+    public function getAncestors()
+    {
+        return $this->ancestors;
+    }
+
+    /**
+     * Set ancestors
+     *
+     * @return Doctrine\Common\Collections\Collection $ancestors
+     */
+    public function setAncestors($ancestors)
+    {
+        return $this->ancestors = $ancestors;
+    }
+
+    /**
+     * Add descendant
+     *
+     * @param Zeega\DataBundle\Document\Project $descendant
+     */
+    public function addDescendant(\Zeega\DataBundle\Document\Project $descendant)
+    {
+        $this->descendants[] = $descendant;
+    }
+
+    /**
+     * Remove descendant
+     *
+     * @param Zeega\DataBundle\Document\Project $descendant
+     */
+    public function removeDescendant(\Zeega\DataBundle\Document\Project $descendant)
+    {
+        $this->descendants->removeElement($descendant);
+    }
+
+    /**
+     * Get descendants
+     *
+     * @return Doctrine\Common\Collections\Collection $descendants
+     */
+    public function getDescendants()
+    {
+        return $this->descendants;
+    }
+
+    /**
+     * Set descendants
+     *
+     * @return Doctrine\Common\Collections\Collection $descendants
+     */
+    public function setDescendants($descendants)
+    {
+        return $this->descendants = $descendants;
     }
 }

@@ -31,8 +31,6 @@ class PublishController extends BaseController
      
     public function projectAction($id, $mobile)
     {   
-
-
         $mobileDetector = $this->get('mobile_detect.mobile_detector');
 
         if( $mobileDetector->isMobile() || $mobileDetector->isTablet()){
@@ -40,8 +38,6 @@ class PublishController extends BaseController
         }
 
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-        $relatedProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findRelated($id);
-
 
         if (null === $project) {
             throw $this->createNotFoundException('The project with the id $id does not exist or is not published.');
@@ -58,19 +54,21 @@ class PublishController extends BaseController
         }
         // favorites end
         
+        // render views to bootstrap data for the player
+        // - if the project is a remix -> load the root project
+        // - if the project is not a remix -> load the project
+        $rootProject = $project->getRootProject();
+        if ( isset($rootProject) ) {
+            // it's a remix
+            $rootProject->setDescendants($project->getAncestors());
+            $project = $rootProject;
+        } 
+
+        $relatedProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findRelated($project->getId());
         $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array(
-                'project' => $project,
-                'favorite' => $favorite
-            ));
-
-
-        // $key = rand( 0, count( $relatedProjects ) );
-        // $key2 = rand( 0, count( $relatedProjects - 1 ) );
-        // $relProjects[] = $relatedProjects[ $key ];
-        // unset( $relatedProjects[ $key ] );
-        // $relProjects[] = $relatedProjects[ $key2 ];
-
-
+            'project' => $project,
+            'favorite' => $favorite
+        ));
 
         $relatedProjectsData = $this->renderView('ZeegaApiBundle:Projects:index.json.twig', array(
                 'projects' => $relatedProjects,
