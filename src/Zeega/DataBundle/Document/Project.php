@@ -927,4 +927,49 @@ class Project
         }
         return $this->tags;
     }
+
+     /**
+     * Add a single tag
+     *
+     * @param collection $tags
+     * @return self
+     */
+    public function addTag($tag)
+    {
+        if (isset($tag) && is_string($tag)) {
+            $tag = $this->sanitizeTag($tag);
+
+            if (isset($tag)) {
+                $this->tags[] = $tag;    
+            }
+        }
+        
+        return $this;
+    }
+
+    /**
+     * Add multiple tags
+     *
+     * @return collection $tags
+     */
+    public function addTags($tags)
+    {
+        if (!isset($this->tags)) {
+            $this->tags = array();
+        }
+        return $this->tags;
+    }
+
+    private function sanitizeTag($tag) 
+    {
+        if(isset($tag) && is_string($tag)) {
+            $tag = preg_replace("/(\n|\r)*/","",$tag);
+            $tag = preg_replace("/\s\s+/", "-",$tag);
+            $tag = preg_replace("/[^A-Za-z 0-9 \.,:\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]\.`~]*/g", "",$tag);
+            
+            return $tag;
+        }
+
+        return null;
+    }
 }
