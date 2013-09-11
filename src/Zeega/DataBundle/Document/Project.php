@@ -904,18 +904,6 @@ class Project
     }
 
     /**
-     * Set tags
-     *
-     * @param collection $tags
-     * @return self
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-        return $this;
-    }
-
-    /**
      * Get tags
      *
      * @return collection $tags
@@ -939,7 +927,7 @@ class Project
         if (isset($tag) && is_string($tag)) {
             $tag = $this->sanitizeTag($tag);
 
-            if (isset($tag)) {
+            if (isset($tag) && !isset($this->tags[$tag])) {
                 $this->tags[] = $tag;    
             }
         }
@@ -947,26 +935,14 @@ class Project
         return $this;
     }
 
-    /**
-     * Add multiple tags
-     *
-     * @return collection $tags
-     */
-    public function addTags($tags)
-    {
-        if (!isset($this->tags)) {
-            $this->tags = array();
-        }
-        return $this->tags;
-    }
-
-    private function sanitizeTag($tag) 
+    private function sanitizeTag($tag)
     {
         if(isset($tag) && is_string($tag)) {
             $tag = preg_replace("/(\n|\r)*/","",$tag);
             $tag = preg_replace("/\s\s+/", "-",$tag);
-            $tag = preg_replace("/[^A-Za-z 0-9 \.,:\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]\.`~]*/g", "",$tag);
-            
+            /* should non-alphanumeric characters be removed ?
+            $tag = preg_replace("/[^A-Za-z0-9 ]/", '', $tag);
+            */
             return $tag;
         }
 
