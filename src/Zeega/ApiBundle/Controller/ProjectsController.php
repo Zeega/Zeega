@@ -257,9 +257,7 @@ class ProjectsController extends BaseController
             throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
         }
 
-        $tags = $project->getTags();
-        array_push($tags, $tag);
-        $project->setTags($tags);
+        $project->addTag($tag);
 
         $dm->persist($project);
         $dm->flush();
@@ -422,9 +420,11 @@ class ProjectsController extends BaseController
                 $projectTags = $project->getTags();
 
                 if (is_string($attributes["tags"])) {
-                    array_push($projectTags, $attributes["tags"]);
+                    $project->addTag($attributes["tags"]);
                 } elseif (is_array($attributes["tags"])) {
-                    
+                    foreach ($attributes["tags"] as $tag) {
+                        $project->addTag($tag);
+                    }
                 }
             }
         }
