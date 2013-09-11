@@ -72,12 +72,12 @@ class ProjectRepository extends DocumentRepository
     }
 
     // Place holder for related Zeegas
-    public function findRelated( $id = null, $query = null ){
+    public function findRelated( $public_id = null, $query = null ){
 
         $qb = $this->createQueryBuilder('Project')
                         ->select('user', 'public_id', 'title','uri', 'cover_image', 'authors', 'date_created', 'tags','views')
                         ->field('user')->prime(true)
-                        ->field('id')->notEqual( $id )
+                        ->field('public_id')->notEqual( $public_id )
                         ->eagerCursor(true)
                         ->limit( 2 )
                         ->skip( rand(0, 50) )

@@ -38,6 +38,23 @@ class ProjectsController extends BaseController
         return new Response($projectView);
     } 
 
+    public function getProjectsItemsAction($projectId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        if ( !$project ) {
+            throw $this->createNotFoundException('Unable to find the Project with the id ' + $projectId);
+        }
+
+        $projectLayers = $project->getLayers();
+        $projectView = $this->renderView('ZeegaApiBundle:Items:index_layers.json.twig', array('layers' => $projectLayers));
+        
+        return new Response($projectView);
+    }
+
+
+
     public function getProjectsFavoritesAction($projectId)
     {   
         $dm = $this->get('doctrine_mongodb')->getManager();        
@@ -124,7 +141,7 @@ class ProjectsController extends BaseController
         $project->setVersion($version);
         $project->addSequence($sequence);
         $project->addFrame($frame);
-        
+       
         $dm = $this->get('doctrine_mongodb')->getManager();
         $dm->persist($project);
         $dm->flush();
@@ -233,6 +250,31 @@ class ProjectsController extends BaseController
             $currFrameId = $frame->getId();
             if ($currFrameId === $frameId){
                 $frames->removeElement($frame);
+                break;
+            }
+        }
+
+        $dm->flush();
+        
+        return new Response('SUCCESS',200);
+    }
+
+    /**
+     * Delete a frame
+     * Route: Delete api/projects/:id
+     *
+     * @return Project|response
+     */   
+    public function deleteLayerAction($projectId, $layerId)
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $project = $dm->getRepository('ZeegaDataBundle:Project')->findOneById($projectId);
+
+        $layers = $project->getLayers();
+        foreach($layers as $layer) {
+            $currLayerId = $layer->getId();
+            if ($currLayerId === $layerId){
+                $layers->removeElement($layer);
                 break;
             }
         }

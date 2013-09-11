@@ -57,7 +57,7 @@
             <div class="error" style="color:red">{{ error }}</div>
         {% endif %}
         
-        <br><h2 class='message'>Or Login with Email / Username</h2>
+        <h2><br></h2>
         <form class="form-vertical" action="{{ path("fos_user_security_check") }}" method="post">
           <fieldset>
             <div class="control-group"> 
@@ -76,12 +76,13 @@
                 
                 <div class="pull-right">
 
-                    <a href="{{path("fos_user_resetting_request")}}" class="sidebar forget-pwd">Forgot password?</a>
+                    <a href="{{path("fos_user_resetting_request")}}" class="sidebar forget-pwd">Forgot password?</a> | 
+                    <a href="{{path("fos_user_registration_register")}}" class="sidebar forget-pwd">Register with email</a>
 
                 </div>
                 
                 <div>
-                <button type="submit" class="btn btn-success btn-custom"><h4>Submit</h4></button>
+                <button type="submit" class="btn btn-success btn-custom"><h4>Go</h4></button>
                 </div>
 
                 
