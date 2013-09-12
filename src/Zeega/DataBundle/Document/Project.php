@@ -117,7 +117,7 @@ class Project
     /**
      * @MongoDB\Boolean
      */
-    protected $remixable;
+    protected $remixable = true;
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="Project", name="root_project")
