@@ -117,7 +117,7 @@ class Project
     /**
      * @MongoDB\Boolean
      */
-    protected $remixable;
+    protected $remixable = true;
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="Project", name="root_project")
@@ -199,6 +199,9 @@ class Project
             $this->layers = new \Doctrine\Common\Collections\ArrayCollection(
                 $this->layers->toArray()
             );
+
+            $this->descendants = array();
+            $this->ancestors = array();
 
             $this->authors = null;
             $this->views = 0;

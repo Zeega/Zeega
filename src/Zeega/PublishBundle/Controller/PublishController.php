@@ -58,9 +58,13 @@ class PublishController extends BaseController
         // - if the project is a remix -> load the root project
         // - if the project is not a remix -> load the project
         $rootProject = $project->getRootProject();
-        if ( isset($rootProject) ) {
-            // it's a remix
-            $rootProject->setDescendants($project->getAncestors());
+        $ancestors = $project->getAncestors();
+
+        if ( isset($rootProject) && isset($ancestors) ) {
+            foreach ($ancestors as $ancestor) {
+                $rootProject->addDescendant($ancestor);
+            }
+            
             $project = $rootProject;
         } 
 

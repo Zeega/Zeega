@@ -103,17 +103,16 @@ class ProjectService
                 $newProject->addLayer($soundtrackLayer);
             }
         }
-
-        $newProject->setParentProject($parentProject);
-        $rootProject = $parentProject->getRootProject();
-        $ancestors = $parentProject->getAncestors();
         
+        $ancestors = $parentProject->getAncestors();        
         if ( isset($ancestors) ) {
-            $newProject->setAncestors($ancestors);
+            foreach ($ancestors as $ancestor) {
+                $newProject->addAncestor($ancestor);
+            }
         } 
-
         $newProject->addAncestor($parentProject);
 
+        $rootProject = $parentProject->getRootProject();        
         if ( isset($rootProject) ) {            
             $newProject->setRootProject($parentProject->getRootProject());
         } else {
