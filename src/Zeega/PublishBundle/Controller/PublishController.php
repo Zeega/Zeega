@@ -60,11 +60,14 @@ class PublishController extends BaseController
         $rootProject = $project->getRootProject();
         $ancestors = $project->getAncestors();
 
-        if ( isset($rootProject) && isset($ancestors) ) {
+        if ( isset($rootProject) && isset($ancestors) ) {            
             foreach ($ancestors as $ancestor) {
-                $rootProject->addDescendant($ancestor);
+                if($ancestor->getId() != $rootProject->getId()) {
+                    $rootProject->addDescendant($ancestor);    
+                }                
             }
             
+            $rootProject->addDescendant($project);
             $project = $rootProject;
         } 
 
