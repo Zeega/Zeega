@@ -117,7 +117,7 @@ class Project
     /**
      * @MongoDB\Boolean
      */
-    protected $remixable = true;
+    protected $remixable;
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="Project", name="root_project")
@@ -202,6 +202,8 @@ class Project
 
             $this->descendants = array();
             $this->ancestors = array();
+            $this->rootProject = null;
+            $this->parentProject = null;
 
             $this->authors = null;
             $this->views = 0;
