@@ -82,7 +82,7 @@
     {% endfor %}        
 ]
 ,"remix":{
-    "remix": {{ (project.getParentProject is not null) | json_encode | raw}}
+    "remix": {{ (project.getRootProject is not null) | json_encode | raw}}
     {% if project.getRootProject is not null %}
         ,"root": {
             "id": {{project.getRootProject.publicId | default(project.getRootProject.id) | json_encode | raw }},
