@@ -111,6 +111,7 @@ class ProjectService
             }
         } 
         $newProject->addAncestor($parentProject);
+        $newProject->setParentProject($parentProject);
 
         $rootProject = $parentProject->getRootProject();        
         if ( isset($rootProject) ) {            
