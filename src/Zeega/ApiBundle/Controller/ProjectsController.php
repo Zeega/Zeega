@@ -526,6 +526,17 @@ class ProjectsController extends BaseController
         if($request->request->has('attr')) {
             $attributes = $request->request->get('attr');
             $layer->setAttr($attributes);
+            if( isset($attributes["tags"]) ) {
+                $projectTags = $project->getTags();
+
+                if (is_string($attributes["tags"])) {
+                    $project->addTag($attributes["tags"]);
+                } elseif (is_array($attributes["tags"])) {
+                    foreach ($attributes["tags"] as $tag) {
+                        $project->addTag($tag);
+                    }
+                }
+            }
         }
 
         $layer->setEnabled(true);
