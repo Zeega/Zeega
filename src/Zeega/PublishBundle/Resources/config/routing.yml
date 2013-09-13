@@ -8,19 +8,15 @@ ZeegaPublishBundle_embed:
 
 ZeegaPublishBundle_project_main:
     pattern: /{id}
-    defaults: { _controller:  ZeegaPublishBundle:Publish:project, mobile: False }
-
-ZeegaPublishBundle_project_mobile:
-    pattern: /m/{id}
-    defaults: { _controller:  ZeegaPublishBundle:Publish:project, mobile: True }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:project }
 
 ZeegaPublishBundle_project_oldview:
     pattern: /{id}/view
-    defaults: { _controller:  ZeegaPublishBundle:Publish:project, mobile: False }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:project }
 
 ZeegaPublishBundle_project_altview:
     pattern: /project/{id}/view
-    defaults: { _controller:  ZeegaPublishBundle:Publish:project, mobile: False }
+    defaults: { _controller:  ZeegaPublishBundle:Publish:project }
 
 ZeegaPublishBundle_project_remix:
     pattern: /{id}/remix

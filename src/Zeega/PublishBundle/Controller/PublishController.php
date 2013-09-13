@@ -29,12 +29,14 @@ class PublishController extends BaseController
         ));
     }
      
-    public function projectAction($id, $mobile)
+    public function projectAction($id)
     {   
         $mobileDetector = $this->get('mobile_detect.mobile_detector');
 
         if( $mobileDetector->isMobile() || $mobileDetector->isTablet()){
             $mobile = true;
+        } else {
+            $mobile = false;
         }
 
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
@@ -172,6 +174,21 @@ class PublishController extends BaseController
 
     public function embedAction ($id)
     {
+
+        $mobileDetector = $this->get('mobile_detect.mobile_detector');
+
+        if( $mobileDetector->isMobile() || $mobileDetector->isTablet()){
+            $mobile = true;
+        } else {
+            $mobile = false;
+        }
+
+        if($mobile){
+                $response = $this->forward('ZeegaPublishBundle:Publish:project', array('id' => $id));
+                return $response;
+        }
+
+
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
         $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project)); 
         
