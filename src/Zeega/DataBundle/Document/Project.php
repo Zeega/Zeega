@@ -927,7 +927,7 @@ class Project
         if (isset($tag) && is_string($tag)) {
             $tag = $this->sanitizeTag($tag);
 
-            if (isset($tag) && !isset($this->tags[$tag])) {
+            if (isset($tag) && !in_array($tag, $this->tags)) {
                 $this->tags[] = $tag;    
             }
         }
@@ -938,11 +938,14 @@ class Project
     private function sanitizeTag($tag)
     {
         if(isset($tag) && is_string($tag)) {
-            $tag = preg_replace("/(\n|\r)*/","",$tag);
-            $tag = preg_replace("/\s\s+/", "-",$tag);
-            /* should non-alphanumeric characters be removed ?
-            $tag = preg_replace("/[^A-Za-z0-9 ]/", '', $tag);
-            */
+            $tag = strtolower($tag);
+            //Clean multiple dashes or whitespaces
+            $tag = preg_replace("/[\s-]+/", " ", $tag);
+            //Convert whitespaces and underscore to dash
+            $tag = preg_replace("/[\s_]/", "-", $tag);
+            /* should non-alphanumeric characters be removed ?*/
+            $tag = preg_replace("/[^A-Za-z0-9 -]/", '', $tag);
+            
             return $tag;
         }
 
