@@ -90,7 +90,7 @@ class ProjectService
             $soundtrackSequence = $parentProjectSequences[0];
             $soundtrackSequenceAttributes = $soundtrackSequence->getAttr();
 
-            if( isset($soundtrackSequenceAttributes) && isset($soundtrackSequenceAttributes["soundtrack"]) ) {
+            if( isset($soundtrackSequenceAttributes) && isset($soundtrackSequenceAttributes["soundtrack"]) && is_string($soundtrackSequenceAttributes["soundtrack"]) ) {
                 $soundtrackLayerId = $soundtrackSequenceAttributes["soundtrack"];
                 $sequence->setAttr(array("soundtrack" => $soundtrackLayerId));
 
