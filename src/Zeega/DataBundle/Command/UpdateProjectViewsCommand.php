@@ -112,7 +112,7 @@ class UpdateProjectViewsCommand extends ContainerAwareCommand
             $userNotificationsEnabled = $user->getEmailNotificationsOnPopular();
             $projectNotificationsEnabled = $project->getEmailNotificationsOnPopular();
             $views = $project->getViews();
-            if ($views > 100) {
+            if ($views > 40) {
                 if ( isset($userEmail) && $userNotificationsEnabled === true && $projectNotificationsEnabled === true) {
                     $host = $this->getContainer()->getParameter('hostname');
                     $hostDirectory = $this->getContainer()->getParameter('directory');
