@@ -82,7 +82,7 @@
     {% endfor %}        
 ]
 ,"remix":{
-    "remix": {{ (project.getParentProject is not null) | json_encode | raw}}
+    "remix": {{ (project.getRootProject is not null) | json_encode | raw}}
     {% if project.getRootProject is not null %}
         ,"root": {
             "id": {{project.getRootProject.publicId | default(project.getRootProject.id) | json_encode | raw }},
@@ -90,12 +90,33 @@
             "user": {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': project.getRootProject.user} %}
         }
     {% endif %}
-    {% if project.getParentProject is not null %}        
-        ,"parent": {
-            "id": {{project.getParentProject.publicId | default(project.getParentProject.id) | json_encode | raw }},
-            "cover_image": {{project.getParentProject.getCoverImage | json_encode | raw }},
-            "user": {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': project.parentProject.user} %}
+    {% if project.getAncestors is not null %}
+        ,"ancestors": [
+        {% for ancestor in project.getAncestors %}
+        {
+            "id": {{ancestor.publicId | default(ancestor.id) | json_encode | raw }},
+            "cover_image": {{ancestor.getCoverImage | json_encode | raw }},
+            "user": {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': ancestor.user} %}
         }
+        {%- if loop.index0 < project.getAncestors()|length - 1 -%}
+        ,
+        {%- endif -%}     
+        {% endfor %}
+        ]
+    {% endif %}
+     {% if project.getDescendants is not null %}
+        ,"descendants": [
+        {% for descendant in project.getDescendants() %}
+        {   
+            "id": {{descendant.publicId | default(descendant.publicId) | json_encode | raw }},
+            "cover_image": {{descendant.getCoverImage | json_encode | raw }},
+            "user": {% include 'ZeegaApiBundle:Users:user-include.json.twig' with {'user': descendant.user} %}
+        }
+        {%- if loop.index0 < project.getDescendants()|length - 1 -%}
+        ,
+        {%- endif -%}     
+        {% endfor %}
+        ]
     {% endif %}
 }
 }

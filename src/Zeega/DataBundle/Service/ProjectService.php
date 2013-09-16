@@ -90,7 +90,7 @@ class ProjectService
             $soundtrackSequence = $parentProjectSequences[0];
             $soundtrackSequenceAttributes = $soundtrackSequence->getAttr();
 
-            if( isset($soundtrackSequenceAttributes) && isset($soundtrackSequenceAttributes["soundtrack"]) ) {
+            if( isset($soundtrackSequenceAttributes) && isset($soundtrackSequenceAttributes["soundtrack"]) && is_string($soundtrackSequenceAttributes["soundtrack"]) ) {
                 $soundtrackLayerId = $soundtrackSequenceAttributes["soundtrack"];
                 $sequence->setAttr(array("soundtrack" => $soundtrackLayerId));
 
@@ -103,10 +103,17 @@ class ProjectService
                 $newProject->addLayer($soundtrackLayer);
             }
         }
-
-        $newProject->setParentProject($parentProject);
-        $rootProject = $parentProject->getRootProject();
         
+        $ancestors = $parentProject->getAncestors();        
+        if ( isset($ancestors) ) {
+            foreach ($ancestors as $ancestor) {
+                $newProject->addAncestor($ancestor);
+            }
+        } 
+        $newProject->addAncestor($parentProject);
+        $newProject->setParentProject($parentProject);
+
+        $rootProject = $parentProject->getRootProject();        
         if ( isset($rootProject) ) {            
             $newProject->setRootProject($parentProject->getRootProject());
         } else {

@@ -29,19 +29,17 @@ class PublishController extends BaseController
         ));
     }
      
-    public function projectAction($id, $mobile)
+    public function projectAction($id)
     {   
-
-
         $mobileDetector = $this->get('mobile_detect.mobile_detector');
 
         if( $mobileDetector->isMobile() || $mobileDetector->isTablet()){
             $mobile = true;
+        } else {
+            $mobile = false;
         }
 
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
-        $relatedProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findRelated($id);
-
 
         if (null === $project) {
             throw $this->createNotFoundException('The project with the id $id does not exist or is not published.');
@@ -58,19 +56,28 @@ class PublishController extends BaseController
         }
         // favorites end
         
+        // render views to bootstrap data for the player
+        // - if the project is a remix -> load the root project
+        // - if the project is not a remix -> load the project
+        $rootProject = $project->getRootProject();
+        $ancestors = $project->getAncestors();
+
+        if ( isset($rootProject) && isset($ancestors) ) {            
+            foreach ($ancestors as $ancestor) {
+                if($ancestor->getId() != $rootProject->getId()) {
+                    $rootProject->addDescendant($ancestor);    
+                }                
+            }
+            
+            $rootProject->addDescendant($project);
+            $project = $rootProject;
+        } 
+
+        $relatedProjects = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findRelated($project->getId());
         $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array(
-                'project' => $project,
-                'favorite' => $favorite
-            ));
-
-
-        // $key = rand( 0, count( $relatedProjects ) );
-        // $key2 = rand( 0, count( $relatedProjects - 1 ) );
-        // $relProjects[] = $relatedProjects[ $key ];
-        // unset( $relatedProjects[ $key ] );
-        // $relProjects[] = $relatedProjects[ $key2 ];
-
-
+            'project' => $project,
+            'favorite' => $favorite
+        ));
 
         $relatedProjectsData = $this->renderView('ZeegaApiBundle:Projects:index.json.twig', array(
                 'projects' => $relatedProjects,
@@ -167,6 +174,21 @@ class PublishController extends BaseController
 
     public function embedAction ($id)
     {
+
+        $mobileDetector = $this->get('mobile_detect.mobile_detector');
+
+        if( $mobileDetector->isMobile() || $mobileDetector->isTablet()){
+            $mobile = true;
+        } else {
+            $mobile = false;
+        }
+
+        if($mobile){
+                $response = $this->forward('ZeegaPublishBundle:Publish:project', array('id' => $id));
+                return $response;
+        }
+
+
         $project = $this->getDoctrine()->getRepository('ZeegaDataBundle:Project')->findOneById($id);
         $projectData = $this->renderView('ZeegaApiBundle:Projects:show.json.twig', array('project' => $project)); 
         
