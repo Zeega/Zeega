@@ -71,7 +71,8 @@ class EditorController extends BaseController
                 $mediaData = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), array("type"=>"Image", "user"=>"51afedf18d34d4d711000000", "limit"=> 48))->getContent();
             } else {
                 $parentId = $parentProject->getId();
-                $mediaData = $this->forward('ZeegaApiBundle:Projects:getProjectsItems', array("projectId" => $parentId))->getContent();
+               $mediaData = $this->forward('ZeegaApiBundle:Items:getItemsSearch', array(), array("type"=>"Image", "user"=>"51afedf18d34d4d711000000", "limit"=> 48))->getContent();
+               // $mediaData = $this->forward('ZeegaApiBundle:Projects:getProjectsItems', array("projectId" => $parentId))->getContent();
             }
 
             if( $project->getVersion() == 1.2 ) {
